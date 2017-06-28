@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>数字</title>
+</head>
+
+<body>
+    <script type="text/javascript">
+        // tofixed(..) 方法可指定小数部分的显示位数，返回的是一个字符串
+        // 无效语法：
+        // 42. toFixed(3); // SyntaxError
+        // 下面的语法都有效：
+        (42).toFixed(3); // "42.000"
+        0.42.toFixed(3); // "0.420"
+        42..toFixed(3); // "42.000"
+        // toPrecision(..) 方法用来指定有效数位的显示位数
+        var a = 42.59;
+        a.toPrecision(1); // "4e+1"
+        a.toPrecision(2); // "43"
+        a.toPrecision(3); // "42.6"
+        // toExponential返回以指数表示法表示的数组的字符串形式
+
+        // 二进制浮点数最大的问题
+        0.1 + 0.2 === 0.3; // false
+
+        // 整数检测
+        // 使用 ES6 中的 Number.isInteger(..) 方法
+        Number.isInteger( 42 ); // true
+        Number.isInteger( 42.000 ); // true
+        // 如果Number.isInteger不存在
+        if (!Number.isInteger) {
+            Number.isInteger = function(num) {
+                return typeof num == "number" && num % 1 == 0;
+            };
+        }
+
+        // 如果数学运算的操作数不是数字类型（或者无法解析为常规的十进制或十六进制数字），就无法返回一个有效的数字，这种情况下返回值为 NaN。
+        // NaN 是一个特殊值，它和自身不相等，是唯一一个非自反（自反， reflexive，即 x === x 不成立）的值。而 NaN != NaN 为 true
+        // 内建的全局工具函数 isNaN(..) 来判断一个值是否是 NaN
+
+        // 非数字转化为数组number(),parseInt(),parseFloat()
+
+    </script>
+</body>
+
+</html>

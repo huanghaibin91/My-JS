@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>JSON</title>
+    </head>
+    <body>
+        <script type="text/javascript">
+            // JSON,JavaScript对象表示法，是JavaScript的一个严格的子集，利用了JavaScript中的一些模式来表示结构化数据
+
+            // JSON不支持对象，函数或对象实例，它是一种表示结构化数据的格式
+
+            // JSON字符串必须使用双引号
+            // JSON中对象属性也要加双引号
+
+            // JSON对象的两个方法
+            // stringify()将JSONJavaScript对象序列化为JSON字符串,在序列化JavaScript对象时，所有函数及其原型成员都会被忽略，值为undefined的任何属性也都会被跳过
+            var book = {
+                "title": "Professional JavaScript",
+                "authors": [
+                    "Nicholas C.Zakas"
+                ],
+                "edition": 3,
+                "year": 2011,
+            };
+            console.log(JSON.stringify(book, ["title", "edition"]));
+
+            console.log(JSON.stringify(book, function (key, value) {
+                switch (key) {
+                    case "authors":
+                        return value.join(',')
+                        break;
+                    case "year":
+                        return 5000;
+                        break;
+                    case "edition":
+                        return undefined; // undefined的值转化为JSON会被忽略
+                        break;
+                    default:
+                        return value;
+                }
+            }), 4); // 数值4作为最后一个参数表示缩进的空格数
+            // parse()把JSON字符串解析为原生JavaScript值
+
+            // toJSON(),返回其自身的JSON数据格式，可以作为函数过滤器的补充
+
+            // 把一个对象传入JSON.stringify(),序列化对象的顺序
+            // 1.如果存在toJSON()方法而且能够通过它取得有效的值，则调用该方法。否则，返回对象本身
+            // 2.如果提供了第二个参数，应用这个函数过滤器。传入函数过滤器的值是第1步返回的值
+            // 3.对第2步返回的每个值进行相应的序列化
+            // 4.如果提供了第三个参数，执行相应的格式化
+
+            // parse()如stringify()一样可以接受一个函数，函数的两个参数一个键一个值，而且都需要返回一个值，函数称作还原函数。如果还原函数返回undefined，则表示要从结果中删除对应的键，如果返回其他值，则将该值插入到结果中
+
+            
+
+        </script>
+    </body>
+</html>

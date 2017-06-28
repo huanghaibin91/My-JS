@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>事件</title>
+    </head>
+    <body>
+        <script type="text/javascript">
+            // 事件冒泡，事件捕获阶段，处于目标阶段，事件冒泡阶段
+
+            //使用DOM0级事件时，事件处理程序的this指向当前元素，被当做元素的方法
+
+            // DOM2级事件处理addEventListener(),removeEventListener(),接收三个参数，事件名，事件处理函数，布尔值，最后一个布尔值默认false，代表事件冒泡，设置为true表示事件捕获，DOM2可以为同一元素设置多个事件处理函数
+            // IE中attachEvent(),detachEvent(),两个参数，事件名加‘on’，事件处理函数,this指向window，IE中的event也是window下的一个属性
+
+            // 宽浏览器事件处理
+            var EventUtil = {
+                addHandler: function (ele, type, handler) {
+                    if (ele.addEventListener) {
+                        ele.addEventListener(type, handler, false);
+                    } else if (ele.attachEvent) {
+                        ele.attachEvent('on' + type, handler);
+                    } else {
+                        ele['on' + type] = handler;
+                    }
+                },
+                removeHandler: function (ele, type, handler) {
+                    if (ele.removeEventListener) {
+                        ele.removeEventListener(type, handler,false);
+                    } else if (ele.detachEvent) {
+                        ele.detachEvent('on' + type, handler);
+                    } else {
+                        ele['on' + type] = null;
+                    }
+                },
+                getEvent: function (event) {
+                    return event ? event : window.event;
+                },
+                getTarget: function (event) {
+                    return event.target || event.srcElement;
+                },
+                preventDefault: function (event) {
+                    if (event.preventDefault) {
+                        event.preventDefault();
+                    } else {
+                        event.returnValue = false;
+                    }
+                },
+                stopPropagation: function (event) {
+                    if (event.stopPropagation) {
+                        event.stopPropagation();
+                    } else {
+                        event.cancelBubble = true;
+                    }
+                },
+            };
+
+            // 事件类型
+
+            // UI事件，load,unload,select,resize,scroll
+            // unload,用户从一个页面切换到另一个页面触发，最多用于清除引用，避免内存泄露
+            // resize，浏览器窗口大小变化时触发
+            // scroll，文档滚动时触发
+
+            // 鼠标事件
+            // click
+            // dblclick
+            // mousedown
+            // mouseup
+            // mouseenter,光标首次从外部移动到元素范围内触发，不冒泡
+            // mouseleave，不冒泡
+            // mousemove
+            // mouseout
+            // mouseover
+            // 鼠标在窗口位置clientX,clientY
+            // 鼠标在页面位置pageX，pageY
+            // 鼠标在屏幕位置screenX，screenY
+
+            // 键盘事件
+            // keydown
+            // keyup
+            // keypress,按下字符键触发，按住不放重复触发
+            // keyCode,键码
+
+            // 事件委托
+
+            
+
+        </script>
+    </body>
+</html>

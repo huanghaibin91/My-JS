@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>数组</title>
+    </head>
+    <body>
+        <script type="text/javascript">
+        // JavaScript 中，数组可以容纳任何类型的值，可以是字符串、数字、对象（ object），甚至是其他数组（多维数组就是通过这种方式来实现的）
+
+        // slice可以将类数组参数argumen转化成真正的数组
+
+        // var arr = Array.prototype.slice.call( arguments );
+        // 用 ES6 中的内置工具函数 Array.from(..) 也能实现同样的功能：
+        // var arr2 = Array.from( arguments );
+
+        // 检测是否是数组
+        var arr3 = [1, 2, 3];
+        console.log(arr3 instanceof Array);
+        console.log(Array.isArray(arr3));
+
+        // join,将数组组合成字符串
+        var arr4 = ['hello', 'world', 'hi'];
+        console.log(arr4.join(''));
+        console.log(arr4.join('-'));
+
+        // push(), pop(), unshift(), shift(),向数组中添加元素,改变原数组
+
+        // reverse(),翻转数组，改变原数组
+        var arr5 = [1, 5, 6, 3, 9];
+        console.log(arr5.reverse());
+        console.log(arr5);
+        // sort()，数组排序，改变原数组
+        console.log(arr5.sort(function(a, b) {
+            return a - b;
+        }));
+
+        // concat(),连接数组，返回一个新数组
+        var arr6 = arr5.concat(arr4, arr3);
+        console.log(arr6);
+
+        // slice(start, end),截去数组，不包括end项，返回新数组
+        var arr7 = arr6.slice(0, 4);
+        console.log(arr7);
+
+        // splice(),删除添加元素都可以，改变原数组，返回值是删除的元素
+        var arr8 = arr6.splice(0, 2, 'one', 'two');
+        console.log(arr6);
+        console.log(arr8);
+
+        // indexOf(), lastIndexOf(),查找数组是否包含元素，并返回元素所在的位置，没有则返回-1
+
+        // 迭代方法
+        var arr9 = [1, 8, 7, 6, 3];
+        // every()，返回布尔值，数组所有元素满足返回true
+        console.log(arr9.every(function (ele) {
+            return ele > 1;
+        }));
+        // filter()，筛选数组满足条件的元素，返回一个新数组
+        var arr10 = arr9.filter(function (ele) {
+            return ele > 3;
+        });
+        console.log(arr10);
+        console.log(arr9);
+        // forEach()，对数组每一项进行操作，没有返回值,既不产生新数组，也不改变原数组除非在其中的函数中对原数组就行更改
+        arr9.forEach(function (ele, index, arr) {
+            if (ele > 3) {
+                arr.splice(index, 1);
+            }
+        });
+        console.log(arr9);
+        // map()，对数组每一项进行操作，返回操作后新数组
+        var arr11 = arr9.map(function (ele) {
+            return ele * 2;
+        });
+        console.log(arr11);
+        // some(),返回布尔值，全部都不满足返回false
+        console.log(arr9.some(function (ele) {
+            return ele > 3;
+        }));
+        // reduce(),归并方法，返回一个最终值
+        // pre在归并开始时是数组第一个值，后边会把函数操作的返回值作为pre传递到下一步
+        var total = arr9.reduce(function(pre, nex) {
+            return pre + nex;
+        });
+        console.log(total);
+
+
+        </script>
+    </body>
+</html>

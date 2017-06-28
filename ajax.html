@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Ajax</title>
+</head>
+
+<body>
+    <script type="text/javascript">
+        // Ajax,异步的JavaScript和XML
+        // 核心是XMLHttpRequest
+
+        // 跨浏览器创建XHR
+        function createXHR() {
+            if (typeof XMLHttpRequest !== 'undefined') {
+                return new XMLHttpRequest();
+            } else if (typeof ActiveXObject !== 'undefined') {
+                if (typeof arguments.callee.activeXString !== 'string') {
+                    var versions = ['MSXML2.XMLHttp.6.0', 'MSXML2.XMLHttp.6.0', 'MSXML2.XMLHttp'];
+                    for (var i = 0; i < versions.length; i++) {
+                        try {
+                            new ActiveXObject(versions[i]);
+                            arguments.callee.activeXString = versions[i];
+                            break;
+                        } catch (ex) {
+                            // 跳过
+                        }
+                    }
+                }
+                return new ActiveXObject(arguments.callee.activeXString);
+            } else {
+                throw new Error('浏览器不支持XHR');
+            }
+        }
+
+        // XHR使用
+        // 创建新的XMLHttpRequest实例
+        var xhr = createXHR();
+        // 监听请求的状态变化
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState == 4) {
+                if ((xhr.status >= 200 && xhr.status < 300) || xhr.status == 304) {
+                    console.log(xhr.responseText);
+                } else {
+                    console.log('请求不成功' + xhr.status);
+                }
+            }
+        }
+        // get请求
+        // 使用XHR对象时，调用的第一个方法是open(),接收三个参数，要发起请求的类型（'get','post'），请求的URL和表示是否异步发送请求的布尔值，false表示同步
+
+        // 同步请求
+        xhr.open('get', 'example.php', false);
+        // send()方法，接收一个参数，即要作为请求主体发送的数据，如果不需要通过请求主体发送数据，则必须传入null
+        xhr.send(null);
+        if ((xhr.status >= 200 && xhr.status < 300) || xhr.status == 304) {
+            console.log(xhr.responseText);
+        } else {
+            console.log('request was unsuccessful' + xhr.status);
+        }
+
+        // XHR对象的属性
+        // responseText，作为相应主体返回的文本
+        // responseXML，保存包含响应数据的XML DOM文档
+        // status，响应的HTTP状态，200表示成功，304表示请求的资源并没有被修改，可以直接使用浏览器缓存的版本，
+        // statusText，HTTP状态的说明
+
+        // 异步请求
+        xhr.open('get', 'example.php', true);
+        xhr.send(null);
+        // 异步有readyState属性，表示当前响应的活动阶段，4表示完成
+        // readyState每次变化会触发，readyStateChange事件
+        xhr.onreadyStateChange = function() {
+            if (xhr.readyState == 4) {
+                if ((xhr.status >= 200 && xhr.status < 300) || xhr.status == 304) {
+                    console.log(xhr.responseText);
+                } else {
+                    console.log('request was unsuccessful' + xhr.status);
+                }
+            }
+        }
+
+        // get请求，常用于向服务器查询某些信息
+        // 查询字符串中每个参数的名称和值都必须使用encodeURIComponent()进行编码
+        // 向URL的末尾添加查询字符串参数
+        function addURLParam (url, name, value) {
+            url += (url.index('?') == -1 ? '?' : '&');
+            url += encodeURIComponent(name) + '=' + encodeURIComponent(value);
+            return url;
+        }
+
+        // post请求，通常用于向服务器发送应该被保存的数据，通常用于表单提交
+
+        // setRequestHeader(),设置http请求头部信息，两个参数头部字段的名称和头部字段的值
+        // getResponseHeader(),可以取得相应的相应头部信息
+        // getAllResponseHeaders(),可以取得所有头部信息的长字符串
+
+        // FormData对象，序列化表单
+        var data = new FormData();
+        data.append(key, value); // 两个参数，键和值，向data中添加数据
+
+        // 超时设定
+        xhr.open('get', 'example.php', true);
+        xhr.timeout = 1000; // 表示请求响应多少秒之后就终止
+        xhr.ontimeout = function () { // 如果时间到了没有响应，就触发timeout事件
+            console.log('request was not return in a second');
+        };
+        xhr.send(null);
+
+
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>原型</title>
+</head>
+
+<body>
+    <script type="text/javascript">
+        // 创建的每个对象都有一个prototype（原型）属性，这个属性是一个指针，指向一个对象，而这个对象的用途是包含可以由特定类型的所有实例共享的属性和方法
+
+        // JS中分为普通对象和函数对象
+        var o1 = {};
+        var o2 = new Object();
+        var o3 = new f1();
+
+        function f1() {};
+        var f2 = function() {};
+        var f3 = new Function('str', 'console.log(str)');
+
+        console.log(typeof Object); //function
+        console.log(typeof Function); //function
+        console.log(typeof Array); // function
+
+        console.log(typeof f1); //function
+        console.log(typeof f2); //function
+        console.log(typeof f3); //function
+
+        console.log(typeof o1); //object
+        console.log(typeof o2); //object
+        console.log(typeof o3); //object
+        // 凡是通过 new Function() 创建的对象都是函数对象，其他的都是普通对象。f1,f2,归根结底都是通过 new Function()的方式进行创建的。Function Object 也都是通过 New Function()创建的。JS的内置对象如数组、字符串、日期等对象都是函数对象，由函数对象创建的对象就是普通对象
+
+        // person1 和 person2 都是 构造函数 Person 的实例一个公式：实例的构造函数属性（constructor）指向构造函数，因为constructor是指向prototype属性所在函数的指针
+        function Person(name, age, job) {
+            this.name = name;
+            this.age = age;
+            this.job = job;
+            // this.sayName = function() {
+            //     console.log(this.name)
+            // }
+        }
+        // console.log(new Person('Tom', 19, 'Student').sayName()); 在重写原型之前调用构造函数，显示错误。重写原型对象切断了现有原型和任何之前已经存在的对象实例之间的联系。它们引用的仍是最初的原型
+        Person.prototype = {
+            // constructor: Person, // 使用对象字面量重写了原型对象，此时新的对象也有一个constructor属性，指向Object，如果constructor值重要，可以这样重写constructor指向适当的值
+            name: 'Zaxlct',
+            age: 28,
+            job: 'Software Engineer',
+            sayName: function() {
+                console.log(this.name);
+            }
+        }
+
+        var person1 = new Person('Zaxlct', 28, 'Software Engineer');
+        var person2 = new Person('Mick', 23, 'Doctor');
+        console.log(typeof Person);
+        console.log(typeof person1);
+        console.log(Person.prototype.constructor === Person); // true
+        console.log(person1.constructor == Person); //true
+        console.log(person2.constructor == Person); //true
+        console.log(person1.sayname == person2.sayname); //true
+        person1.sayName(); // 'Zaxlct'
+        person2.sayName(); // 'Zaxlct'
+        // 每个对象都有 __proto__ 属性，但只有函数对象才有 prototype 属性，所有对象的 __proto__ 都指向其构造器的 prototype，所有函数对象的 __proto__ 最后都指向 Function.prototype，它是一个空函数（Empty function）
+        // JS 在创建对象（不论是普通对象还是函数对象）的时候，都有一个叫做__proto__ 的内置属性，用于指向创建它的构造函数的原型对象,对象 person1 有一个 __proto__属性，创建它的构造函数是 Person，构造函数的原型对象是 Person.prototype ,连接存在于实例（person1）与构造函数（Person）的原型对象（Person.prototype）之间，而不是存在于实例（person1）与构造函数（Person）之间。
+
+        // 使用hasOwnProperty()方法可以知道属性是属于原型还是实例属性
+
+        // 原型链
+        // person1.__proto__ === Person.prototype
+        // Person.__proto__ === Function.prototype
+        // Person.prototype.__proto__ === Object.prototype
+        // Object.prototype.__proto__ === null，所有函数对象的__proto__都指向Function.prototype，它是一个空函数
+        // 所有的构造器都来自于 Function.prototype，甚至包括根构造器Object及Function自身。所有构造器都继承了·Function.prototype·的属性及方法。如length、call、apply、bind
+
+        function Person2() {}
+        var person3 = new Person();
+        console.log(person3.__proto__ === Person2.prototype); // true
+        console.log(Person2.prototype.__proto__ === Object.prototype) //true
+        console.log(Object.prototype.__proto__) //null
+
+        Person2.__proto__ == Function.prototype; //true
+        console.log(Function.prototype) // function(){} (空函数)
+
+        var num = new Array()
+        console.log(num.__proto__ == Array.prototype) // true
+        console.log(Array.prototype.__proto__ == Object.prototype) // true
+        console.log(Array.prototype) // [] (空数组)
+        console.log(Object.prototype.__proto__) //null
+
+        console.log(Array.__proto__ == Function.prototype) // true
+
+        // 原型和原型链是JS实现继承的一种模型。
+        // 原型链的形成是真正是靠__proto__ 而非prototype
+        var animal = function() {};
+        var dog = function() {};
+
+        animal.price = 2000;
+        dog.prototype = animal;
+        var tidy = new dog();
+        console.log(dog.price) //undefined，dog是函数，而不是构造函数new调用之后的对象，所以dog.price不存在
+        console.log(tidy.price) // 2000
+        // 解析
+        // var dog = function() {};
+        // dog.prototype.price = 2000;
+        // var tidy = new dog();
+        // console.log(tidy.price); // 2000
+        // console.log(dog.price); //undefined
+        //
+        // var dog = function() {};
+        // var tidy = new dog();
+        // tidy.price = 2000;
+        // console.log(dog.price); //undefined，构造函数没有new调用的时候就是个函数，不存在price属性的
+        // 实例（tidy）和 原型对象（dog.prototype）存在一个连接。不过，要明确的真正重要的一点就是，这个连接存在于实例（tidy）与构造函数的原型对象（dog.prototype）之间，而不是存在于实例（tidy）与构造函数（dog）之间
+
+
+        // 在默认情况下，所有的原型对象都会自动获得一个 constructor（构造函数）属性，这个属性（是一个指针）指向 prototype 属性所在的函数（Person）
+        // 原型对象（Person.prototype）是 构造函数（Person）的一个实例
+
+        // 每个函数都有一个prototype属性，这个属性是一个指针，指向一个对象，而这个对象的用途是包含可以由特定类型的所有实例共享的属性和方法
+        // 默认情况下，所有原型对象都会自动获得一个constructor（构造函数属性），这个属性是一个指向prototype属性所在函数的指针
+
+        // isPrototypeOf()，判断是否是对象的原型
+        // obj.prototype.isPrototypeOf(obj), obj.prototype是不是obj的原型，是返回true
+        // Object.getPrototypeOf(),返回对象的原型
+
+        // 读取对象属相时会先搜索实例再搜索原型，所以对象实例中有同名属性，就会屏蔽原型中的同名属性
+
+        // hasOwnProperty()可以检测属性是否是存在于实例中
+        // in无论属性在实例还是原型中
+        // property in obj，判断obj中是否有property
+        // for (property in obj)循环obj中所有属性，不论原型还是实例
+        // 使用 for..in 遍历对象时原理和查找 [[Prototype]] 链类似， 任何可以通过原型链访问到（ 并且是 enumerable） 的属性都会被枚举。 使用 in 操作符来检查属性在对象中是否存在时， 同样会查找对象的整条原型链（ 无论属性是否可枚举）
+
+        // 原型链
+        // 每个构造函数都有一个原型对象，原型对象都包含一个指向构造函数的指针，而实例都包含一个指向原型对象的内部指针。
+
+        // Object.create(..) 的原理， 现在只需要知道它会创建一个对象并把这个对象的 [[Prototype]] 关联到指定的对象
+        var anotherObject = {
+            a: 2
+        };
+        // 创建一个关联到 anotherObject 的对象
+        var myObject = Object.create(anotherObject);
+        myObject.a; // 2
+        // 现在 myObject 对象的 [[Prototype]] 关联到了 anotherObject。 显然myObject.a 并不存在，但是尽管如此， 属性访问仍然成功地（ 在 anotherObject 中） 找到了值 2
+
+        // 如果 foo 不直接存在于 myObject 中而是存在于原型链上层时 myObject.foo = "bar" 会出现的三种情况
+        // 1. 如果在 [[Prototype]] 链上层存在名为 foo 的普通数据访问属性并且没有被标记为只读（ writable:false）， 那就会直接在 myObject 中添加一个名为 foo 的新属性， 它是屏蔽属性。
+        // 2. 如果在 [[Prototype]] 链上层存在 foo， 但是它被标记为只读（ writable:false）， 那么无法修改已有属性或者在 myObject 上创建屏蔽属性。 如果运行在严格模式下， 代码会抛出一个错误。 否则， 这条赋值语句会被忽略。 总之， 不会发生屏蔽。
+        // 3. 如果在 [[Prototype]] 链上层存在 foo 并且它是一个 setter， 那就一定会调用这个 setter。 foo 不会被添加到（ 或者说屏蔽于） myObject， 也不会重新定义 foo 这个 setter。
+        // 希望在第二种和第三种情况下也屏蔽 foo， 那就不能使用 = 操作符来赋值， 而是使用 Object.defineProperty(..)来向 myObject 添加 foo。
+
+        var anotherObject2 = {
+            a: 2
+        };
+        var myObject2 = Object.create(anotherObject2);
+        anotherObject2.a; // 2
+        myObject2.a; // 2
+        anotherObject2.hasOwnProperty("a"); // true
+        myObject2.hasOwnProperty("a"); // false
+        myObject2.a++; // 隐式屏蔽！
+        anotherObject2.a; // 2
+        myObject2.a; // 3
+        myObject2.hasOwnProperty("a"); // true
+        // ++ 操作相当于 myObject.a = myObject.a + 1。 因此 ++ 操作首先会通过 [[Prototype]]查找属性 a 并从 anotherObject.a 获取当前属性值 2， 然后给这个值加 1， 接着用 [[Put]]将值 3 赋给 myObject 中新建的屏蔽属性 a
+
+        // 所有的函数默认都会拥有一个名为 prototype 的公有并且不可枚举 的属性， 它会指向另一个对象
+        // function Foo() {
+        //     // ...
+        // }
+        // Foo.prototype; // { }对象通常被称为 Foo 的原型
+        // 这个对象是在调用 new Foo()时创建的， 最后会被关联到这个“ Foo 点 prototype” 对象上
+
+        // JavaScript 中， 我们并不会将一个对象（ “ 类”） 复制到另一个对象（ “ 实例”）， 只是将它们关联起来
+        // 继承意味着复制操作， JavaScript（ 默认） 并不会复制对象属性。 相反， JavaScript 会在两个对象之间创建一个关联， 这样一个对象就可以通过委托访问另一个对象的属性和函数。委托这个术语可以更加准确地描述 JavaScript 中对象的关联机制。
+
+        // 通过“ 构造函数” 调用 new创建的对象有一个 .constructor 属性， 指向“ 创建这个对象的函数”
+
+        // a1 并没有 .constructor 属性， 所以它会委托 [[Prototype]] 链上的 Foo.prototype。 但是这个对象也没有 .constructor 属性（ 不过默认的 Foo.prototype 对象有这个属性！ ）， 所以它会继续委托， 这次会委托给委托链顶端的 Object.prototype。 这个对象有 .constructor 属性， 指向内置的 Object(..) 函数
+        function Foo1() { /* .. */ } // 有constructor属性，指向Foo
+        Foo1.prototype = { /* .. */ }; // 创建一个新原型对象,constructor属性变成了新对象的constructor属性，指向Object构造函数
+        var a1 = new Foo1();
+        a1.constructor === Foo1; // false!
+        a1.constructor === Object; // true!
+
+        // 原型继承
+        function Foo2(name) {
+            this.name = name;
+        }
+        Foo2.prototype.myName = function() {
+            return this.name;
+        };
+
+        function Bar2(name, label) {
+            Foo2.call(this, name);
+            this.label = label;
+        }
+        // 我们创建了一个新的 Bar2prototype 对象并关联到 Foo2.prototype
+        Bar2.prototype = Object.create(Foo2.prototype); // Object.create(..) 会创建一个新对象（ bar2） 并把它关联到我们指定的对象（ foo2）
+        // 注意！ 现在没有 Bar2.prototype.constructor 了
+        // 如果你需要这个属性的话可能需要手动修复一下它
+        Bar2.prototype.myLabel = function() {
+            return this.label;
+        };
+        var a2 = new Bar2("a", "obj a");
+        a2.myName(); // "a"
+        a2.myLabel(); // "obj a"
+
+        // Object.create(null) 会创建一个拥有（或者说null）[[Prototype]]链接的对象， 这个对象无法进行委托。 由于这个对象没有原型链， 所以instanceof 操作符（ 之前解释过） 无法进行判断， 因此总是会返回 false。
+
+
+        // 原型链继承
+        function superColor1 () {
+            this.colors = ['red', 'blue', 'green'];
+        }
+        function subColor1 () {
+
+        }
+        subColor1.prototype = new superColor1(); // 这样共享原型会产生问题，改变数据后都会被修改，而且添加新方法不能采用subColor.prototype = {}因为这样会重写原型，会导致之前的原型无效
+        var color1 = new subColor1();
+        var color2 = new subColor1();
+        color1.colors.push('black');
+        console.log(color1.colors);
+        console.log(color2.colors);
+        console.log(superColor1.colors); // superColor是构造函数，不是构造函数new出的对象，不能访问colors
+
+        // 借用构造函数，利用call,apply
+        function superColor2 () {
+            this.colors = ['red', 'blue', 'green'];
+        }
+        function subColor2 () {
+            superColor2.call(this); // 这样就不会共享数据了，之间都是独立的，还有个好处是可以传递参数
+        }
+        var color3 = new subColor2();
+        var color4 = new subColor2();
+        color3.colors.push('black');
+        console.log(color3.colors);
+        console.log(color4.colors);
+
+        // 组合式继承
+        function superColor3 (name) {
+            this.name = name;
+            this.colors = ['red', 'blue', 'green'];
+        }
+        superColor3.prototype.sayName = function () {
+            console.log(this.name);
+        }
+        function subColor3 (name, age) {
+            this.age = age;
+            superColor3.call(this, name); // 这里有superColor3的属性，第二次调用
+        }
+        subColor3.prototype = new superColor3(); // 这里有superColor3的属性，第一次调用
+        subColor3.prototype.sayAge = function () {
+            console.log(this.age);
+        }
+        var color5 = new subColor3('Jack', 29);
+        color5.sayName();
+        color5.sayAge();
+
+        // 寄生组合式继承
+        // 声明一个方法
+        function inheritPrototype (subType, superType) {
+            var prototype = Object(superType, subType); // 创建对象
+            prototype.constructor = subType; // 增强对象
+            subType.prototype = prototype; // 指定对象
+        }
+
+        function superColor4 (name) {
+            this.name = name;
+            this.colors = ['red', 'blue', 'green'];
+        }
+        superColor4.prototype.sayName = function () {
+            console.log(this.name);
+        }
+        function subColor4 (name, age) {
+            this.age = age;
+            superColor3.call(this, name);
+        }
+        inheritPrototype(subColor4, superColor4);
+        subColor4.prototype.sayAge = function () {
+            console.log(this.age);
+        }
+        var color6 = new subColor3('Jim', 30);
+        color6.sayName();
+        color6.sayAge();
+
+
+    </script>
+</body>
+
+</html>

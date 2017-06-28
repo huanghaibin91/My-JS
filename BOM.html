@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>浏览器对象模型</title>
+    </head>
+    <body>
+        <img src="./image/size.png" alt="">
+        <script type="text/javascript">
+            // screenLeft, screenTop,表示窗口相对于屏幕左边和上边的位置
+            // Firefox则是screenX，screenY
+            // 跨浏览器取得窗口左边和上边的位置
+            var leftPos = (typeof screenLeft === 'number') ? window.screenLeft : window.screenX);
+            var topPos = (typeof screenTop === 'number') ? window.screenTop : window.screenX);
+
+            // moveTo()移动到位置,moveBy()移动多少位置，将窗口移动到一个精确的位置
+            // resizeTo(),resizeBy(),调整浏览器窗口的大小
+
+            // innerWidth,innerHeight，表示该容器中页面视图区的大小（减去边框宽度）
+            // outerWidth,outerHeight,返回浏览器窗口本身的尺寸
+            // 跨浏览器获取页面视口的大小
+            function getPage () {
+                var pageWidth = window.innerWidth;
+                var pageHeight = window.innerHeight;
+
+                if (typeof pageWidth !== 'number') {
+                    if (document.compatMode == 'CSS1Compat') {
+                        pageWidth = document.documentElement.clientWidth;
+                        pageHeight = document.documentElement.clientHeight;
+                    } else {
+                        pageWidth = document.body.clientWidth;
+                        pageHeight = document.body.clientHeight;
+                    }
+                }
+                return {
+                    pageWidth: pageWidth,
+                    pageHeight: pageHeight
+                }
+            }
+
+            // window.open()打开新窗口
+
+            // setTimeOut()超时调用,setInterval()间歇调用，尽量不使用间歇调用
+            // 使用超时调用来模拟间歇调用是一种最佳模式
+
+            // alert()
+            // consfirm()确认框
+            // prompt()确认加输入框
+
+        </script>
+    </body>
+</html>

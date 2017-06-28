@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>类型</title>
+</head>
+
+<body>
+    <script type="text/javascript">
+        // JavaScript 有七种内置类型：
+        //     • 空值（ null）
+        //     • 未定义（ undefined）
+        //     • 布尔值（ boolean）
+        //     • 数字（ number）
+        //     • 字符串（ string）
+        //     • 对象（ object），数组，函数都是object下的“子类型”
+        //     • 符号（ symbol， ES6 中新增）
+        typeof undefined === "undefined"; // true
+        typeof true === "boolean"; // true
+        typeof 42 === "number"; // true
+        typeof "42" === "string"; // true
+        typeof {
+            life: 42
+        } === "object"; // true
+        // ES6中新加入的类型
+        typeof Symbol() === "symbol"; // true
+        typeof null === "object"; // true,所以不能够判定出是null
+        // 下面是判定null的方法
+        var a = null;
+        (!a && typeof a === "object"); // true
+
+        // function是 object 的一个“子类型”，函数对象的 length 属性是其声明的参数的个数
+
+        // instanceof,检测是什么类型的对象，返回一个布尔值，arr instanceof Array,arr是否是数组
+
+        // JavaScript 中的变量是没有类型的， 只有值才有。变量可以随时持有任何类型的值。
+        // 已在作用域中声明但还没有赋值的变量，是 undefined 的。相反，还没有在作用域中声明过的变量，是 undeclared 的。
+        var a2;
+        a2; // undefined，已声明但没有赋值
+        // b2; // ReferenceError: b is not defined，没有声明
+        typeof a2; // undefined
+        typeof b2; // undefined,都输同样的显示
+
+        // JS中赋值和参数传递是通过值传递的
+        // 赋值和参数传递可以通过值复制（ value-copy）或者引用复制（ reference-copy）来完成
+        // JavaScript 引用指向的是值。如果一个值有 10 个引用，这些引用指向的都是同一个值， 它们相互之间没有引用 / 指向关系，JavaScript 中的引用和其他语言中的引用 / 指针不同，它们不能指向别的变量 / 引用，只能指向值
+        // JavaScript 对值和引用的赋值 / 传递在语法上没有区别，完全根据值的类型来决定
+        // 简单值（即标量基本类型值， scalar primitive） 总是通过值复制的方式来赋值 / 传递，包括null、 undefined、字符串、数字、布尔和 ES6 中的 symbol
+        var a3 = 2;
+        var b3 = a3; // b是a的值的一个副本
+        b3++;
+        a3; // 2
+        b3; // 3
+        // 复合值（ compound value）——对象（包括数组和封装对象，参见第 3 章）和函数，则总是通过引用复制的方式来赋值 / 传递
+        var c3 = [1, 2, 3];
+        var d3 = c3; // d是[1,2,3]的一个引用
+        d3.push(4);
+        c3; // [1,2,3,4]
+        d3; // [1,2,3,4]
+
+        // 向函数传递 a 的时候，实际是将引用 a 的一个复本赋值给 x，而 a 仍然指向 [1,2,3]。在函数中我们可以通过引用 x 来更改数组的值（ push(4) 之后变为 [1,2,3,4]）。但 x =[4,5,6] 并不影响 a 的指向，所以 a 仍然指向 [1,2,3,4]。
+        function foo4(x) {
+            x.push(4); // x = a4 引用同一个值，改变x就改变a4
+            x; // [1,2,3,4]
+            // 然后
+            x = [4, 5, 6]; // x重新定向，指向另一个数组
+            x.push(7); // 改变x后，原数组a4不会改变
+            x; // [4,5,6,7]
+        }
+        var a4 = [1, 2, 3];
+        foo4(a4);
+        console.log(a4); // 是[1,2,3,4]，不是[4,5,6,7]
+
+        // 通过引用 x 来更改引用 a 的指向，只能更改 a 和 x 共同指向的值。要将 a 的值变为 [4,5,6,7]，必须更改 x 指向的数组，而不是为 x 赋值一个新的数组
+        function foo5(x) {
+            x.push(4); // x = a5 引用同一个值，改变x就改变a4
+            x; // [1,2,3,4] 下面的操作都是在a5上操作的，没有改变引用的值，所以改变x会改变a5
+            // 然后
+            x.length = 0; // 清空数组
+            x.push(4, 5, 6, 7);
+            x; // [4,5,6,7]
+        }
+        var a5 = [1, 2, 3];
+        foo5(a5);
+        console.log(a5); // 是[4,5,6,7]，不是[1,2,3,4]
+
+        // 将值从一种类型转换为另一种类型通常称为类型转换（ type casting），这是显式的情况；隐式的情况称为强制类型转换（ coercion）
+        // JavaScript 中的强制类型转换总是返回标量基本类型值，如字符串、数字和布尔值，不会返回对象和函数。
+
+        var a6 = 42;
+        var b6 = a6 + ""; // 隐式强制类型转换
+        var c6 = String(a6); // 显式强制类型转换
+
+        // 类型转化toNumber()，true 转换为 1， false 转换为 0。 undefined 转换为 NaN， null 转换为 0
+
+        // 以下JS中是假值，除了假值其余为真
+        // undefined
+        // null
+        // false
+        // +0、 -0 和 NaN
+        // ""
+
+        // a || b;
+        // 大致相当于(roughly equivalent to):
+        // a ? a : b;
+        // a && b;
+        // 大致相当于(roughly equivalent to):
+        // a ? b : a;
+
+        // 十分常见的 || 的用法， 设置默认值：
+        function foo7(a, b) {
+            a = a || "hello";
+            b = b || "world";
+            console.log(a + " " + b);
+        }
+        console.log(foo7()); // "hello world"
+
+        // (1) 如果 Type(x) 是布尔类型，则返回 ToNumber(x) == y 的结果；
+        // (2) 如果 Type(y) 是布尔类型，则返回 x == ToNumber(y) 的结果。
+        var a8 = "42";
+        var b8 = true; // Type(x) 是布尔值，所以 ToNumber(x) 将 true 强制类型转换为 1
+        console.log(a8 == b8); // false
+
+        // 不要这样用，条件判断不成立：
+        // if (a == true) {
+        //     // ..
+        // }
+        // 也不要这样用，条件判断不成立：
+        // if (a === true) {
+        //     // ..
+        // }
+        // 这样的显式用法没问题：
+        // if (a) {
+        //     // ..
+        // }
+        // 这样的显式用法更好：
+        // if (!!a) {
+        //     // ..
+        // }
+        // 这样的显式用法也很好：
+        // if (Boolean(a)) {
+        //     // ..
+        // }
+
+        // (1) 如果 Type(x) 是字符串或数字， Type(y) 是对象，则返回 x == ToPrimitive(y) 的结果；
+        // (2) 如果 Type(x) 是对象， Type(y) 是字符串或数字，则返回 ToPromitive(x) == y 的结果。
+        var a9 = 42;
+        var b9 = [42]; //[ 42 ] 首先调用 ToPromitive 抽象操作，返回 "42"，变成 "42" == 42，然后又变成 42 == 42，最后二者相等。
+        console.log(a9 == b9); // true
+
+        // • 如果两边的值中有 true 或者 false，千万不要使用 ==。
+        // • 如果两边的值中有 []、 "" 或者 0，尽量不要使用 ==。
+        // 为了安全起见就要使用 ===
+
+        // JavaScript 通过标签跳转能够实现 goto 的部分功能。 continue 和 break 语句都可以带一个标签，因此能够像 goto 那样进行跳转
+        // 标签为foo的循环
+        // contine foo 并不是指“跳转到标签 foo 所在位置继续执行”，而是“执行foo 循环的下一轮循环”
+        foo: for (var i = 0; i < 4; i++) {
+            for (var j = 0; j < 4; j++) {
+                // 如果j和i相等，继续外层循环
+                if (j == i) {
+                    // 跳转到foo的下一个循环
+                    continue foo;
+                }
+                // 跳过奇数结果
+                if ((j * i) % 2 == 1) {
+                    // 继续内层循环（没有标签的）
+                    continue;
+                }
+                console.log(i, j);
+            }
+        }
+
+        // 标签为foo的循环
+        // break foo 不是指“跳转到标签 foo 所在位置继续执行”，而是“跳出标签foo 所在的循环 / 代码块，继续执行后面的代码”
+        foo: for (var i = 0; i < 4; i++) {
+            for (var j = 0; j < 4; j++) {
+                if ((i * j) >= 3) {
+                    console.log("stopping!", i, j);
+                    break foo;
+                }
+                console.log(i, j);
+            }
+        }
+    </script>
+</body>
+
+</html>
