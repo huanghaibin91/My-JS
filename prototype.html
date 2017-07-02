@@ -74,6 +74,8 @@
         // Object.prototype.__proto__ === null，所有函数对象的__proto__都指向Function.prototype，它是一个空函数
         // 所有的构造器都来自于 Function.prototype，甚至包括根构造器Object及Function自身。所有构造器都继承了·Function.prototype·的属性及方法。如length、call、apply、bind
 
+        // 委托是指，原型链接只有检索值的时候才会被用到。如果我们尝试去获取对象的某个属性值，但该对象没有此属性值，那么JavaScript会尝试着从原型对象中获取属性值。如果那个原型对象也没有该属性，那么再从它的原型寻找，依次类推，直到该过程最后到达终点Object.prototype。如果想要的属性完全不存在于原型链中，那么结果就是undefined。这个过程称为委托。
+
         function Person2() {}
         var person3 = new Person();
         console.log(person3.__proto__ === Person2.prototype); // true

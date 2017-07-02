@@ -5,7 +5,6 @@
     <title>闭包</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="css/style.css" rel="stylesheet">
 </head>
 
 <body>
@@ -23,7 +22,6 @@
 
         function foo() {
             var a = 2; // 3.调用的函数内部使用了父级作用域的内部变量
-
             function bar() { // 1.调用的函数是父级作用域内部声明的
                 console.log(a);
             }
@@ -35,7 +33,6 @@
         // 无论使用何种方式对函数类型的值进行传递， 当函数在别处被调用时都可以观察到闭包。
         function foo2() {
             var a = 2;
-
             function baz2() {
                 console.log(a); // 2
             }
@@ -45,13 +42,13 @@
         function bar2(fn) {
             fn(); // 这就是闭包！
         }
+        foo2();
 
         // 无论通过何种手段将内部函数传递到所在的词法作用域以外， 它都会持有对原始定义作用域的引用， 无论在何处执行这个函数都会使用闭包。
         var fn3;
 
         function foo3() {
             var a = 2;
-
             function baz3() {
                 console.log(a);
             }
@@ -103,6 +100,7 @@
             }, i * 1000);
         }
 
+        // 模块的一般形式是：一个定义了私有变量和函数的函数，利用闭包创建可以访问私有变量和函数的特权方法，最后返回这个特权函数，或者把它们保存到一个可访问到的地方
         // 模块有两个主要特征：（ 1） 为创建内部作用域而调用了一个包装函数；（ 2） 包装函数的返回值必须至少包括一个对内部函数的引用， 这样就会创建涵盖整个包装函数内部作用域的闭包。
         // 模块模式需要具备两个必要条件1. 必须有外部的封闭函数， 该函数必须至少被调用一次（ 每次调用都会创建一个新的模块实例）。2. 封闭函数必须返回至少一个内部函数， 这样内部函数才能在私有作用域中形成闭包， 并且可以访问或者修改私有的状态。
         var foo4 = (function CoolModule(id) {
