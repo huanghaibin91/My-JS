@@ -156,7 +156,7 @@
 
         function foo9() {
             setTimeout(() => {
-                // 这里的 this 在此法上继承自 foo()
+                // 这里的 this 在此法上继承自 foo9()
                 console.log(this.a);
             }, 100);
         }
@@ -209,7 +209,7 @@
 
         // 在构造函数的prototype中的this指向当前对象，其实就是采用new判定
 
-        
+
     </script>
 </body>
 
