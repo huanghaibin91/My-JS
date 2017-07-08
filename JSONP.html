@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>JSONP</title>
+        <script type="text/javascript" src="https://cdn.staticfile.org/jquery/1.12.4/jquery.js"></script>
+        <!-- 直接写在链接上 -->
+        <!-- <script type="text/javascript" src="http://osod5bm6c.bkt.clouddn.com/jsonp.json?callback=updateText2"></script> -->
+    </head>
+    <body>
+        <p id="text">1</p>
+        <p id="text2">2</p>
+
+        <script type="text/javascript">
+            // 同源是指，域名，协议，端口相同。当一个浏览器的两个tab页中分别打开来 百度和谷歌的页面当一个百度浏览器执行一个脚本的时候会检查这个脚本是属于哪个页面的，即检查是否同源，只有和百度同源的脚本才会被执行。
+
+            // script标签加载外部文件是可以跨域（不仅如此，我们还发现凡是拥有”src”这个属性的标签都拥有跨域的能力，比如<script>、<img>、<iframe>）
+            // web客户端通过与调用脚本一模一样的方式，来调用跨域服务器上动态生成的js格式文件（一般以JSON为后缀）
+
+            // JSONP，该协议的一个要点就是允许用户传递一个callback参数给服务端，然后服务端返回数据时会将这个callback参数作为函数名来包裹住JSON数据，这样客户端就可以随意定制自己的函数来自动处理返回数据,让远程服务器知道它应该调用的本地函数叫什么名字，毕竟是jsonp的服务者都要面对很多服务对象，而这些服务对象各自的本地函数都不相同啊？解决方法是我们要本地函数的名字发送给远程服务器，然后让远程服务器根据名字动态的构建JSON。
+            window.onload = function () {
+                // 同源数据，利用Ajax
+                var url = 'http://localhost/jsonp.json';
+                var request = new XMLHttpRequest();
+                request.open('GET', url);
+                request.onload = function () {
+                    if (request.status == 200) {
+                        console.log(request.responseText); // json字符串
+                        var value = JSON.parse(request.responseText); // 解析为JavaScript对象
+                        console.log(value);
+                        updateText(value.say.hello);
+                    }
+                }
+                request.send(null);
+
+                function updateText (response) {
+                    var text = document.querySelector('#text');
+                    text.innerHTML = response;
+                }
+
+                // 跨域数据，利用jsonp
+                jsonpRequest();
+
+                // 动态插入
+                function jsonpRequest () {
+                    // 使用script元素时就是在告诉浏览器需要获取JavaScript，完成解析并执行。这说明，它执行到你的script中的callback函数时，JSON已经不再是字符串形式了，而是一个真正的JavaScript对象。使用XMLHttpRequest时，数据采用字符串返回，现在函数会认为它得到的是一个串。
+
+                    // 浏览器缓存，如果你反复获取同一个URL，浏览器为了提高效率会把它缓存起来，所以你会反复获得缓存的文件，解决方法：在URL后面添加一个无意义的随机数，诱使浏览器认为是一个新的URL
+                    // var url = 'http://osod5bm6c.bkt.clouddn.com/jsonp.json?callback=updateText2' + '&random=' + (new Date()).getTime();
+                    // 因为http://osod5bm6c.bkt.clouddn.com/jsonp.json所对应的后台的服务器端脚本只是单纯的输出，并不支持回调（或者你不知道他的回调的api名称，格式）。
+                    var url = 'http://osod5bm6c.bkt.clouddn.com/jsonp.json';
+                    // var url = 'jsonp.js?callback=updateText2' + '&random=' + (new Date()).getTime();;
+                    var newScript = document.createElement('script');
+                    newScript.setAttribute('src', url);
+                    newScript.setAttribute('id', 'jsonp');
+
+                    var oldScript = document.querySelector('#jsonp');
+                    var head = document.querySelector('head');
+
+                    // 用新的script文件替换掉原来的，不能直接替换src，直接修改src浏览器不会把它看成一个新的script元素，所以它不会发出请求来获取JSONP。要强制浏览器做出请求，必须创建新的script元素，成为“脚本插入”
+
+                    if (oldScript == null) {
+                        head.appendChild(newScript);
+                    } else {
+                        head.replaceChild(newScript, oldScript);
+                    }
+                }
+
+                // jsonp，Ajax
+                // getJSON
+                $.getJSON('http://osod5bm6c.bkt.clouddn.com/jsonp.json', function (data) {
+                    console.log(data); // 完成
+                });
+                // ajax
+                // JSONP不支持POST请求仅仅执行GET请求
+                $.ajax({
+                    url: 'http://osod5bm6c.bkt.clouddn.com/jsonp.json',
+                    type: 'get',
+                    dataType: 'jsonp',
+                    jsonpCallback: 'updateText2',
+                    success: function (data) {
+                        console.log(data);
+                    }
+                });
+
+            }
+
+            function updateText2 (jsonText) {
+                // var text = document.querySelector('#text2');
+                // var response = JSON.parse(jsonText);
+                // text.innerHTML = response.say.world;
+                console.log(jsonText);
+            }
+        </script>
+    </body>
+</html>
