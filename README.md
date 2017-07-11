@@ -198,3 +198,4 @@ JS知识笔记
 	> * 元素可见尺寸，除去外边距、变宽，`clientWidth`、`clientHeight`，如果有滚动条，还会再减去滚动条的宽度，内联元素的这两个属性为0
 	> * 元素相对于父元素的位置`offsetLeft`、`offsetTop`
 	> * 元素左、上边框大小`clientLeft`、`clientTop`
+
