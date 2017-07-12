@@ -113,6 +113,13 @@
         // POST - 向指定的资源提交要处理的数据
         // $.post(URL,data,callback);
 
+        // jQuery链式调用,return this返回当前对象，来维护插件链式调用，each循环实现每个对象的访问
+        $.fn.example = functon () {
+            return this.each(function () {
+                // do something
+            });
+        };
+
         // $.fn是指jquery的命名空间，加上fn上的方法及属性，会对jquery实例每一个有效，类似于在jQuery实例上添加一个prototype方法
         // $.fn = jQuery.prototype = {
         　　　 //    init: function( selector, context ) {//….
@@ -120,22 +127,32 @@
         // };
 
         // jQuery为开发插件提拱了两个方法，分别是：
-        // jQuery.extend(object); 为扩展jQuery类本身.为类添加新的方法,可以理解为添加静态方法
-        // jQuery.fn.extend(object); 给jQuery对象添加方法,jQuery.fn.extend = jQuery.prototype.extend
+        // jQuery.extend(object) = jQuery.object; 为扩展jQuery类本身.为类添加新的方法,可以理解为添加静态方法，类似$.ajax(),$.extend()
+
+        // jQuery.fn.extend(object); 给jQuery对象添加方法,jQuery.fn.extend = jQuery.prototype.extend,类似$(ele).addClass()等等，需要调用jQuery实例的方法
+
         // $.extend(),extend(dest,src1,src2,src3...),合并多个对象,是将src1,src2,src3...合并到dest中,返回值为合并后的dest,后面对象的同名属性会覆盖前面的，没有的对象属性会被添加
         // extend(boolean,dest,src1,src2,src3...)，第一个布尔值为true时表示深度拷贝，属性中的对象的属性会被复制进属性对象
 
-        // jQuery(function(){}) = jQuery(docunemt).ready(function(){})，意义为在DOM加载完毕后执行ready()方法 
+        // jQuery(function(){}) = jQuery(docunemt).ready(function(){})，意义为在DOM加载完毕后执行ready()方法
         // (funtion($){}(jQuery)，用于存放开发插件的代码，执行其中代码DOM不一定存在，直接自动执行DOM操作代码请小心使用
 
         // 开发插件模式
+        // 避免全局依赖，避免第三方破坏，兼容jQuery操作符'$'和'jQuery'
         // (function ($) {
         //     $.fn.example = function () {
         //         alert('example')
         //     }
         // })(jQuery);
 
-        
+        // 单例模式,如果实例存在就不再重新创建实例，利用data()来存放插件对象的实例
+        $.fn.example = function () {
+            var that = $(this);
+            instance = me.data('example');
+            if (!instance) {
+                me.data('example', (instance = new example()));
+            }
+        };
 
     </script>
 </body>
