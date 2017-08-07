@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Function</title>
+    </head>
+    <body>
+        <script type="text/javascript">
+            // var add = 5;
+            function add(a, b) {
+                return a + b;
+            }
+            console.log(typeof add); // function
+            console.log(add(2, 3));
+
+            // 函数是对象，函数名是指针，使用不带圆括号的函数名是访问函数指针，而非调用函数
+
+            // 函数声明提升，函数表达式不会提升
+
+            // 函数内部属性，arguments，保存函数参数，arguments.callee()函数自身；this，引用的是函数数据以执行的环境对象
+
+            // 函数的属性和方法，属性：length和prototype，length是命名参数的个数，prototype保存实例方法的所在
+
+            // 利用立即函数可以模仿块级作用域
+            (function () {
+                // 块级作用域
+            } ());
+
+        </script>
+    </body>
+</html>

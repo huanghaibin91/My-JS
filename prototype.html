@@ -42,8 +42,11 @@
             // }
         }
         // console.log(new Person('Tom', 19, 'Student').sayName()); 在重写原型之前调用构造函数，显示错误。重写原型对象切断了现有原型和任何之前已经存在的对象实例之间的联系。它们引用的仍是最初的原型
+
+        console.log(new Person().sayName); // undefined,在重写原型之前调用，仍指向原来的原型，原来的原型没有sayName方法
+
         Person.prototype = {
-            // constructor: Person, // 使用对象字面量重写了原型对象，此时新的对象也有一个constructor属性，指向Object，如果constructor值重要，可以这样重写constructor指向适当的值
+            // constructor: Person, // 使用对象字面量重写了原型对象，此时新的对象也有一个constructor属性，指向Object，如果constructor值重要，可以这样重写constructor指向适当的值，这种方法会导致它的enumerable为true，默认情况下，constructor是不可枚举的
             name: 'Zaxlct',
             age: 28,
             job: 'Software Engineer',
@@ -51,6 +54,12 @@
                 console.log(this.name);
             }
         }
+        Object.defineProperty(Person.prototype, 'constructor', {
+            enmumerable: false,
+            value: Person
+        }); // constructor设置为不可枚举的
+
+        console.log(new Person().sayName); // 在重写原型之后调用，指向新的原型，有sayName方法
 
         var person1 = new Person('Zaxlct', 28, 'Software Engineer');
         var person2 = new Person('Mick', 23, 'Doctor');
@@ -61,7 +70,7 @@
         console.log(person2.constructor == Person); //true
         console.log(person1.sayname == person2.sayname); //true
         person1.sayName(); // 'Zaxlct'
-        person2.sayName(); // 'Zaxlct'
+        person2.sayName(); // 'Mick'
         // 每个对象都有 __proto__ 属性，但只有函数对象才有 prototype 属性，所有对象的 __proto__ 都指向其构造器的 prototype，所有函数对象的 __proto__ 最后都指向 Function.prototype，它是一个空函数（Empty function）
         // JS 在创建对象（不论是普通对象还是函数对象）的时候，都有一个叫做__proto__ 的内置属性，用于指向创建它的构造函数的原型对象,对象 person1 有一个 __proto__属性，创建它的构造函数是 Person，构造函数的原型对象是 Person.prototype ,连接存在于实例（person1）与构造函数（Person）的原型对象（Person.prototype）之间，而不是存在于实例（person1）与构造函数（Person）之间。
 
@@ -125,7 +134,7 @@
 
         // isPrototypeOf()，判断是否是对象的原型
         // obj.prototype.isPrototypeOf(obj), obj.prototype是不是obj的原型，是返回true
-        // Object.getPrototypeOf(),返回对象的原型
+        // Object.getPrototypeOf(obj),返回对象obj的原型
 
         // 读取对象属相时会先搜索实例再搜索原型，所以对象实例中有同名属性，就会屏蔽原型中的同名属性
 
@@ -198,7 +207,7 @@
             Foo2.call(this, name);
             this.label = label;
         }
-        // 我们创建了一个新的 Bar2prototype 对象并关联到 Foo2.prototype
+        // 我们创建了一个新的 Bar2.prototype 对象并关联到 Foo2.prototype
         Bar2.prototype = Object.create(Foo2.prototype); // Object.create(..) 会创建一个新对象（ bar2） 并把它关联到我们指定的对象（ foo2）
         // 注意！ 现在没有 Bar2.prototype.constructor 了
         // 如果你需要这个属性的话可能需要手动修复一下它
@@ -212,7 +221,7 @@
         // Object.create(null) 会创建一个拥有（或者说null）[[Prototype]]链接的对象， 这个对象无法进行委托。 由于这个对象没有原型链， 所以instanceof 操作符（ 之前解释过） 无法进行判断， 因此总是会返回 false。
 
 
-        // 原型链继承
+        // 原型链继承，通过原型链实现继承时，不能通过对象字面量创建原型方法，因为这样会重写原型链
         function superColor1 () {
             this.colors = ['red', 'blue', 'green'];
         }
@@ -253,6 +262,7 @@
             superColor3.call(this, name); // 这里有superColor3的属性，第二次调用
         }
         subColor3.prototype = new superColor3(); // 这里有superColor3的属性，第一次调用
+        // 两次调用superColor3，subColor3的原型和实例中都有属性name和colors，只是实例中的屏蔽了原型中的同名属性
         subColor3.prototype.sayAge = function () {
             console.log(this.age);
         }

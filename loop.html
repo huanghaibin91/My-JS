@@ -33,7 +33,22 @@
 
         // 相当于每次遇到setTimeOut函数就扔到一边，最后循环几次就放几个setTimeOut函数进去，最会循环结束，其他同步函数也结束后，开始执行几个setTimeOut函数，它们基本就是同时执行，只看自己的回调时间
 
-        
+        // break，立即退出循环。continue，立即退出循环，再从退出位置后面继续执行。两者都可以和label语句联合使用，从而返回代码中特定的位置
+
+        var num = 0;
+        outermost:
+        for (var i = 0; i < 10; i++) {
+            for (var j = 0; j < 10; j++) {
+                if (i == 5 && j ==5) {
+                    // break; // 仅退出j循环，num=95
+                    // continue; // 仅退出i==5&&j==5这一次循环，num=99
+                    // break outermost; // 退出ij两个循环，num=55
+                    continue outermost; // 退出j循环，继续i循环，num=95
+                }
+                num++;
+            }
+        }
+        console.log(num);
     </script>
 </body>
 

@@ -18,17 +18,17 @@
         // nodeValue，元素节点为null，文本节点为文本内容
 
         // parentNode,父节点
-        // childNodes,所有子节点
+        // childNodes,所有子节点,基于DOM结构动态查询的结果，因此DOM结构的变化能够自动反映在Nodelist对象中
         // children，所有子元素节点
         // firstChild,第一个子节点，firstElementChild第一个元素子节点
         // lastChild，最后一个子节点, lastElementChild最后一个元素子节点
         // nextSibling，下一个兄弟节点,nextElementSibling下一个元素兄弟节点
         // previousSibing，上一个兄弟节点,previousElementSibing上一个元素兄弟节点
 
-        // appendChild(),在父节点末尾添加一个节点，如果目标节点已经是文档的一部分了，那结果就是将该节点从原来的的位置移动到新位置
-        // insertBefore()，在父节点的某个子节点之前添加一个节点
-        // replaceChild()，替换一个子节点
-        // removeChild()，移出一个子节点
+        // parentNode.appendChild(newNode),在父节点末尾添加一个节点，如果目标节点已经是文档的一部分了，那结果就是将该节点从原来的的位置移动到新位置
+        // parentNode.insertBefore(newNode,targetNode)，在父节点的某个子节点之前添加一个节点，目标位置参数null则跟appendChild()一样
+        // parentNode.replaceChild(newNode, oldNode)，替换一个子节点
+        // parentNode.removeChild(node )，移出一个子节点
 
         // cloneNode(),复制节点，接收一个参数，表示是否执行深复制，深复制会复制其整个子节点树
 
@@ -44,7 +44,7 @@
         // document.createElement()
         // document.createTextNode()
 
-        // normalize()合并元素的文本节点
+        // normalize()合并元素的文本节点，将元素下多个文本节点合并为一个
         // splitText()将一个文本节点分成两个，参数是文本位置
 
         // classList类名集合,以下是它的方法

@@ -6,7 +6,29 @@
     </head>
     <body>
         <script type="text/javascript">
-            
+            // 正则表达式标志：g，全局模式；i，不区分大小写；m，多行模式
+            // 正则表达式元字符：( { [ \ ^ $ | ? * = . ] } )这些元字符都拥有特殊用途，要想匹配元字符就必须用\反斜杠转义
+
+            // reg1与reg2等价
+            var reg1 = /\[bc\]at/g;
+            var reg2 = new RegExp('\\[bc\\]at', 'g');
+
+            // 正则表达式的实例方法
+            // exec()，捕获组，返回包含第一个匹配信息的数组，没有则返回null。返回的数组是Array的实例，但包含两个额外属性index和input，index表示匹配项在字符串中的位置，input表示应用正则表达式的字符串
+            var text1 = 'mom and dady and baby';
+            var pattern1 = /mom( and dady( and baby)?)?/gi;
+            var matches = pattern1.exec(text1);
+            console.log(matches.index);
+            console.log(matches.input);
+            console.log(matches[0]);
+            console.log(matches[1]);
+            console.log(matches[2]);
+
+            // 对于exec(),模式中设置了g标志，每次也只会返回一个匹配项。在不设置g时，在同一个字符串上多次调用exec()将始终返回第一个匹配项的信息。设置g后，每次调用exec()都会在字符串中继续查找新匹配项
+
+            // test()，匹配返回true，否则返回false
+            var pattern2 = /mom/;
+            console.log(pattern2.test(text1));
         </script>
     </body>
 </html>

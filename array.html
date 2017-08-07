@@ -30,7 +30,7 @@
         var arr5 = [1, 5, 6, 3, 9];
         console.log(arr5.reverse());
         console.log(arr5);
-        // sort()，数组排序，改变原数组
+        // sort()，数组排序，改变原数组，比较函数接收两个参数，如果第一个数应该位于跌个数之前则返回一个负数，相等返回0，第一个参数应该位于第二个参数之后返回一个正数
         console.log(arr5.sort(function(a, b) {
             return a - b;
         }));

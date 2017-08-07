@@ -8,6 +8,15 @@
 
 <body>
     <script type="text/javascript">
+        // 对象的属性和方法:
+        // constructor: 保存着用于创建当前对象的函数
+        // hasOwnProperty(propertyName): 用于检验属性是否在实例中
+        // isPrototypeOf(object): 用于检查传入的对象是否是当前对象的原型
+        // propertyIsEnumerable(): 检查属性是否能用for-in枚举
+        // toLocalString():
+        // toString():
+        // valueOf():
+
         // 对象可以通过两种形式定义： 声明（ 文字） 形式和构造形式。
         var myObj = { // 声明对象，常用
             key: 'hello',
@@ -41,8 +50,10 @@
             a: 2
         };
         Object.getOwnPropertyDescriptor(myObject, "a");
+        console.log(Object.getOwnPropertyDescriptor(myObject, "a"));
+        // 数据属性
         // {
-        // value: 2,值
+        // value: 2，默认undefined
         // writable: true,可写，决定可以修改属性的值
         // enumerable: true,可枚举，，属性是否会出现在对象的属性枚举中
         // configurable: true,可配置，只要属性是可配置的， 就可以使用defineProperty(..) 方法来修改属性描述符，不可配置的属性也不可以删除
@@ -50,7 +61,7 @@
 
         // 不变性，属性或者对象是不可改变，所有的方法创建的都是浅不变形， 也就是说， 它们只会影响目标对象和它的直接属性。 如果目标对象引用了其他对象（ 数组、 对象、 函数， 等）， 其他对象的内容不受影响， 仍然是可变的
 
-        // Object.defineProperty(),修改对象特性，接收三个参数：属性所在的对象，属性的名字和一个描述符对象
+        // Object.defineProperty(),修改对象特性，接收三个参数：属性所在的对象，属性的名字和一个描述符对象，在调用Object.getOwnPropertyDescriptor()方法时，如果不指定writable,enumerable,configurable属性则默认值为false，IE支持版本IE8以上
 
         // 1. 对象常量，结合 writable:false 和 configurable:false 就可以创建一个真正的常量属性（ 不可修改、重定义或者删除
         var myObject1 = {};
@@ -59,6 +70,7 @@
             writable: false,
             configurable: false
         });
+        console.log(myObject1.FAVORITE_NUMBER); // 42
         //2. 禁止一个对象添加新属性并且保留已有属性，可以使用Object.preventExtensions(..)
         var myObject2 = {
             a: 2
@@ -78,13 +90,14 @@
         myObject3.hasOwnProperty("a"); // true，hasOwnProperty(..) 只会检查属性是否在 myObject 对象中， 不会检查 [[Prototype]] 链
         myObject3.hasOwnProperty("b"); // false
 
-        // 读取访问器属性时，会调用getter函数，在写入访问器函数时，会调用setter函数并传入新值
+        // 读取访问器属性时，会调用getter函数，负责返回有效的值在；写入访问器函数时，会调用setter函数并传入新值，这个函数负责如何处理函数
         var book = {
-            _year: 2017, // _year前面的下划线表示只能通过对象方法访问的属性
+            _year: 2017, // _year前面的下划线表示只能通过对象方法访问的属性,私有属性
             edition: 1,
         };
 
         // 访问器属性有四个configurable,enumerable,getter,setter,访问器属性只能使用Object.defineProperty()方法定义
+        // 只指定getter意味着属性不能写，只指定setter意味属性不能读
         Object.defineProperty(book, 'year', {
             get: function () {
                 return this._year;
@@ -97,8 +110,23 @@
             }
         });
         book.year = 2018;
-        console.log(book.edition);
+        console.log(book.edition); // 2018 - 2017 + 1 = 2
         // 同时可以操作多个对象属性的Object.defineProperties()方法
+        Object.defineProperties(book, {
+            _year: {
+                writable: true,
+                value: 2017
+            },
+            edition: {
+                writable: true,
+                value: 3
+            }
+        });
+        console.log(book._year);
+        console.log(book.edition);
+
+        // 读取属性的特性，Object,getOwnPropertyDescriptor(),属性所在的对象和要读取其描述符的属性名称
+        console.log(Object.getOwnPropertyDescriptor(book, '_year'));
 
         // 创建对象
         // 工厂模式
@@ -112,13 +140,13 @@
             return o;
         }
         console.log(createPeerson('tom', 21));
-        // 构造函数模式,构造函数跟普通函数一样，只是是用来创建对象的函数而已，作为普通函数调用，作用域会绑定到window，this此时是默认绑定
+        // 构造函数模式,构造函数跟普通函数一样，只是是用来创建对象的函数而已，作为普通函数调用，作用域会绑定到window，this此时是默认绑定，函数此时会为window添加新属性和方法
         // 特点：没有显式的创建对象，直接将属性和方法赋值给this对象，没有return语句
         function Person (name, age) {
             this.name = name;
             this.age = age;
             this.sayName = function () {
-                console.log(this.sayName);
+                console.log(this.name);
             }
         }
         // 要创建构造函数新实例，必须使用new操作符：
@@ -136,8 +164,8 @@
         }
         Person2.prototype = {
             constructor: Person2,
-            this.sayName = function () {
-                console.log(this.sayName);
+            sayName: function () {
+                console.log(this.name);
             }
         }
     </script>

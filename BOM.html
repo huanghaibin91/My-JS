@@ -10,8 +10,8 @@
             // screenLeft, screenTop,表示窗口相对于屏幕左边和上边的位置
             // Firefox则是screenX，screenY
             // 跨浏览器取得窗口左边和上边的位置
-            var leftPos = (typeof screenLeft === 'number') ? window.screenLeft : window.screenX);
-            var topPos = (typeof screenTop === 'number') ? window.screenTop : window.screenX);
+            var leftPos = (typeof screenLeft === 'number') ? window.screenLeft : window.screenX;
+            var topPos = (typeof screenTop === 'number') ? window.screenTop : window.screenX;
 
             // moveTo()移动到位置,moveBy()移动多少位置，将窗口移动到一个精确的位置
             // resizeTo(),resizeBy(),调整浏览器窗口的大小
@@ -20,7 +20,7 @@
             // outerWidth,outerHeight,返回浏览器窗口本身的尺寸
             // 跨浏览器获取页面视口的大小
             function getPage () {
-                var pageWidth = window.innerWidth;
+                var pageWidth = window.innerWidth; // window.innerWidth是移动设备保存可见视口，也就是屏幕可见页面区域的大小
                 var pageHeight = window.innerHeight;
 
                 if (typeof pageWidth !== 'number') {
@@ -44,9 +44,16 @@
             // 使用超时调用来模拟间歇调用是一种最佳模式
 
             // alert()
-            // consfirm()确认框
+            // confirm()确认框
+            if (confirm('hello world')) {
+                alert('hello');
+            } else {
+                alert('world');
+            }
             // prompt()确认加输入框
-
+            if (prompt('hello world?', '') !== null) {
+                alert('hello world');
+            }
         </script>
     </body>
 </html>
