@@ -19,6 +19,7 @@
 
         // parentNode,父节点
         // childNodes,所有子节点,基于DOM结构动态查询的结果，因此DOM结构的变化能够自动反映在Nodelist对象中
+        // hasChildNodes()，方法检测 元素是否有子节点
         // children，所有子元素节点
         // firstChild,第一个子节点，firstElementChild第一个元素子节点
         // lastChild，最后一个子节点, lastElementChild最后一个元素子节点
@@ -30,12 +31,14 @@
         // parentNode.replaceChild(newNode, oldNode)，替换一个子节点
         // parentNode.removeChild(node )，移出一个子节点
 
-        // cloneNode(),复制节点，接收一个参数，表示是否执行深复制，深复制会复制其整个子节点树
+        // cloneNode(),复制节点，接收一个参数，表示是否执行深复制，深复制会复制其整个子节点树。这个方法不会复制添加到DOM节点中的JavaScript属性，例如事件处理等
 
         // document.documentElement取得html,document.body取得body
+        // docuemnt.title取得文档标题
         // document.forms取得所有表单元素
         // document.images取得所有图像元素
         // document.links取得所有带href特性的a元素
+        // document.getElementsByName()，返回有指定name的元素，常用情况是取得单选按钮，name相同的单选按钮只有选中那个会被获取
 
         // getAttribute()
         // setAttribute()
@@ -47,11 +50,29 @@
         // normalize()合并元素的文本节点，将元素下多个文本节点合并为一个
         // splitText()将一个文本节点分成两个，参数是文本位置
 
+        // DocumentFragment，没有对应的标记，可以作为‘仓库’使用
+        // var fragment = document.creatDocumentFragment();
+        // var ul = document.getElementsByTagName('ul');
+        // for (var i = 0; i < 3; i++) {
+        //     var  li = document.createElement('li');
+        //     fragment.appendChild(li); // 利用DocumentFragment作为仓库先储存元素，最后再一起插入目标元素，避免浏览器多次渲染
+        // }
+        // ul.appendChild(fragment);
+
+        // querySelector()、querySelectorAll()，接收以个CSS选择符，并获取匹配元素
+
+        // childElementCount，返回子元素的个数
+
         // classList类名集合,以下是它的方法
         // add()，添加类名
         // contains()，是否有类名
-        // remove()，移出类名
+        // remove()，移除类名
         // toggle()，检查是否有类名，有就删除，没有就添加
+
+        // document.activeElement(),DOM中当前获得焦点的元素
+        // document.hasFocus(),确定文档是否获取了焦点
+
+        // document.readyState，有两个值loading和complete，用来实现一个指示文档已经加载完成的指示器
 
         // innerHTML，读模式属性返回与调用元素的所有子节点对应的HTML标记，写模式会被解析为DOM子树，替换调用元素所有的子节点，但是通过innerHTML插入script无效
         // outerHTML，读模式属性返回与调用元素及其所有子节点对应的HTML标记，写模式会被解析为DOM子树，替换调用元素及其所有的子节点
@@ -61,20 +82,22 @@
 
         // style特性，包含元素HTML标签中的style样式，不包含外部链接样式，所以通过style设置样式，设置的是内联样式。设置外部样式可以通过设置类名或id连接外部样式表
         // CSSText可以方位设置style特性中的CSS代码
+        // getPropertyValue，获取CSS属性值的字符串表示
+        // removeProperty，移除一个CSS属性
 
-        // 计算样式，元素所有样式，getComputedStyle,currentStyle(IE中)
-        // var computedStyle = document.defaultView.getComputedStyle(node, null);
+        // 计算样式，元素所有样式，getComputedStyle,currentStyle(IE中)，计算样式都是只读的
+        // var computedStyle = document.defaultView.getComputedStyle(node, null); 两个参数是计算样式的元素和一个伪元素字符串，如":after"，不需要伪元素则写null，会返回一个包含所有计算属性的对象
         // var computedStyle = node.currentStyle;
         // 有可能不会显示综合属性，就是几个CSS属性简写在一起的，所以查询的时候写详细的属性
 
-        // 元素尺寸,一下属性都是只读属性，不可赋值
+        // 元素尺寸,以下属性都是只读属性，不可赋值
         // offsetHeight，元素垂直空间高度，包括边框与滚动条
         // offsetWidth，元素水平空间高度，包括边框与滚动条
         // offsetTop，元素上外边框与与包含元素上内边框的距离
         // offsetLeft，元素左外边框与与包含元素左内边框的距离
         // 包含元素保存在offsetParent，不一定与parentNode相同，因为offsetParent是要能够设置大小的元素
-        // clientHeight，元素内容及其内边距所占高度，不包含滚动条
-        // clientWidth，元素内容及其内边距所占宽度，不包含滚动条
+        // clientHeight，元素内容及其内边距所占高度，不包含滚动条与边框
+        // clientWidth，元素内容及其内边距所占宽度，不包含滚动条与边框
 
         // 浏览器窗口大小
         function getViewport() {
