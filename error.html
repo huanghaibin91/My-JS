@@ -12,7 +12,33 @@
 
             // ReferenceError 同作用域判别失败相关， 而 TypeError 则代表作用域判别成功了， 但是对结果的操作是非法或不合理的。
 
-            
+            try {
+                // 可能会导致错误的代码
+                window.errorFunction();
+            } catch (error) {
+                // 在错误发生时怎么处理
+                alert(error.message);
+            } finally {
+                // 只要代码中包含finally字句，finally就一定会执行，且try和catch中的return会被忽略
+            }
+
+            // 错误类型
+            // Error，error是基础类型，其它错误都继承至该类型
+            // EvalError，使用eval错误时抛出
+            // RangeError，数值超出范围
+            // ReferenceError，找不到对象
+            // SyntaxError，把语法错误的字符串传入eval()函数时
+            // TypeError，在变量保存着意外的类型时，或者访问不存在的方法时
+            // URIError，使用encodeURL()或decodeURI()，URI格式不正确时
+
+            function add(a, b) {
+                if (typeof a !== 'number' || typeof b !== 'number') {
+                    throw new Error ('a or b is not number');
+                }
+                return a + b;
+            }
+            add('hello', 2)
+
         </script>
     </body>
 </html>

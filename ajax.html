@@ -38,7 +38,7 @@
         // 创建新的XMLHttpRequest实例
         var xhr = createXHR();
         // 监听请求的状态变化
-        xhr.onreadystatechange = function() {
+        xhr.onreadystatechange = function() {  // 使用实际的xhr对象而不用this，防止出现作用域问题
             if (xhr.readyState == 4) {
                 if ((xhr.status >= 200 && xhr.status < 300) || xhr.status == 304) {
                     console.log(xhr.responseText);
@@ -92,13 +92,14 @@
 
         // post请求，通常用于向服务器发送应该被保存的数据，通常用于表单提交
 
-        // setRequestHeader(),设置http请求头部信息，两个参数头部字段的名称和头部字段的值
+        // setRequestHeader(),设置http请求头部信息，两个参数头部字段的名称和头部字段的值，必须在调用open()之后send()之前调用setRequestHeader()
         // getResponseHeader(),可以取得相应的相应头部信息
         // getAllResponseHeaders(),可以取得所有头部信息的长字符串
 
-        // FormData对象，序列化表单
+        // FormData对象，序列化表单，使用formdata不必明确设置头部，XHR对象能够数据类型是formdata的实例
         var data = new FormData();
         data.append(key, value); // 两个参数，键和值，向data中添加数据
+        data.append(document.form[0]);
 
         // 超时设定
         xhr.open('get', 'example.php', true);
@@ -108,6 +109,35 @@
         };
         xhr.send(null);
 
+        // 进度事件
+        // load事件，在接收完整的响应数据时触发
+        xhr.onload = function () {
+            if ((xhr.status >= 200 && xhr.status < 300) || xhr.status == 304) {
+                console.log(xhr.responseText);
+            } else {
+                console.log('response is not success' + xhr.status);
+            }
+        }
+        // progresss事件，在刘拉你接收数据周期性触发，可以用来创建进度指示器，会接收一个event对象，event.target指向XHR，包含三个属性：
+        // lengthComputable，表示进度信息是否可用
+        // position，已经接收的字节数
+        // totalSize，根据Content-Length响应头确定的预期字节数
+
+        // 跨域安全策略，XHR对象只能访问包含它页面位于同一个域中的资源
+
+        // CORS定义了必须访问跨域资源时，浏览器与服务器应该如何沟通。就是使用自定义的HTTP头部让浏览器与服务器精细沟通，从而决定请求或响应是应该成功，还是应该失败
+        // 除IE外，其它浏览器用XMLHttpRequest原生支持CORS
+
+        // 图像Ping，网页可以从任何其它网页加载图像，不用担心跨域。图像Ping是与服务器进行简单、单向的跨域通信。通过图像Ping，浏览器得不到任何具体的数据，但通过侦听load和error事件，它能知道响应是什么时候接收到的
+        var img = new Image();
+        img.onload = img.onerror = function () {
+            console.log('Done!');
+        }
+        img.src = 'http://example.com/test/?name=Jack';
+
+        // Comet，一种服务器向页面推送数据的技术，实现Comet的方式长轮询（浏览器定时向服务器发送请求，看有没有更新的数据）和流
+        // 轮询使用setTime和XHR就能实现
+        // HTTP流 
 
 
     </script>
