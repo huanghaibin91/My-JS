@@ -13,7 +13,7 @@
             // DOM2级事件处理addEventListener(),removeEventListener(),接收三个参数，事件名，事件处理函数，布尔值，最后一个布尔值默认false，代表事件冒泡，设置为true表示事件捕获，DOM2可以为同一元素设置多个事件处理函数，W3Cthis指向当前元素，被当做元素的方法，IE指向window
             // IE中attachEvent(),detachEvent(),两个参数，事件名加‘on’，事件处理函数,this指向window，IE中的event也是window下的一个属性
 
-            // 宽浏览器事件处理
+            // 宽浏览器事件处理，IE9+支持W3C标准事件处理
             var EventUtil = {
                 addHandler: function (ele, type, handler) {
                     if (ele.addEventListener) {
