@@ -1,44 +1,71 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <title>错误</title>
-    </head>
-    <body>
-        <script type="text/javascript">
-            // 作用域中遍寻不到所需的变量， 引擎就会抛出 ReferenceError异常。
 
-            // RHS 查询找到了一个变量， 但是你尝试对这个变量的值进行不合理的操作，比如试图对一个非函数类型的值进行函数调用， 或着引用 null 或 undefined 类型的值中的属性， 那么引擎会抛出另外一种类型的异常， 叫作 TypeError。
+<head>
+    <meta charset="utf-8">
+    <title>错误</title>
+</head>
 
-            // ReferenceError 同作用域判别失败相关， 而 TypeError 则代表作用域判别成功了， 但是对结果的操作是非法或不合理的。
+<body>
+    <script type="text/javascript">
+        // 作用域中遍寻不到所需的变量， 引擎就会抛出 ReferenceError异常。
 
+        // RHS 查询找到了一个变量， 但是你尝试对这个变量的值进行不合理的操作，比如试图对一个非函数类型的值进行函数调用， 或着引用 null 或 undefined 类型的值中的属性， 那么引擎会抛出另外一种类型的异常， 叫作 TypeError。
+
+        // ReferenceError 同作用域判别失败相关， 而 TypeError 则代表作用域判别成功了， 但是对结果的操作是非法或不合理的。
+
+        try {
+            // 可能会导致错误的代码
+            window.errorFunction();
+        } catch (error) {
+            // 在错误发生时怎么处理
+            alert(error.message);
+        } finally {
+            // 只要代码中包含finally字句，finally就一定会执行，且try和catch中的return会被忽略
+        }
+
+        // error属性：message：错误提示信息name、错误名称（非标准属性）、stack：错误的堆栈（非标准属性）
+
+        // 错误类型
+        // Error，error是基础类型，其它错误都继承至该类型
+        // EvalError，使用eval错误时抛出
+        // RangeError，数值超出范围
+        // ReferenceError，找不到对象
+        // SyntaxError，把语法错误的字符串传入eval()函数时
+        // TypeError，在变量保存着意外的类型时，或者访问不存在的方法时
+        // URIError，使用encodeURL()或decodeURI()，URI格式不正确时
+
+        function add(a, b) {
+            if (typeof a !== 'number' || typeof b !== 'number') {
+                throw new Error('a or b is not number');
+            }
+            return a + b;
+        }
+        add('hello', 2)
+
+        function f() {
             try {
-                // 可能会导致错误的代码
-                window.errorFunction();
-            } catch (error) {
-                // 在错误发生时怎么处理
-                alert(error.message);
+                console.log(0);
+                throw 'bug';
+            } catch (e) {
+                console.log(1);
+                return true; // 这句原本会延迟到finally代码块结束再执行
+                console.log(2); // 不会运行
             } finally {
-                // 只要代码中包含finally字句，finally就一定会执行，且try和catch中的return会被忽略
+                console.log(3);
+                return false; // 这句会覆盖掉前面那句return
+                console.log(4); // 不会运行
             }
+            console.log(5); // 不会运行
+        }
 
-            // 错误类型
-            // Error，error是基础类型，其它错误都继承至该类型
-            // EvalError，使用eval错误时抛出
-            // RangeError，数值超出范围
-            // ReferenceError，找不到对象
-            // SyntaxError，把语法错误的字符串传入eval()函数时
-            // TypeError，在变量保存着意外的类型时，或者访问不存在的方法时
-            // URIError，使用encodeURL()或decodeURI()，URI格式不正确时
+        var result = f();
+        // 0
+        // 1
+        // 3
+        result
+        // false
+    </script>
+</body>
 
-            function add(a, b) {
-                if (typeof a !== 'number' || typeof b !== 'number') {
-                    throw new Error ('a or b is not number');
-                }
-                return a + b;
-            }
-            add('hello', 2)
-
-        </script>
-    </body>
 </html>

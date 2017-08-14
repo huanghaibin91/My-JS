@@ -17,6 +17,32 @@
         // toString():
         // valueOf():
 
+        // Object.keys方法和Object.getOwnPropertyNames方法很相似，一般用来遍历对象的属性。它们的参数都是一个对象，都返回一个数组，该数组的成员都是对象自身的（而不是继承的）所有属性名。它们的区别在于，Object.keys方法只返回可枚举的属性（关于可枚举性的详细解释见后文），Object.getOwnPropertyNames方法还返回不可枚举的属性名
+        var o = {
+            p1: 123,
+            p2: 456
+        };
+        Object.keys(o) // ["p1", "p2"]
+        Object.getOwnPropertyNames(o) // ["p1", "p2"]
+        
+        // 对象属性模型的相关方法
+        // Object.getOwnPropertyDescriptor()：获取某个属性的attributes对象。
+        // Object.defineProperty()：通过attributes对象，定义某个属性。
+        // Object.defineProperties()：通过attributes对象，定义多个属性。
+        // Object.getOwnPropertyNames()：返回直接定义在某个对象上面的全部属性的名称
+
+        // 控制对象状态的方法  
+        // Object.preventExtensions()：防止对象扩展。
+        // Object.isExtensible()：判断对象是否可扩展。
+        // Object.seal()：禁止对象配置。
+        // Object.isSealed()：判断一个对象是否可配置。
+        // Object.freeze()：冻结一个对象。
+        // Object.isFrozen()：判断一个对象是否被冻结。
+
+        // 原型链相关方法
+        // Object.create()：该方法可以指定原型对象和属性，返回一个新的对象。
+        // Object.getPrototypeOf()：获取对象的Prototype对象
+
         // 对象可以通过两种形式定义： 声明（ 文字） 形式和构造形式。
         var myObj = { // 声明对象，常用
             key: 'hello',

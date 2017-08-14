@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+    <!-- script -->
+    <script>
+        //  这种方法将私有变量封装在构造函数中，违反了构造函数与实例对象相分离的原则。并且，非常耗费内存
+        function StringBuilder() {
+            var buffer = [];
+            this.add = function (str) {
+                buffer.push(str);
+            };
+            this.toString = function () {
+                return buffer.join('');
+            };
+        }
+
+        // 这种方法将私有变量放入实例对象中，好处是看上去更自然，但是它的私有变量可以从外部读写，不是很安全
+        function StringBuilder() {
+            this._buffer = [];
+        }
+        StringBuilder.prototype = {
+            constructor: StringBuilder,
+            add: function (str) {
+                this._buffer.push(str);
+            },
+            toString: function () {
+                return this._buffer.join('');
+            }
+        };
+
+        // 使用“立即执行函数”（Immediately-Invoked Function Expression，IIFE），将相关的属性和方法封装在一个函数作用域里面，可以达到不暴露私有成员的目的
+        var module1 = (function () {　
+            var _count = 0;　
+            var m1 = function () {　 //...
+                　};　
+            var m2 = function () {　　 //...
+                　};　
+            return {　　
+                m1: m1,
+                m2: m2　
+            };
+        })();
+
+        // 如果一个模块很大，必须分成几个部分，或者一个模块需要继承另一个模块，这时就有必要采用“放大模式”（augmentation）
+        var module1 = (function (mod) {　
+            mod.m3 = function () {　　 
+                //...
+            };　
+            return mod;
+        })(module1);
+
+        var module1 = (function (mod) {　 
+            //...
+            return mod;
+        })(window.module1 || {});
+
+    </script>
+</body>
+
+</html>

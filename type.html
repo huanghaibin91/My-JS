@@ -16,6 +16,8 @@
         //     • 字符串（ string）
         //     • 对象（ object），数组，函数都是object下的“子类型”
         //     • 符号（ symbol， ES6 中新增）
+        // JavaScript有三种方法，可以确定一个值到底是什么类型: typeof运算符、instanceof运算符、Object.prototype.toString方法
+
         typeof undefined === "undefined"; // true
         typeof true === "boolean"; // true
         typeof 42 === "number"; // true
@@ -23,9 +25,14 @@
         typeof {
             life: 42
         } === "object"; // true
+        typeof function () {} === 'function'; // true
+
+        // JS中undefined、null、false、0、NaN、""或''（空字符串）为假，其它都为真
+
         // ES6中新加入的类型
         typeof Symbol() === "symbol"; // true
         typeof null === "object"; // true,所以不能够判定出是null
+
         // 下面是判定null的方法
         var a = null;
         (!a && typeof a === "object"); // true
@@ -89,6 +96,23 @@
         // 将值从一种类型转换为另一种类型通常称为类型转换（ type casting），这是显式的情况；隐式的情况称为强制类型转换（ coercion）
         // JavaScript 中的强制类型转换总是返回标量基本类型值，如字符串、数字和布尔值，不会返回对象和函数。
 
+        // 强制转换主要指使用Number、String和Boolean三个构造函数，手动将各种类型的值，转换成数字、字符串或者布尔值
+
+        // number()规则：
+        // 调用对象自身的valueOf方法。如果返回原始类型的值，则直接对该值使用Number函数，不再进行后续步骤。
+        // 如果valueOf方法返回的还是对象，则改为调用对象自身的toString方法。如果toString方法返回原始类型的值，则对该值使用Number函数，不再进行后续步骤。
+        // 如果toString方法返回的是对象，就报错
+
+        // string()规则：
+        // 数值：转为相应的字符串。
+        // 字符串：转换后还是原来的值。
+        // 布尔值：true转为"true"，false转为"false"。
+        // undefined：转为"undefined"。
+        // null：转为"null"
+        // 先调用对象自身的toString方法。如果返回原始类型的值，则对该值使用String函数，不再进行以下步骤。
+        // 如果toString方法返回的是对象，再调用原对象的valueOf方法。如果valueOf方法返回原始类型的值，则对该值使用String函数，不再进行以下步骤。
+        // 如果valueOf方法返回的是对象，就报错
+        
         var a6 = 42;
         var b6 = a6 + ""; // 隐式强制类型转换
         var c6 = String(a6); // 显式强制类型转换
@@ -116,7 +140,8 @@
             console.log(a + " " + b);
         }
         console.log(foo7()); // "hello world"
-
+        
+        // 相等判定
         // (1) 如果 Type(x) 是布尔类型，则返回 ToNumber(x) == y 的结果；
         // (2) 如果 Type(y) 是布尔类型，则返回 x == ToNumber(y) 的结果。
         var a8 = "42";
@@ -153,6 +178,9 @@
         // • 如果两边的值中有 true 或者 false，千万不要使用 ==。
         // • 如果两边的值中有 []、 "" 或者 0，尽量不要使用 ==。
         // 为了安全起见就要使用 ===
+
+        a10 = 1; // 全局变量，会作为window的属性，可以用delete删除
+        var a11 = 1; // 声明变量
 
         // JavaScript 通过标签跳转能够实现 goto 的部分功能。 continue 和 break 语句都可以带一个标签，因此能够像 goto 那样进行跳转
         // 标签为foo的循环

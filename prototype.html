@@ -16,7 +16,7 @@
         var o3 = new f1();
 
         function f1() {};
-        var f2 = function() {};
+        var f2 = function () {};
         var f3 = new Function('str', 'console.log(str)');
 
         console.log(typeof Object); //function
@@ -50,7 +50,7 @@
             name: 'Zaxlct',
             age: 28,
             job: 'Software Engineer',
-            sayName: function() {
+            sayName: function () {
                 console.log(this.name);
             }
         }
@@ -104,8 +104,8 @@
 
         // 原型和原型链是JS实现继承的一种模型。
         // 原型链的形成是真正是靠__proto__ 而非prototype
-        var animal = function() {};
-        var dog = function() {};
+        var animal = function () {};
+        var dog = function () {};
 
         animal.price = 2000;
         dog.prototype = animal;
@@ -199,7 +199,7 @@
         function Foo2(name) {
             this.name = name;
         }
-        Foo2.prototype.myName = function() {
+        Foo2.prototype.myName = function () {
             return this.name;
         };
 
@@ -211,7 +211,7 @@
         Bar2.prototype = Object.create(Foo2.prototype); // Object.create(..) 会创建一个新对象（ bar2） 并把它关联到我们指定的对象（ foo2）
         // 注意！ 现在没有 Bar2.prototype.constructor 了
         // 如果你需要这个属性的话可能需要手动修复一下它
-        Bar2.prototype.myLabel = function() {
+        Bar2.prototype.myLabel = function () {
             return this.label;
         };
         var a2 = new Bar2("a", "obj a");
@@ -222,10 +222,11 @@
 
 
         // 原型链继承，通过原型链实现继承时，不能通过对象字面量创建原型方法，因为这样会重写原型链
-        function superColor1 () {
+        function superColor1() {
             this.colors = ['red', 'blue', 'green'];
         }
-        function subColor1 () {
+
+        function subColor1() {
 
         }
         subColor1.prototype = new superColor1(); // 这样共享原型会产生问题，改变数据后都会被修改，而且添加新方法不能采用subColor.prototype = {}因为这样会重写原型，会导致之前的原型无效
@@ -237,10 +238,11 @@
         console.log(superColor1.colors); // superColor是构造函数，不是构造函数new出的对象，不能访问colors
 
         // 借用构造函数，利用call,apply
-        function superColor2 () {
+        function superColor2() {
             this.colors = ['red', 'blue', 'green'];
         }
-        function subColor2 () {
+
+        function subColor2() {
             superColor2.call(this); // 这样就不会共享数据了，之间都是独立的，还有个好处是可以传递参数
         }
         var color3 = new subColor2();
@@ -250,14 +252,15 @@
         console.log(color4.colors);
 
         // 组合式继承
-        function superColor3 (name) {
+        function superColor3(name) {
             this.name = name;
             this.colors = ['red', 'blue', 'green'];
         }
         superColor3.prototype.sayName = function () {
             console.log(this.name);
         }
-        function subColor3 (name, age) {
+
+        function subColor3(name, age) {
             this.age = age;
             superColor3.call(this, name); // 这里有superColor3的属性，第二次调用
         }
@@ -272,20 +275,21 @@
 
         // 寄生组合式继承
         // 声明一个方法
-        function inheritPrototype (subType, superType) {
+        function inheritPrototype(subType, superType) {
             var prototype = Object(superType, subType); // 创建对象
             prototype.constructor = subType; // 增强对象
             subType.prototype = prototype; // 指定对象
         }
 
-        function superColor4 (name) {
+        function superColor4(name) {
             this.name = name;
             this.colors = ['red', 'blue', 'green'];
         }
         superColor4.prototype.sayName = function () {
             console.log(this.name);
         }
-        function subColor4 (name, age) {
+
+        function subColor4(name, age) {
             this.age = age;
             superColor3.call(this, name);
         }
@@ -296,6 +300,29 @@
         var color6 = new subColor3('Jim', 30);
         color6.sayName();
         color6.sayAge();
+
+        // 多重继承
+        function M1() {
+            this.hello = 'hello';
+        }
+        function M2() {
+            this.world = 'world';
+        }
+        function S() {
+            M1.call(this);
+            M2.call(this);
+        }
+        // 继承 M1
+        S.prototype = Object.create(M1.prototype);
+        // 继承链上加入 M2
+        // Object.assign({},obj,obj1);//花括号叫目标对象，后面的obj、obj1是源对象。对象合并是指：将源对象里面的属性添加到目标对象中去，若两者的属性名有冲突，后面的将会覆盖前面的
+        Object.assign(S.prototype, M2.prototype);
+        // 指定构造函数
+        S.prototype.constructor = S;
+        var s = new S();
+        s.hello // 'hello：'
+        s.world // 'world'
+
 
 
     </script>

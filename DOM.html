@@ -10,8 +10,15 @@
     <img src="./image/size2.png" alt=""><br>
     <img src="./image/size3.png" alt=""><br>
     <img src="./image/size4.png" alt=""><br>
-
+    <ul class="ul">
+        <li class="li1">1</li>
+        <li class="li2">2</li>
+        <li class="li3">3</li>
+    </ul>
     <script type="text/javascript">
+        window.onload = function () {
+            document.querySelector('.ul').classList.add('active');
+        }
         // 元素节点，属性节点，文本节点
         // nodeType, 元素节点1，属性节点2，文本节点3
         // nodeName,元素节点保存元素的标签名，tagName也可以
@@ -29,7 +36,7 @@
         // parentNode.appendChild(newNode),在父节点末尾添加一个节点，如果目标节点已经是文档的一部分了，那结果就是将该节点从原来的的位置移动到新位置
         // parentNode.insertBefore(newNode,targetNode)，在父节点的某个子节点之前添加一个节点，目标位置参数null则跟appendChild()一样
         // parentNode.replaceChild(newNode, oldNode)，替换一个子节点
-        // parentNode.removeChild(node )，移出一个子节点
+        // parentNode.removeChild(node)，移出一个子节点
 
         // cloneNode(),复制节点，接收一个参数，表示是否执行深复制，深复制会复制其整个子节点树。这个方法不会复制添加到DOM节点中的JavaScript属性，例如事件处理等
 

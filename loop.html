@@ -8,6 +8,10 @@
 
 <body>
     <img src="./image/loop1.jpg" alt="">
+    <p>单线程红色为等待时间</p>
+    <img src="./image/loop2.png" alt="">
+    <p>程序中设置两个线程：一个负责程序本身的运行，称为"主线程"；另一个负责主线程与其他进程（主要是各种I/O操作）的通信，被称为"Event Loop线程"（可以译为"消息线程"）。上图主线程的绿色部分，还是表示运行时间，而橙色部分表示空闲时间。每当遇到I/O的时候，主线程就让Event Loop线程去通知相应的I/O程序，然后接着往后运行，所以不存在红色的等待时间。等到I/O程序完成操作，Event Loop线程再把结果返回主线程。主线程就调用事先设定的回调函数，完成整个任务称为"异步模式"（asynchronous I/O）或"非堵塞模式"（non-blocking mode）</p>
+    <img src="./image/loop3.png" alt="">
     <script type="text/javascript">
         // Javascript的事件分为同步任务和异步任务，遇到同步任务就放在执行栈中执行，而碰到异步任务就放到任务队列之中，等到执行栈执行完毕之后再去执行任务队列之中的事件
 
@@ -49,6 +53,9 @@
             }
         }
         console.log(num);
+
+
+
     </script>
 </body>
 
