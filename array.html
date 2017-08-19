@@ -6,11 +6,13 @@
     </head>
     <body>
         <script type="text/javascript">
-        // JavaScript 中，数组可以容纳任何类型的值，可以是字符串、数字、对象（ object），甚至是其他数组（多维数组就是通过这种方式来实现的）
+        // JavaScript 中，数组可以容纳任何类型的值，可以是字符串、数字、对象（ object），甚至是其他数组
+        // （多维数组就是通过这种方式来实现的）
 
         // slice可以将类数组参数argumen转化成真正的数组
 
-        // var arr = Array.prototype.slice.call( arguments );当slice()没有输入参数的时候，会创建一个新数组，然后把当前数组的所有元素扔进去，最后返回这个新数组
+        // var arr = Array.prototype.slice.call( arguments );当slice()没有输入参数的时候，会创建一个新数组，
+        // 然后把当前数组的所有元素扔进去，最后返回这个新数组
         // 用 ES6 中的内置工具函数 Array.from(..) 也能实现同样的功能：
         // var arr2 = Array.from( arguments );
 
@@ -30,7 +32,8 @@
         var arr5 = [1, 5, 6, 3, 9];
         console.log(arr5.reverse());
         console.log(arr5);
-        // sort()，数组排序，改变原数组，比较函数接收两个参数，如果第一个数应该位于跌个数之前则返回一个负数，相等返回0，第一个参数应该位于第二个参数之后返回一个正数
+        // sort()，数组排序，改变原数组，比较函数接收两个参数，如果第一个数应该位于跌个数之前则返回一个负数，
+        // 相等返回0，第一个参数应该位于第二个参数之后返回一个正数
         console.log(arr5.sort(function(a, b) {
             return a - b;
         }));
@@ -84,8 +87,6 @@
             return pre + nex;
         });
         console.log(total);
-
-
         </script>
     </body>
 </html>

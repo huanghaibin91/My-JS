@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>JS 数据结构和算法</title>
+</head>
+
+<body>
+    <script>
+        // 数组既可以是栈也可以是队列
+
+        // 先进后出
+        // 利用数组创建一个栈
+        function Stack() {
+            var items = [];
+            // 栈的操作方法
+            this.push = function (element) {
+                items.push(element);
+            };
+            this.pop = function () {
+                return items.pop();
+            };
+            this.peek = function () {
+                return items[items.length - 1];
+            };
+            this.isEmpty = function () {
+                return items.length == 0;
+            };
+            this.size = function () {
+                return items.length;
+            };
+            this.clear = function () {
+                items = [];
+            };
+            // 其它方法
+            this.print = function () {
+                console.log(items.toString());
+            };
+        }
+
+        // 利用栈将10进制转化为2进制
+        function divideBy2(decNumber) {
+            var remStack = new Stack(),
+                rem,
+                binaryString = '';
+            while (decNumber > 0) {
+                rem = Math.floor(decNumber % 2);
+                remStack.push(rem);
+                decNumber = Math.floor(decNumber / 2);
+            }
+            while (!remStack.isEmpty()) {
+                binaryString += remStack.pop().toString();
+            }
+            return binaryString;
+        }
+        console.log(divideBy2(100));
+
+        // 利用数组将十进制转化为2进制
+        function divideBy2Arr(decNumber) {
+            var arr = [],
+                rem,
+                binaryString = '';
+            while (decNumber > 0) {
+                rem = Math.floor(decNumber % 2);
+                arr.push(rem);
+                decNumber = Math.floor(decNumber / 2);
+            }
+            if (arr.length !== 0) {
+                binaryString = arr.reverse().join('');
+            }
+            return binaryString;
+        }
+        console.log(divideBy2Arr(100));
+
+        // 队列先进先出
+        // 利用数组创建一个队列
+        function Queue() {
+            var items = [];
+            // 队列的操作方法
+            this.enqueue = function (element) {
+                items.push(element);
+            };
+            this.dequeue = function () {
+                return items.shift();
+            };
+            this.front = function () {
+                return items[0];
+            };
+            this.isEmpty = function () {
+                return items.length == 0;
+            };
+            this.clear = function () {
+                items = [];
+            };
+            this.size = function () {
+                return items.length;
+            };
+            // 队列的其它方法
+            this.print = function () {
+                console.log(items.toString());
+            };
+        }
+
+        // 优先队列，优先级高的放前边
+        function PriorityQueue() {
+            var items = [];
+
+            function QueueElement(element, priority) {
+                this.element = element;
+                this.priority = priority;
+            }
+            this.enqueue = function (element, priority) {
+                var queueElement = new QueueElement(element, priority);
+                if (this.isEmpty()) {
+                    items.push(queueElement);
+                } else {
+                    var added = false;
+                    for (var i = 0; i < items.length; i++) {
+                        if (queueElement.priority > items[i].priority) {
+                            items.splice(i, 0, queueElement);
+                            added = true;
+                            break;
+                        }
+                    }
+                    if (!added) {
+                        items.push(queueElement);
+                    }
+                }
+            };
+            //其他方法和默认的Queue实现相同
+        }
+
+        // 链表，链表存储有序的元素集合，但不同于数组，链表中的元素在内存中并不是连续放置的。每个
+        // 元素由一个存储元素本身的节点和一个指向下一个元素的引用（也称指针或链接）组成
+        // 链表的一个好处在于，添加或移除元素的时候不需要移动其他元素
+        // 数组的另一个细节是可以直接访问任何位置的任何元素，而要想访问链表中间的一个元素，需要从起点（表头）
+        // 开始迭代列表直到找到所需的元素。列表最后一个节点的下一个元素始终是null
+        function LinkedList() {
+            var Node = function (element) {
+                this.element = element;
+                this.next = null;
+            };
+            var length = 0;
+            var head = null;
+            this.append = function (element) {
+                var node = new Node(element),
+                    current;
+                if (head === null) { //列表中第一个节点 
+                    head = node;
+                } else {
+                    current = head;
+                    //循环列表，直到找到最后一项
+                    while (current.next) {
+                        current = current.next;
+                    }
+                    //找到最后一项，将其next赋为node，建立链接
+                    current.next = node;
+                }
+                length++; //更新列表的长度 
+            };
+            this.insert = function (position, element) {
+                //检查越界值
+                if (position >= 0 && position <= length) {
+                    var node = new Node(element),
+                        current = head,
+                        previous,
+                        index = 0;
+                    if (position === 0) { //在第一个位置添加
+                        node.next = current;
+                        head = node;
+                    } else {
+                        while (index++ < position) {
+                            previous = current;
+                            current = current.next;
+                        }
+                        node.next = current;
+                        previous.next = node;
+                        length++; //更新列表的长度
+                        return true;
+                    }
+                } else {
+                    return false;
+                }
+            };
+            this.removeAt = function (position) {
+                //检查越界值
+                if (position > -1 && position < length) { // {1}
+                    var current = head,
+                        previous,
+                        index = 0;
+                    //移除第一项
+                    if (position === 0) {
+                        head = current.next;
+                    } else {
+                        while (index++ < position) {
+                            previous = current;
+                            current = current.next;
+                        }
+                        //将previous与current的下一项链接起来：跳过current，从而移除它
+                        previous.next = current.next;
+                    }
+                    length--;
+                    return current.element;
+                } else {
+                    return null;
+                }
+            };
+            this.remove = function (element) {
+                var index = this.indexOf(element);
+                return this.removeAt(index);
+            };
+            this.indexOf = function (element) {
+                var current = head,
+                    index = -1;
+                while (current) {
+                    if (element === current.element) {
+                        return index;
+                    }
+                    index++;
+                    current = current.next;
+                }
+                return -1;
+            };
+            this.isEmpty = function () {
+                return length === 0;
+            };
+            this.size = function () {
+                return length;
+            };
+            this.getHead = function () {
+                return head;
+            };
+            this.toString = function () {
+                var current = head,
+                    string = '';
+                while (current) {
+                    string = current.element;
+                    current = current.next;
+                }
+                return string;
+            };
+            this.print = function () {
+                console.log(this.toString());
+            };
+        }
+
+        // 集合是由一组无序且唯一（即不能重复）的项组成的
+        // ES6中set实现了集合
+        function set() {
+            var items = {};
+            this.has = function (value) {
+                return items.hasOwnProperty(value);
+            };
+            this.add = function (value) {
+                if (!this.has(value)) {
+                    items[value] = value;
+                    return true;
+                }
+                return false;
+            };
+            this.remove = function (value) {
+                if (this.has(value)) {
+                    delete items[value];
+                    return true;
+                }
+                return false;
+            };
+            this.size = function () {
+                return Object.keys(items).length; //{4}
+            };
+            this.values = function () {
+                return Object.keys(items);
+            };
+            // 并集
+            this.union = function (otherSet) {
+                var unionSet = new Set();
+                var values = this.values();
+                for (var i = 0; i < values.length; i++) {
+                    unionSet.add(values[i]);
+                }
+                values = otherSet.values();
+                for (var i = 0; i < values.length; i++) {
+                    unionSet.add(values[i]);
+                }
+                return unionSet;
+            };
+            // 交集
+            this.intersection = function (otherSet) {
+                var intersectionSet = new Set();
+                var values = this.values();
+                for (var i = 0; i < values.length; i++) {
+                    if (otherSet.has(values[i])) {
+                        intersectionSet.add(values[i]);
+                    }
+                }
+                return intersectionSet;
+            }
+            // 差集
+            this.difference = function (otherSet) {
+                var differenceSet = new Set();
+                var values = this.values();
+                for (var i = 0; i < values.length; i++) {
+                    if (!otherSet.has(values[i])) {
+                        differenceSet.add(values[i]);
+                    }
+                }
+                return differenceSet;
+            };
+            // 子集
+            this.subset = function (otherSet) {
+                if (this.size() > otherSet.size()) {
+                    return false;
+                } else {
+                    var values = this.values();
+                    for (var i = 0; i < values.length; i++) {
+                        if (!otherSet.has(values[i])) {
+                            return false;
+                        }
+                    }
+                    return true;
+                }
+            };
+        }
+
+        // 字典中，我们用[键，值]的形式来存储数据。在散列表中也是一样（也是以[键，值]对的形式来存储数据）
+        // 字典则是以[键，值]的形式来存储元素。字典也称作映射
+        // ES6中的map
+        function Dictionary() {
+            var items = {};
+            this, has = function (key) {
+                return items.hasOwnProperty(key);
+            }
+            this.set = function (key, value) {
+                items[key] = value;
+            }
+            this.remove = function (key) {
+                if (this.has(key)) {
+                    delete items[key];
+                    return true;
+                }
+                return false;
+            }
+            this.get = function (key) {
+                return this.has(key) ? items[key] : undefined;
+            };
+            this.values = function () {
+                var values = {};
+                for (var k in items) {
+                    if (this.has(k)) {
+                        values.push(items[k]);
+                    }
+                }
+                return values;
+            };
+            this.getItems = function () {
+                return items;
+            }
+        }
+
+        // 散列表，HashTable类，也叫HashMap类，是Dictionary类的一种散列表实现方式
+
+        // 树，树是一种分层数据的抽象模型，储存需要快速查找的数据
+        // 二叉树中的节点最多只能有两个子节点：一个是左侧子节点，另一个是右侧子节点。这些定义有助于我们写出更高效的
+        // 向/从树中插入、查找和删除节点的算法。
+        // 二叉搜索树（BST）是二叉树的一种，但是它只允许你在左侧节点存储（比父节点）小的值，在右侧节点存储（比父节点）大
+        // （或者等于）的值
+        function BinarySearchTree() {
+            var Node = function (key) {
+                this.key = key;
+                this.left = null;
+                this.right = null;
+            };
+            var root = null;
+            this.insert = function (key) {
+                var newNode = new Node(key);
+                if (root === null) {
+                    root = newNode;
+                } else {
+                    insertNode(root, newNode);
+                }
+            };
+            var insertNode = function (node, newNode) {
+                if (newNode.key < node.key) {
+                    if (node.left === null) {
+                        node.left = newNode;
+                    } else {
+                        insertNode(node.left, newNode);
+                    }
+                } else {
+                    if (node.right === null) {
+                        node.right = newNode;
+                    } else {
+                        insertNode(node.right, newNode);
+                    }
+                }
+            };
+        }
+    </script>
+</body>
+
+</html>

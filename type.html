@@ -110,7 +110,8 @@
         // undefined：转为"undefined"。
         // null：转为"null"
         // 先调用对象自身的toString方法。如果返回原始类型的值，则对该值使用String函数，不再进行以下步骤。
-        // 如果toString方法返回的是对象，再调用原对象的valueOf方法。如果valueOf方法返回原始类型的值，则对该值使用String函数，不再进行以下步骤。
+        // 如果toString方法返回的是对象，再调用原对象的valueOf方法。如果valueOf方法返回原始类型的值，
+        // 则对该值使用String函数，不再进行以下步骤。
         // 如果valueOf方法返回的是对象，就报错
         
         var a6 = 42;
@@ -182,7 +183,8 @@
         a10 = 1; // 全局变量，会作为window的属性，可以用delete删除
         var a11 = 1; // 声明变量
 
-        // JavaScript 通过标签跳转能够实现 goto 的部分功能。 continue 和 break 语句都可以带一个标签，因此能够像 goto 那样进行跳转
+        // JavaScript 通过标签跳转能够实现 goto 的部分功能。 continue 和 break 语句都可以带一个标签，
+        // 因此能够像 goto 那样进行跳转
         // 标签为foo的循环
         // contine foo 并不是指“跳转到标签 foo 所在位置继续执行”，而是“执行foo 循环的下一轮循环”
         foo: for (var i = 0; i < 4; i++) {

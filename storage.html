@@ -8,7 +8,10 @@
         <script type="text/javascript">
             // Cookie，HTTP cookie
             // cookie是绑定在特定的域名下的，而且有限制，大小是4096B以下
-            // cookie的构成：名称，一个唯一确定cookie的名称，不区分大小写。值，储存在cookie中的字符串值。值必须被URL编码。域，cookie对于哪个域是有效的，所有向该域发送的请求中都会包含这个cookie信息。路径，对于指定域中的那个路径，应该向服务器发送cookie。失效时间，表示cookie何时应该被删除的时间戳。安全标志，指定后，cookie只有在使用SSL连接的时候才发送到服务器。以上，cookie的名字和值是必须的。
+            // cookie的构成：名称，一个唯一确定cookie的名称，不区分大小写。值，储存在cookie中的字符串值。
+            // 值必须被URL编码。域，cookie对于哪个域是有效的，所有向该域发送的请求中都会包含这个cookie信息。
+            // 路径，对于指定域中的那个路径，应该向服务器发送cookie。失效时间，表示cookie何时应该被删除的时间戳。
+            // 安全标志，指定后，cookie只有在使用SSL连接的时候才发送到服务器。以上，cookie的名字和值是必须的。
 
             // 获取cookie： document.cookie
 
@@ -54,15 +57,18 @@
             // removeItem(name)，删除name指定的名值对
             // setItem(name, value)，为指定的name设置一个对应的值
 
-            // sessionStorage，用于存储特定于某个会话的数据，也就是数据只保存到浏览器关闭，在浏览器关闭后消失。储存在sessionStorage中的数据可以跨越页面刷新而存在
+            // sessionStorage，用于存储特定于某个会话的数据，也就是数据只保存到浏览器关闭，在浏览器关闭后消失。
+            // 储存在sessionStorage中的数据可以跨越页面刷新而存在
             // sessionStorage是Storage的一个实例，所以可以用Storage的方法
             // sessionStorage.setItem('name', 'Tom') // 使用方法存储数据
 
-            // globalStorage,目的是跨越会话存储数据，但有特定的访问限制，使用globalStorage的时候一定要指定一个域名，也可以使用Storage对象的方法
+            // globalStorage,目的是跨越会话存储数据，但有特定的访问限制，使用globalStorage的时候一定要指定一个域名，
+            // 也可以使用Storage对象的方法
             // globalStorage['example.com'].name = 'Tom' // 只有example.com域可以访问
             // globalStorage[''].name = 'Tom' // 所以域都可以访问
             // globalStorage[local.host].name = 'Tom' // 不确定类名就使用local.host作为属性比较安全
-            // localStorage，持久保存客户端数据，要访问同一个localStorage对象，页面必须来自同一个域名（子域名无效），使用同一种协议，在同一个端口上
+            // localStorage，持久保存客户端数据，要访问同一个localStorage对象，页面必须来自同一个域名（子域名无效），
+            // 使用同一种协议，在同一个端口上
             
         </script>
     </body>

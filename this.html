@@ -74,7 +74,8 @@
         };
         obj1.obj1.foo2(); // 42
 
-        // 隐式丢失，this 绑定问题就是被隐式绑定的函数会丢失绑定对象， 也就是说它会应用默认绑定， 从而把 this 绑定到全局对象或者 undefined 上
+        // 隐式丢失，this 绑定问题就是被隐式绑定的函数会丢失绑定对象， 也就是说它会应用默认绑定， 
+        // 从而把 this 绑定到全局对象或者 undefined 上
         function foo4() {
             console.log(this.a);
         }
@@ -82,7 +83,8 @@
             a4: 2,
             foo4: foo4
         };
-        var bar4 = obj4.foo4; // 函数别名！， bar 是 obj.foo 的一个引用， 但是实际上， 它引用的是 foo 函数本身， 因此此时的bar() 其实是一个不带任何修饰的函数调用， 因此应用了默认绑定。
+        var bar4 = obj4.foo4; // 函数别名！， bar 是 obj.foo 的一个引用， 但是实际上， 它引用的是 foo 函数本身， 
+        // 因此此时的bar() 其实是一个不带任何修饰的函数调用， 因此应用了默认绑定。
         var a4 = "oops, global"; // a 是全局对象的属性
         bar4(); // "oops, global"
 
@@ -99,7 +101,8 @@
         var obj5 = {
             a: 2
         };
-        foo5.call(obj5); // 2，通过 foo.call(..)， 我们可以在调用 foo 时强制把它的 this 绑定到 obj 上。硬绑定的 bar 不可能再修改它的 this
+        foo5.call(obj5); // 2，通过 foo.call(..)， 我们可以在调用 foo 时强制把它的 this 绑定到 obj 上。
+        // 硬绑定的 bar 不可能再修改它的 this
 
         // 简单的辅助绑定函数，ES5 中提供了内置的方法 Function.prototype.bind
         function bind(fn, obj) { // 将fn绑定到obj中，this指向obj
@@ -107,6 +110,8 @@
                 return fn.apply(obj, arguments);
             };
         }
+
+        // apply()和call()，传入null/undefined的时候将执行js全局对象浏览器中是window，其他环境是global 
 
         // 使用 new 来调用函数， 或者说发生构造函数调用时， 会自动执行下面的操作。
         // 1. 创建（ 或者说构造） 一个全新的对象。
@@ -137,7 +142,8 @@
         var bar7 = foo7.bind(null, 2);
         bar7(3); // a:2, b:3
 
-        // 箭头函数并不是使用 function 关键字定义的， 而是使用被称为“ 胖箭头” 的操作符 => 定义的。 箭头函数不使用 this 的四种标准规则， 而是根据外层（ 函数或者全局） 作用域来决定 this。
+        // 箭头函数并不是使用 function 关键字定义的， 而是使用被称为“ 胖箭头” 的操作符 => 定义的。 箭头函数不使用 this 
+        // 的四种标准规则， 而是根据外层（ 函数或者全局） 作用域来决定 this。
         function foo8() {
             // 返回一个箭头函数
             return (a) => {
@@ -152,7 +158,8 @@
             a: 3
         };
         var bar8 = foo8.call(obj8);
-        bar8.call(obj9); // 2, 不是 3 ！foo() 内部创建的箭头函数会捕获调用时 foo() 的 this。 由于 foo() 的 this 绑定到 obj1，bar（ 引用箭头函数） 的 this 也会绑定到 obj1， 箭头函数的绑定无法被修改。（ new 也不行！ ）
+        bar8.call(obj9); // 2, 不是 3 ！foo() 内部创建的箭头函数会捕获调用时 foo() 的 this。 由于 foo() 的 this 
+        // 绑定到 obj1，bar（ 引用箭头函数） 的 this 也会绑定到 obj1， 箭头函数的绑定无法被修改。（ new 也不行！ ）
 
         function foo9() {
             setTimeout(() => {

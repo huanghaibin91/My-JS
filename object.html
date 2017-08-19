@@ -17,7 +17,10 @@
         // toString():
         // valueOf():
 
-        // Object.keys方法和Object.getOwnPropertyNames方法很相似，一般用来遍历对象的属性。它们的参数都是一个对象，都返回一个数组，该数组的成员都是对象自身的（而不是继承的）所有属性名。它们的区别在于，Object.keys方法只返回可枚举的属性（关于可枚举性的详细解释见后文），Object.getOwnPropertyNames方法还返回不可枚举的属性名
+        // Object.keys方法和Object.getOwnPropertyNames方法很相似，一般用来遍历对象的属性。
+        // 它们的参数都是一个对象，都返回一个数组，该数组的成员都是对象自身的（而不是继承的）所有属性名。
+        // 它们的区别在于，Object.keys方法只返回可枚举的属性（关于可枚举性的详细解释见后文），
+        // Object.getOwnPropertyNames方法还返回不可枚举的属性名
         var o = {
             p1: 123,
             p2: 456
@@ -51,13 +54,15 @@
 
         var myObj2 = new Object(); // 构造函数
         myObj2.key = 'hello';
-        // 如果想访问key， 使用. 操作符或者 [] 操作符。 .a 语法通常被称为“ 属性访问”， ["a"] 语法通常被称为“ 键访问”。. 操作符要求属性名满足标识符的命名规范， 而 [".."] 语法可以接受任意 UTF-8/Unicode 字符串作为属性名。
+        // 如果想访问key， 使用. 操作符或者 [] 操作符。 .a 语法通常被称为“ 属性访问”， ["a"] 语法通常被称为“ 键访问”。
+        // . 操作符要求属性名满足标识符的命名规范， 而 [".."] 语法可以接受任意 UTF-8/Unicode 字符串作为属性名。
         // . 操作符要求属性名满足标识符的命名规范， 而 [".."] 语法可以接受任意 UTF-8/Unicode 字符串作为属性名。
 
         // 简单基本类型（ string、 boolean、 number、 null 和 undefined） 本身并不是对象。
 
         // 复制对象
-        // 浅复制，浅拷贝来说， 复制出的新对象中的值会复制旧对象中的值， 但是新对象中 属性其实只是三个引用， 它们和旧对象中引用的对象是一样的，所以改变新对象的值，同样的旧对象的值也会改变。
+        // 浅复制，浅拷贝来说， 复制出的新对象中的值会复制旧对象中的值， 但是新对象中 属性其实只是三个引用， 
+        // 它们和旧对象中引用的对象是一样的，所以改变新对象的值，同样的旧对象的值也会改变。
         var arr1 = ["One", "Two", "Three"];
         var arr2 = arr1;
         arr2[1] = "test";
@@ -82,12 +87,15 @@
         // value: 2，默认undefined
         // writable: true,可写，决定可以修改属性的值
         // enumerable: true,可枚举，，属性是否会出现在对象的属性枚举中
-        // configurable: true,可配置，只要属性是可配置的， 就可以使用defineProperty(..) 方法来修改属性描述符，不可配置的属性也不可以删除
+        // configurable: true,可配置，只要属性是可配置的， 就可以使用defineProperty(..) 方法来修改属性描述符，
+        // 不可配置的属性也不可以删除
         // }
 
-        // 不变性，属性或者对象是不可改变，所有的方法创建的都是浅不变形， 也就是说， 它们只会影响目标对象和它的直接属性。 如果目标对象引用了其他对象（ 数组、 对象、 函数， 等）， 其他对象的内容不受影响， 仍然是可变的
+        // 不变性，属性或者对象是不可改变，所有的方法创建的都是浅不变形， 也就是说， 它们只会影响目标对象和它的直接属性。
+        //  如果目标对象引用了其他对象（ 数组、 对象、 函数， 等）， 其他对象的内容不受影响， 仍然是可变的
 
-        // Object.defineProperty(),修改对象特性，接收三个参数：属性所在的对象，属性的名字和一个描述符对象，在调用Object.getOwnPropertyDescriptor()方法时，如果不指定writable,enumerable,configurable属性则默认值为false，IE支持版本IE8以上
+        // Object.defineProperty(),修改对象特性，接收三个参数：属性所在的对象，属性的名字和一个描述符对象，
+        // 在调用Object.getOwnPropertyDescriptor()方法时，如果不指定writable,enumerable,configurable属性则默认值为false，IE支持版本IE8以上
 
         // 1. 对象常量，结合 writable:false 和 configurable:false 就可以创建一个真正的常量属性（ 不可修改、重定义或者删除
         var myObject1 = {};
@@ -104,8 +112,11 @@
         Object.preventExtensions(myObject2);
         myObject2.b = 3;
         myObject2.b; // undefined
-        // 3.对象密封，Object.seal(..) 会创建一个“ 密封” 的对象， 这个方法实际上会在一个现有对象上调用Object.preventExtensions(..) 并把所有现有属性标为configurable:false;密封之后不仅不能添加新属性， 也不能重新配置或者删除任何现有属性（ 虽然可以修改属性的值）。
-        // 4.对象冻结，Object.freeze(..) 会创建一个冻结对象， 这个方法实际上会在一个现有对象上调用Object.seal(..) 并把所有“ 数据访问” 属性标记为 writable:false， 这样就无法修改它们的值。
+        // 3.对象密封，Object.seal(..) 会创建一个“ 密封” 的对象， 这个方法实际上会在一个现有对象上调用
+        // Object.preventExtensions(..) 并把所有现有属性标为configurable:false;密封之后不仅不能添加新属性， 
+        // 也不能重新配置或者删除任何现有属性（ 虽然可以修改属性的值）。
+        // 4.对象冻结，Object.freeze(..) 会创建一个冻结对象， 这个方法实际上会在一个现有对象上调用Object.seal(..) 
+        // 并把所有“ 数据访问” 属性标记为 writable:false， 这样就无法修改它们的值。
 
         // 判断对象中是否存在这个属性
         var myObject3 = {
@@ -116,7 +127,8 @@
         myObject3.hasOwnProperty("a"); // true，hasOwnProperty(..) 只会检查属性是否在 myObject 对象中， 不会检查 [[Prototype]] 链
         myObject3.hasOwnProperty("b"); // false
 
-        // 读取访问器属性时，会调用getter函数，负责返回有效的值在；写入访问器函数时，会调用setter函数并传入新值，这个函数负责如何处理函数
+        // 读取访问器属性时，会调用getter函数，负责返回有效的值在；写入访问器函数时，会调用setter函数并传入新值，
+        // 这个函数负责如何处理函数
         var book = {
             _year: 2017, // _year前面的下划线表示只能通过对象方法访问的属性,私有属性
             edition: 1,
@@ -166,7 +178,8 @@
             return o;
         }
         console.log(createPeerson('tom', 21));
-        // 构造函数模式,构造函数跟普通函数一样，只是是用来创建对象的函数而已，作为普通函数调用，作用域会绑定到window，this此时是默认绑定，函数此时会为window添加新属性和方法
+        // 构造函数模式,构造函数跟普通函数一样，只是是用来创建对象的函数而已，作为普通函数调用，作用域会绑定到window，
+        // this此时是默认绑定，函数此时会为window添加新属性和方法
         // 特点：没有显式的创建对象，直接将属性和方法赋值给this对象，没有return语句
         function Person (name, age) {
             this.name = name;
@@ -181,7 +194,8 @@
         // 3.执行构造函数中的代码
         // 4.返回新对象
         // 新对象会有一个constructor（构造函数）属性，指向prototype属性所在函数的指针
-        console.log(new Person('Jack', 23)); // constructor属性指向Person，因为通过Person创建的对象的原型都是Person构造函数的原型
+        console.log(new Person('Jack', 23)); // constructor属性指向Person，因为通过Person创建的对象的原型都是
+        // Person构造函数的原型
 
         // 使用构造函数与原型模式组合来创建对象，实例方法与属性放在构造函数中，共享的属性和方法放在原型中
         function Person2 (name, age) {
