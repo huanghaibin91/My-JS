@@ -8,6 +8,7 @@
         <!-- <script type="text/javascript" src="http://osod5bm6c.bkt.clouddn.com/jsonp.json?callback=updateText2"></script> -->
     </head>
     <body>
+        <img src="./image/cross-domain.png" alt="">
         <p id="text">1</p>
         <p id="text2">2</p>
 
@@ -26,6 +27,9 @@
 
             // jsonp由回调函数和数据组成。回调函数是当响应到来时应该在页面中调用的函数，回调函数有的时候是URI指定的
 
+            // 回调函数必须在window下添加，否则会报错。且window下的函数名尽量特别一点，由于window经常会添加各种属性，
+            // 特别的函数名可以防止jsonp覆盖window原有的属性，常见的是将函数名设置为一个随机串
+
             window.onload = function () {
                 // 同源数据，利用Ajax
                 var url = 'http://localhost/jsonp.json';
@@ -40,7 +44,6 @@
                     }
                 }
                 request.send(null);
-
                 function updateText (response) {
                     var text = document.querySelector('#text');
                     text.innerHTML = response;
@@ -48,7 +51,6 @@
 
                 // 跨域数据，利用jsonp
                 jsonpRequest();
-
                 // 动态插入
                 function jsonpRequest () {
                     // 使用script元素时就是在告诉浏览器需要获取JavaScript，完成解析并执行。这说明，它执行到你的script中
