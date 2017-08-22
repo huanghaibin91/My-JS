@@ -65,7 +65,7 @@
             // globalStorage,目的是跨越会话存储数据，但有特定的访问限制，使用globalStorage的时候一定要指定一个域名，
             // 也可以使用Storage对象的方法
             // globalStorage['example.com'].name = 'Tom' // 只有example.com域可以访问
-            // globalStorage[''].name = 'Tom' // 所以域都可以访问
+            // globalStorage[''].name = 'Tom' // 所有域都可以访问
             // globalStorage[local.host].name = 'Tom' // 不确定类名就使用local.host作为属性比较安全
             // localStorage，持久保存客户端数据，要访问同一个localStorage对象，页面必须来自同一个域名（子域名无效），
             // 使用同一种协议，在同一个端口上
