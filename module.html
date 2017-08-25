@@ -34,7 +34,8 @@
                 return this._buffer.join('');
             }
         };
-
+        
+        // 使用立即执行函数加闭包生成模块
         // 使用“立即执行函数”（Immediately-Invoked Function Expression，IIFE），将相关的属性和方法封装在一个函数作用域里面，
         // 可以达到不暴露私有成员的目的
         var module1 = (function () {　
