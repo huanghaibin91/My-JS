@@ -1,31 +1,70 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <title>Function</title>
-    </head>
-    <body>
-        <script type="text/javascript">
-            // var add = 5;
-            function add(a, b) {
-                return a + b;
-            }
-            console.log(typeof add); // function
-            console.log(add(2, 3));
 
-            // 函数是对象，函数名是指针，使用不带圆括号的函数名是访问函数指针，而非调用函数
+<head>
+    <meta charset="utf-8">
+    <title>Function</title>
+</head>
 
-            // 函数声明提升，函数表达式不会提升
+<body>
+    <script type="text/javascript">
+        // var add = 5;
+        // 函数声明
+        function add1(a, b) {
+            return a + b;
+        }
+        console.log(typeof add1); // function
+        console.log(add1(2, 3));
+        // 函数表达式
+        var add2 = function (a, b) {
+            return a + b;
+        };
+        console.log(typeof add2); // function
+        console.log(add2(3, 4));
 
-            // 函数内部属性，arguments，保存函数参数，arguments.callee()函数自身；this，引用的是函数数据以执行的环境对象
+        // // 函数声明提升，函数表达式不会提升
+        // 不能在条件语句中声明函数, 不得在非函数的代码块中声明函数，最常见的情况就是if和try语句 
+        if (false) {
+            function f() {}
+        }
+        f() // 不报错
+        // 上面代码的原始意图是不声明函数f，但是由于f的提升，导致if语句无效，所以上面的代码不会报错。
+        // 要达到在条件语句中定义函数的目的，只有使用函数表达式
+        if (false) {
+            var f1 = function () {}
+        }
+        f1() // undefined
 
-            // 函数的属性和方法，属性：length和prototype，length是命名参数的个数，prototype保存实例方法的所在
+        // 函数属性
+        // name，返回function关键字后的名字
+        // length，返回定义的参数长度
+        // toString，返回函数字符串
 
-            // 利用立即函数可以模仿块级作用域
-            (function () {
-                // 块级作用域
-            } ());
+        // 函数本身也是一个值，也有自己的作用域。它的作用域与变量一样，就是其声明时所在的作用域，与其运行时所在的作用域无关
+        // 所以引用一个外部作用域的函数要声明要传递的参数
 
-        </script>
-    </body>
+        // 函数是对象，函数名是指针，使用不带圆括号的函数名是访问函数指针，而非调用函数
+
+        // 函数内部属性，arguments，保存函数参数，arguments.callee()函数自身；this，引用的是函数数据以执行的环境对象
+        // 函数的属性和方法，属性：length和prototype，length是命名参数的个数，prototype保存实例方法的所在
+
+        // 闭包的最大用处有两个，一个是可以读取函数内部的变量，另一个就是让这些变量始终保持在内存中，即闭包可以使得它诞生环境一直存在。
+        // 请看下面的例子，闭包使得内部变量记住上一次调用时的运算结果
+        function createIncrementor(start) {
+            return function () {
+                return start++;
+            };
+        }
+        var inc = createIncrementor(5);
+        inc() // 5 
+        inc() // 6 
+        inc() // 7
+
+        // 利用立即函数可以模仿块级作用域
+        (function () {
+            // 块级作用域
+        }());
+    </script>
+</body>
+
 </html>

@@ -8,6 +8,16 @@
 
 <body>
     <script type="text/javascript">
+        // JavaScript原生提供一个Error构造函数，所有抛出的错误都是这个构造函数的实例
+        // Error对象的实例必须有message属性，表示出错时的提示信息
+        // message：错误提示信息
+        // name：错误名称（非标准属性）
+        // stack：错误的堆栈（非标准属性）
+        var err = new Error('出错了');
+        console.log(err.message); // "出错了"
+        // 代码解析或运行时发生错误，JavaScript引擎就会自动产生、并抛出一个Error对象的实例，
+        // 然后整个程序就中断在发生错误的地方，不再往下执行
+
         // 作用域中遍寻不到所需的变量， 引擎就会抛出 ReferenceError异常。
 
         // RHS 查询找到了一个变量， 但是你尝试对这个变量的值进行不合理的操作，比如试图对一个非函数类型的值进行函数调用， 
@@ -36,23 +46,66 @@
         // TypeError，在变量保存着意外的类型时，或者访问不存在的方法时
         // URIError，使用encodeURL()或decodeURI()，URI格式不正确时
 
+        // 定义自己的错误对象
+        function UserError(message) {
+            this.message = message || "默认信息";
+            this.name = "UserError";
+        }
+        UserError.prototype = new Error();
+        UserError.prototype.constructor = UserError;
+        new UserError("这是自定义的错误！");
+
         function add(a, b) {
             if (typeof a !== 'number' || typeof b !== 'number') {
+                // throw语句的作用是中断程序执行，抛出一个意外或错误。它接受一个表达式作为参数，可以抛出各种值。
+                // throw可以接受各种值作为参数，throw一般用来弹出自定义错误
                 throw new Error('a or b is not number');
             }
             return a + b;
         }
         add('hello', 2)
 
+        // 由于没有catch语句块，所以错误没有捕获。执行finally代码块以后，程序就中断在错误抛出的地方
+        function cleansUp() {
+            try {
+                throw new Error('出错了……');
+                console.log('此行不会执行');
+            } finally {
+                console.log('完成清理工作');
+            }
+        }
+        cleansUp() 
+        // 完成清理工作 
+        // Error: 出错了……
+
+        // 即使有return语句在前，finally代码块依然会得到执行，且在其执行完毕后，才会显示return语句的值
+        function idle(x) {
+            try {
+                console.log(x);
+                return 'result';
+            } finally {
+                console.log("FINALLY");
+            }
+        }
+        idle('hello')
+        // hello 
+        // FINALLY 
+        // "result"
+
+        // try代码块一抛出错误（上例用的是throw语句），JavaScript引擎就立即把代码的执行，转到catch代码块。
+        // 可以看作，错误可以被catch代码块捕获。catch接受一个参数，表示try代码块抛出的值
         function f() {
             try {
                 console.log(0);
                 throw 'bug';
             } catch (e) {
+                // catch代码块捕获错误之后，程序不会中断，会按照正常流程继续执行下去，如果没有catch捕获，try的throw后面的代码 
+                // 将不会执行
                 console.log(1);
                 return true; // 这句原本会延迟到finally代码块结束再执行
                 console.log(2); // 不会运行
             } finally {
+                // finally代码块，表示不管是否出现错误，都必需在最后运行的语句
                 console.log(3);
                 return false; // 这句会覆盖掉前面那句return
                 console.log(4); // 不会运行

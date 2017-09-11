@@ -10,6 +10,25 @@
     <script type="text/javascript">
         // Ajax,异步的JavaScript和XML
         // 核心是XMLHttpRequest
+        // 在用户和服务器之间加了一个中间层(Ajax引擎)，使用户操作与服务器响应异步化，通过XmlHttpRequest对象来向服务器发异步请求，
+        // 从服务器获得数据，然后用javascript来操作DOM而更新页面
+
+        // Ajax步骤：创建AJAX对象，发出HTTP请求，接收服务器传回的数据，更新网页数据
+        // 一旦拿到服务器返回的数据，AJAX不会刷新整个网页，而是只更新相关部分，从而不打断用户正在做的事情
+
+        // Ajax优点：
+        // 1.最大的一点是页面无刷新，在页面内与服务器通信，给用户的体验非常好。
+        // 2.使用异步方式与服务器通信，不需要打断用户的操作，具有更加迅速的响应能力。
+        // 3.可以把以前一些服务器负担的工作转嫁到客户端，利用客户端闲置的能力来处理，减轻服务器和带宽的负担，节约空间和宽带租用成本。
+        //   并且减轻服务器的负担，ajax的原则是“按需取数据”，可以最大程度的减少冗余请求，和响应对服务器造成的负担。
+        // 4.基于标准化的并被广泛支持的技术，不需要下载插件或者小程序
+        // Ajax缺点：
+        // 1.ajax干掉了back按钮，即对浏览器后退机制的破坏
+        // 2.ajax也难以避免一些已知的安全弱点，诸如跨站点脚步攻击、SQL注入攻击和基于credentials的安全漏洞等
+        // 3.对搜索引擎的支持比较弱
+        // 4.破坏了程序的异常机制，异步不好获取的错误
+        // 5.违背了url和资源定位的初衷
+        
 
         // 跨浏览器创建XHR，IE7以上就支持XMLHttpRequest对象
         function createXHR() {
@@ -34,24 +53,9 @@
             }
         }
 
-        // XHR使用
-        // 创建新的XMLHttpRequest实例
-        var xhr = createXHR();
-        // 监听请求的状态变化
-        xhr.onreadystatechange = function() {  // 使用实际的xhr对象而不用this，防止出现作用域问题
-            if (xhr.readyState == 4) {
-                if ((xhr.status >= 200 && xhr.status < 300) || xhr.status == 304) {
-                    console.log(xhr.responseText);
-                } else {
-                    console.log('请求不成功' + xhr.status);
-                }
-            }
-        }
-        // get请求
+        // 同步请求
         // 使用XHR对象时，调用的第一个方法是open(),接收三个参数，要发起请求的类型（'get','post'），请求的URL和
         // 表示是否异步发送请求的布尔值，false表示同步
-
-        // 同步请求
         xhr.open('get', 'example.php', false);
         // send()方法，接收一个参数，即要作为请求主体发送的数据，如果不需要通过请求主体发送数据，则必须传入null
         xhr.send(null);
@@ -64,15 +68,28 @@
         // XHR对象的属性
         // responseText，作为相应主体返回的文本
         // responseXML，保存包含响应数据的XML DOM文档
-        // status，响应的HTTP状态，200表示成功，304表示请求的资源并没有被修改，可以直接使用浏览器缓存的版本，
+        // status，响应的HTTP状态，200表示成功，304表示请求的资源并没有被修改，可以直接使用浏览器缓存的版本，常用的有：
+        // 200, OK，访问正常，基本上，只有2xx和304的状态码，表示服务器返回是正常状态
+        // 301, Moved Permanently，永久移动
+        // 302, Move temporarily，暂时移动
+        // 304, Not Modified，未修改
+        // 307, Temporary Redirect，暂时重定向
+        // 401, Unauthorized，未授权
+        // 403, Forbidden，禁止访问
+        // 404, Not Found，未发现指定网址
+        // 500, Internal Server Error，服务器发生错误
         // statusText，HTTP状态的说明
 
         // 异步请求
         xhr.open('get', 'example.php', true);
         xhr.send(null);
-        // 异步有readyState属性，表示当前响应的活动阶段，4表示完成
-        // readyState每次变化会触发，readyStateChange事件
-        xhr.onreadyStateChange = function() {
+        // responseType属性用来指定服务器返回数据（xhr.response）的类型：”“：字符串（默认值），“aybuffer”：ArrayBuffer对象
+        // “blob”：Blob对象，“document”：Document对象，“json”：JSON对象，“text”：字符串
+        xhr.responseType = "json";
+        // 异步有readyState属性，表示当前响应的活动阶段，4表示完成，readyState每次变化会触发readyStateChange事件
+        // response属性为只读，返回接收到的数据体（即body部分）。它的类型可以是ArrayBuffer、Blob、Document、
+        // JSON对象、或者一个字符串，这由XMLHttpRequest.responseType属性的值决定。本次请求没有成功或者数据不完整，该属性就会等于null
+        xhr.onreadyStateChange = function () {
             if (xhr.readyState == 4) {
                 if ((xhr.status >= 200 && xhr.status < 300) || xhr.status == 304) {
                     console.log(xhr.responseText);
@@ -86,7 +103,7 @@
         // get请求HTML的responseText返回的是HTML的字符串
         // 查询字符串中每个参数的名称和值都必须使用encodeURIComponent()进行编码
         // 向URL的末尾添加查询字符串参数
-        function addURLParam (url, name, value) {
+        function addURLParam(url, name, value) {
             url += (url.index('?') == -1 ? '?' : '&');
             url += encodeURIComponent(name) + '=' + encodeURIComponent(value);
             return url;
@@ -102,18 +119,43 @@
         // FormData对象，序列化表单，使用formdata不必明确设置头部，XHR对象能够数据类型是formdata的实例
         var data = new FormData();
         data.append(key, value); // 两个参数，键和值，向data中添加数据
-        data.append(document.form[0]);
+        data.append(document.form[0]); // 直接传入表单
+        // 利用formData模拟file控件。进行文件上传
+        function uploadFiles(url, files) {
+            var formData = new FormData();
+            for (var i = 0, file; file = files[i]; ++i) {
+                formData.append(file.name, file); // 可加入第三个参数，表示文件名 
+            }
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', url, true);
+            xhr.onload = function (e) {
+                // ...
+            };
+            xhr.send(formData); // multipart/form-data 
+        }
+        document.querySelector('input[type="file"]').addEventListener('change', function (e) {
+            uploadFiles('/server', this.files);
+        }, false);
+        // 直接使用file API上传文件
+        var file = document.getElementById('test-input').files[0];
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', 'myserver/uploads');
+        xhr.setRequestHeader('Content-Type', file.type);
+        xhr.send(file);
 
-        // 超时设定
-        xhr.open('get', 'example.php', true);
-        xhr.timeout = 1000; // 表示请求响应多少秒之后就终止
-        xhr.ontimeout = function () { // 如果时间到了没有响应，就触发timeout事件
-            console.log('request was not return in a second');
-        };
-        xhr.send(null);
-
-        // 进度事件
-        // load事件，在接收完整的响应数据时触发
+        // XMLHttpRequest第二版支持的回调函数：
+        // onloadstart 请求发出
+        // onprogress 正在发送和加载数据
+        // onabort 请求被中止，比如用户调用了abort()方法
+        ajax.open('GET', 'http://www.example.com/page.php', true);
+        var ajaxAbortTimer = setTimeout(function () {
+            if (ajax) {
+                ajax.abort(); // 用户五秒后终止了请求
+                ajax = null;
+            }
+        }, 5000);
+        // onerror 请求失败
+        // onload 请求成功完成，load事件，在接收完整的响应数据时触发
         xhr.onload = function () {
             if ((xhr.status >= 200 && xhr.status < 300) || xhr.status == 304) {
                 console.log(xhr.responseText);
@@ -121,13 +163,51 @@
                 console.log('response is not success' + xhr.status);
             }
         }
+        // ontimeout 用户指定的时限到期，请求还未完成
+        xhr.open('get', 'example.php', true);
+        xhr.timeout = 1000; // 表示请求响应多少秒之后就终止
+        xhr.ontimeout = function () { // 如果时间到了没有响应，就触发timeout事件
+            console.log('request was not return in a second');
+        };
+        xhr.send(null);
+        // onloadend 请求完成，不管成果或失败
+
+        // 进度事件
         // progresss事件，在刘拉你接收数据周期性触发，可以用来创建进度指示器，会接收一个event对象，event.target指向XHR，
         // 包含三个属性：
         // lengthComputable，表示进度信息是否可用
         // position，已经接收的字节数
         // totalSize，根据Content-Length响应头确定的预期字节数
+        function upload(blobOrFile) {
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/server', true);
+            xhr.onload = function (e) {
+                //...
+            }; // Listen to the upload progress. 
+            var progressBar = document.querySelector('progress');
+            xhr.upload.onprogress = function (e) {
+                if (e.lengthComputable) {
+                    progressBar.value = (e.loaded / e.total) * 100;
+                    progressBar.textContent = progressBar.value; // Fallback for unsupported browsers. 
+                }
+            };
+            xhr.send(blobOrFile);
+        }
+        upload(new Blob(['hello world'], {
+            type: 'text/plain'
+        }));
+
+        // HTML网页的<form>元素能够以四种格式，向服务器发送数据
+        // ectype，form元素设置或返回表单用来编码内容的 MIME 类型
+        // 使用POST方法，将enctype属性设为application/x-www-form-urlencoded，这是默认方法
+        // 使用POST方法，将enctype属性设为text/plain
+        // 使用POST方法，将enctype属性设为multipart/form-data
+        // 使用GET方法，enctype属性将被忽略
 
         // 跨域安全策略，XHR对象只能访问包含它页面位于同一个域中的资源
+
+        // withCredentials，是一个布尔值，表示跨域请求时，用户信息（比如Cookie和认证的HTTP头信息）是否会包含在请求之中，默认为false
+        xhr.withCredentials = true;
 
         // CORS定义了必须访问跨域资源时，浏览器与服务器应该如何沟通。就是使用自定义的HTTP头部让浏览器与服务器精细沟通，
         // 从而决定请求或响应是应该成功，还是应该失败
@@ -145,8 +225,6 @@
         // 看有没有更新的数据）和流
         // 轮询使用setTime和XHR就能实现
         // HTTP流
-
-
     </script>
 </body>
 

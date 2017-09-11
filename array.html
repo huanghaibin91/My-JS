@@ -83,10 +83,12 @@
         }));
         // reduce(),归并方法，返回一个最终值
         // pre在归并开始时是数组第一个值，后边会把函数操作的返回值作为pre传递到下一步
-        var total = arr9.reduce(function(pre, nex) {
+        var total = arr9.reduce(function(pre, next, index, arr) {
             return pre + nex;
         });
         console.log(total);
+
+        // 数组方法中能返回一个数组的方法，都能够链式调用
         </script>
     </body>
 </html>

@@ -16,7 +16,7 @@
             // 获取cookie： document.cookie
 
             // cookie操作
-            var CookieUtil = function () {
+            var CookieUtil = {
                 get: function (name) {
                     var cookieName = encodeURIComponent(name) + '=',
                         cookieStart = document.cookie.indexOf(cookieName),

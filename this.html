@@ -103,6 +103,8 @@
         doFoo(obj4.foo4); // "oops, global"
 
         // 显式绑定，使用函数的 call(..) 和apply(..) 方法。
+        // call、apply方法的参数，应该是一个对象，apply第二个参数是数组，call是逗号分隔的参数。如果参数为空、
+        // null和undefined，则默认传入全局对象
         function foo5() {
             console.log(this.a);
         }

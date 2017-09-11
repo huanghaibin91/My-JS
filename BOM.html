@@ -13,6 +13,7 @@
             // 跨浏览器取得窗口左边和上边的位置
             var leftPos = (typeof screenLeft === 'number') ? window.screenLeft : window.screenX;
             var topPos = (typeof screenTop === 'number') ? window.screenTop : window.screenX;
+            // window.pageXOffset，window.pageYOffset
 
             // moveTo()移动到位置,moveBy()移动多少位置，将窗口移动到一个精确的位置
             // resizeTo(),resizeBy(),调整浏览器窗口的大小
@@ -57,12 +58,16 @@
             }
 
             // location对象，提供与当前窗口加载的文档有关的信息，既是window又是document对象的属性
+            // window.location于获取窗口当前的URL信息。它等同于document.location对象
             // location可以通过多种方法改变浏览器的位置
+
+            // window.frames属性返回一个类似数组的对象，成员为页面内所有框架窗口，包括frame元素和iframe元素
 
             // history对象保存着用户上网的历史记录
             // 使用go方法可以在用户的历史记录上任意跳转
             // history.go(-1) // 后退一页，history.back()
             // history.go(1) // 前进一页, history.forward()
+            // history.go(0)相当于刷新当前页面
 
 
         </script>

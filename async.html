@@ -9,13 +9,15 @@
     会按照它们在页面出现的顺序加载，而多个async脚本是不能保证加载顺序的 -->
     <!-- <script src="path/to/myModule.js" defer></script> -->
     <!-- <script src="path/to/myModule.js" async></script> -->
+    <script src="./image/jquery-1.12.3.js"></script>
 </head>
 
 <body>
     <p>异步运行图</p>
     <img src="./image/asyn.jpg" alt="">
-    <p>下图中，主线程运行的时候，产生堆（heap）和栈（stack），栈中的代码调用各种外部API，它们在"任务队列"中加入各种事件
-        （click，load，done）。只要栈中的代码执行完毕，主线程就会去读取"任务队列"，依次执行那些事件所对应的回调函数</p>
+    <p>下图中，主线程运行的时候，产生堆（heap）和栈（stack），栈中的代码调用各种外部API，它们在"任务队列"中加入各种事件 
+        （click，load，done）。只要栈中的代码执行完毕，主线程就会去读取"任务队列"，依次执行那些事件所对应的回调函数
+    </p>
     <img src="./image/eventloop.png" alt="">
     <script type="text/javascript">
         // 任务可以分成两种，一种是同步任务（synchronous），另一种是异步任务（asynchronous）。
@@ -44,17 +46,100 @@
         // 主线程首先要检查一下执行时间，某些事件只有到了规定的时间，才能返回主线程。
 
         // 除了放置异步任务的事件，"任务队列"还可以放置定时事件
-        setTimeout(function(){console.log(1);}, 0);
+        setTimeout(function () {
+            console.log(1);
+        }, 0);
         console.log(2); // 执行结果总是2，1，因为只有在执行完第二行以后，系统才会去执行"任务队列"中的回调函数
         // 需要注意的是，setTimeout()只是将事件插入了"任务队列"，必须等到当前代码（执行栈）执行完，主线程才会
         // 去执行它指定的回调函数。要是当前代码耗时很长，有可能要等很久，所以并没有办法保证，回调函数一定会在setTimeout()
         // 指定的时间执行
-        
+        // 利用setTimeOut模拟setInterval
+        function interval(func, wait) {
+            var interv = function () {
+                func.call(null);
+                setTimeout(interv, wait);
+            };
+            setTimeout(interv, wait);
+        }
+        // 只能将上一个字符转为大写，因为浏览器此时还没接收到文本，所以this.value取不到最新输入的那个字符
+        document.getElementById('input-box').onkeypress = function (event) {
+            this.value = this.value.toUpperCase();
+        }
+        // 将代码放入setTimeout之中，就能使得它在浏览器接收到文本之后触发
+        document.getElementById('my-ok').onkeypress = function () {
+            var self = this;
+            setTimeout(function () {
+                self.value = self.value.toUpperCase();
+            }, 0);
+        }
         // I/O（input/output），即输入/输出端口
-        
+
         // 不管 API 形态像什么，始终要记住的是，只能在回调内部处理源于回调的异步错误
 
-        
+        // “事件”完全可以理解成”信号”，如果存在一个”信号中心”，某个任务执行完成，就向信号中心”发布”（publish）一个信号，
+        // 其他任务可以向信号中心”订阅”（subscribe）这个信号，从而知道什么时候自己可以开始执行。这就叫做”发布/订阅模式“
+        // （publish-subscribe pattern），又称”观察者模式“（observer pattern）
+
+        // promise，目标是使用正常的程序流程（同步），来处理异步操作。它先返回一个Promise对象，后面的操作以同步的方式，
+        // 寄存在这个对象上面。等到异步操作有了结果，再执行前期寄放在它上面的其他操作
+        // Promise接口的基本思想是，异步任务返回一个Promise对象
+        // Promise对象只有三种状态：异步操作“未完成”（pending），异步操作“已完成”（resolved，又称fulfilled），异步操作“失败”（rejected）
+        // 这三种的状态的变化途径只有两种：异步操作从“未完成”到“已完成”，异步操作从“未完成”到“失败”。
+        // 异步操作成功，Promise对象传回一个值，状态变为resolved。异步操作失败，Promise对象抛出一个错误，状态变为rejected。
+        // omise对象使用then方法添加回调函数。then方法可以接受两个回调函数，第一个是异步操作成功时（变为resolved状态）时的回调函数，
+        // 第二个是异步操作失败（变为rejected）时的回调函数（可以省略）。一旦状态改变，就调用相应的回调函数
+        // promise操作Ajax
+        function search(term) {
+            var url = 'http://example.com/search?q=' + term;
+            var xhr = new XMLHttpRequest();
+            var result;
+            var p = new Promise(function (resolve, reject) {
+                xhr.open('GET', url, true);
+                xhr.onload = function (e) {
+                    if (this.status === 200) {
+                        result = JSON.parse(this.responseText);
+                        resolve(result);
+                    }
+                };
+                xhr.onerror = function (e) {
+                    reject(e);
+                };
+                xhr.send();
+            });
+            return p;
+        }
+        search("Hello World").then(console.log, console.error);
+
+        // 异步编程的方法
+        // 1.回调函数
+        // 假定有两个函数，f1和f2，f2需要f1的结果，但f1需要计算很久，就可以考虑把f1写成f2的回调函数
+        function f2  (callback) {
+            setTimeout(function () {
+                callback();
+            }, 1000)
+        }
+        f1(f2); // 执行代码，f1不会堵塞程序运行，相当于先执行程序的主要逻辑，将耗时的操作推迟执行
+        // 回调函数的优点是简单、容易理解和部署，缺点是不利于代码的阅读和维护，各个部分之间高度耦合（Coupling），
+        // 流程会很混乱，而且每个任务只能指定一个回调函数
+
+        // 2. 事件监听,采用事件驱动模式。任务的执行不取决于代码的顺序，而取决于某个事件是否发生
+        f1.on('done', f2) // f1绑定一个事件，当f1发生done事件，就执行f2
+        function f1 () {
+            setTimeout(function () {
+                f1.trigger('done'); // f1.trigger('done')表示，执行完成后，立即触发done事件，从而开始执行f2
+            }, 1000)
+        }
+        // 这种方法的优点是比较容易理解，可以绑定多个事件，每个事件可以指定多个回调函数，而且可以"去耦合"（Decoupling），
+        // 有利于实现模块化。缺点是整个程序都要变成事件驱动型，运行流程会变得很不清晰
+
+        // 3.发布订阅
+        // 假定，存在一个"信号中心"，某个任务执行完成，就向信号中心"发布"（publish）一个信号，其他任务可以向信号中心
+        // "订阅"（subscribe）这个信号，从而知道什么时候自己可以开始执行。这就叫做"发布/订阅模式"（publish-subscribe pattern），
+        // 又称"观察者模式"（observer pattern）
+
+
+        // 4.promise对象
+
 
     </script>
 </body>
