@@ -50,6 +50,11 @@
         // 原型链相关方法
         // Object.create()：该方法可以指定原型对象和属性，返回一个新的对象。
         // Object.getPrototypeOf()：获取对象的Prototype对象
+        // obj1.prototype.isPrototypeOf(obj2)，obj1.prototype是否是obj2的原型
+        // 判断属性是否在原型中
+        function hasPrototypeProperty (obj, name) {
+            return !obj.hasOwnProperty(name) && (name in obj);
+        }
 
         // 对象可以通过两种形式定义： 声明（ 文字） 形式和构造形式。
         var myObj = { // 声明对象，常用

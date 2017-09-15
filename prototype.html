@@ -9,7 +9,7 @@
 <body>
     <img src="./image/prototype.png" alt=""><br>
     <img src="./image/prototype2.png" alt=""><br>
-    <img src="./image/prototype3.png" alt=""><br>
+    <img src="./image/prototype3.png" alt="" width="100%" height="100%"><br>
 
     <script type="text/javascript">
         // 创建的每个对象都有一个prototype（原型）属性，这个属性是一个指针，指向一个对象，
@@ -73,6 +73,8 @@
             enmumerable: false,
             value: Person
         }); // constructor设置为不可枚举的
+        // 构造函数、原型和实例的关系：每个构造函数都有一个原型对象，原型对象都包含一个指向构造函数的指针，
+        // 而实例都包含一个指向原型对象的内部指针
 
         console.log(new Person().sayName); // 在重写原型之后调用，指向新的原型，有sayName方法
 
@@ -287,16 +289,21 @@
         function superColor1() {
             this.colors = ['red', 'blue', 'green'];
         }
+        superColor1.prototype.sayColor = function () {
+            console.log('red');
+        }
 
         function subColor1() {
 
         }
-        subColor1.prototype = new superColor1(); // 这样共享原型会产生问题，改变数据后都会被修改，而且添加新方法不能采用subColor.prototype = {}因为这样会重写原型，会导致之前的原型无效
+        subColor1.prototype = new superColor1(); // 这样共享原型会产生问题，改变数据后都会被修改，而且添加
+        // 新方法不能采用subColor.prototype = {}因为这样会重写原型，会导致之前的原型无效
         var color1 = new subColor1();
         var color2 = new subColor1();
         color1.colors.push('black');
         console.log(color1.colors);
         console.log(color2.colors);
+        color2.sayColor();
         console.log(superColor1.colors); // superColor是构造函数，不是构造函数new出的对象，不能访问colors
 
         // 构造函数继承
@@ -338,7 +345,7 @@
         // 寄生组合式继承
         // 声明一个方法
         function inheritPrototype(subType, superType) {
-            var prototype = Object(superType, subType); // 创建对象
+            var prototype = Object(superType.prototype); // 创建对象
             prototype.constructor = subType; // 增强对象
             subType.prototype = prototype; // 指定对象
         }
