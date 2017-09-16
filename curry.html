@@ -19,11 +19,11 @@
             }
         }
 
-        function add(a, b) {
-            return a + b;
+        function add(a, b, c) {
+            return a + b + c;
         }
         var curriedAdd = curry(add, 5);
-        console.log(curriedAdd(3));
+        console.log(curriedAdd(3, 2));
 
         // arity 用来标记剩余参数的个数 // args 用来收集参数 
         function createCurry(func, arity, args) { 

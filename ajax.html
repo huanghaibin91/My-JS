@@ -26,7 +26,7 @@
         // 1.ajax干掉了back按钮，即对浏览器后退机制的破坏
         // 2.ajax也难以避免一些已知的安全弱点，诸如跨站点脚步攻击、SQL注入攻击和基于credentials的安全漏洞等
         // 3.对搜索引擎的支持比较弱
-        // 4.破坏了程序的异常机制，异步不好获取的错误
+        // 4.破坏了程序的异常机制，异步不好获取错误
         // 5.违背了url和资源定位的初衷
         
 
@@ -66,6 +66,7 @@
         }
 
         // XHR对象的属性
+        // readyState，异步请求时，当前响应的活动阶段
         // responseText，作为相应主体返回的文本
         // responseXML，保存包含响应数据的XML DOM文档
         // status，响应的HTTP状态，200表示成功，304表示请求的资源并没有被修改，可以直接使用浏览器缓存的版本，常用的有：
@@ -117,6 +118,10 @@
         // getAllResponseHeaders(),可以取得所有头部信息的长字符串
 
         // FormData对象，序列化表单，使用formdata不必明确设置头部，XHR对象能够数据类型是formdata的实例
+        // 表单字段的名称name和值value进行URL编码，使用和号（&）分割
+        // 使用append方法后，对应的键值对就已经添加到表单里面了，你在控制台看到的是FormData原型，存储的数据没有以
+        // 对象属性的方式体现，可以理解为类的私有字段，外界访问不到，所以显示的是空对象，但是你可以通过formData.get("qweqwe")
+        // 的方式获取到对应的表单数据
         var data = new FormData();
         data.append(key, value); // 两个参数，键和值，向data中添加数据
         data.append(document.form[0]); // 直接传入表单
