@@ -7,10 +7,19 @@
     <body>
         <script type="text/javascript">
             // Cookie，HTTP cookie
+
+            // cookie选项包括：expires、domain、path、secure、HttpOnly。在设置任一个cookie时都可以设置相关的这些属性，
+            // 当然也可以不设置，这时会使用这些属性的默认值。在设置这些属性时，属性之间由一个分号和一个空格隔开
+            // expires选项用来设置“cookie 什么时间内有效”。expires其实是cookie失效日期，expires必须是 GMT 格式的时间（可以通过 
+            // new Date().toGMTString()或者 new Date().toUTCString() 来获得）
+            // domain是域名，path是路径，两者加起来就构成了 URL，domain和path一起来限制 cookie 能被哪些 URL 访问
+            // secure选项用来设置cookie只在确保安全的请求中才会发送。当请求是HTTPS或者其他安全协议时，包含 secure 选项的 cookie 才能被发送至服务器
+            // 当cookie带httpOnly选项时，客户端则无法通过js代码去访问（包括读取、修改、删除等）这个cookie
+            
             // cookie是绑定在特定的域名下的，而且有限制，大小是4096B以下
             // cookie的构成：名称，一个唯一确定cookie的名称，不区分大小写。值，储存在cookie中的字符串值。
             // 值必须被URL编码。域，cookie对于哪个域是有效的，所有向该域发送的请求中都会包含这个cookie信息。
-            // 路径，对于指定域中的那个路径，应该向服务器发送cookie。失效时间，表示cookie何时应该被删除的时间戳。
+            // 路径，对于指定域中的那个路径，应该向服务器发送cookie。失效时间expires，表示cookie何时应该被删除的时间戳。
             // 安全标志，指定后，cookie只有在使用SSL连接的时候才发送到服务器。以上，cookie的名字和值是必须的。
 
             // 获取cookie： document.cookie
