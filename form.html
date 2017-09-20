@@ -30,6 +30,36 @@
             // focus(),blur(),select()方法
             // focus,blur,change,celect事件
 
+            // 选择框脚本select元素
+            // add(newOption, relOption)，在relOption之前插入newOption，relOption值为undefined则插入到最后
+            // multiple，布尔值，表示是否可以多项选择
+            // options，select控件中所有option选项
+            // remove(index)，移出index项
+            // selectedIndex，基于0的选中项的索引，没有则是-1
+            // seze，选择框中可见的行数
+
+            // option元素属性
+            // 创建选项Option构造函数
+            var newOption = new Option ('optionText', 'optionValue');
+            // index，option索引
+            // label，当前选型的标签label
+            // selected，布尔值，表示是否选中
+            // text，选项的文本
+            // value，选项的值
+
+            // 获取选中的选项
+            function getSelectedOption (selectBox) {
+                var result = [];
+                var option = null;
+                for (var i = 0, len = selectBox.options.length; i < len; i ++) {
+                    option = selectBox.options[i];
+                    if (option.selected) {
+                        result.push(option);
+                    }
+                }
+                return result;
+            }
+
 
         </script>
     </body>

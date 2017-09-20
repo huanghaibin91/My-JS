@@ -66,6 +66,14 @@
                     event.cancelBubble = true;
                 }
             },
+            // 获取滚轮滚动值
+            getWheelDelta: function (event) {
+                if (event.wheelDelta) {
+                    return (client.engine.opera && client.engine.opera < 9.5 ? -event.wheelDelta : event.wheelDelta);
+                } else {
+                    return -event.detail * 40;
+                }
+            }
         };
 
         // 事件类型
@@ -138,6 +146,7 @@
         
         // 文档事件
         // beforeunload事件，unload事件，load事件，error事件，pageshow事件，pagehide事件
+        // beforeunload，卸载页面前触发，例如用户关闭页面的提示消息
         // DOMContentLoaded事件，当HTML文档下载并解析完成以后触发，外部资源还未加载，比load早
         // readystatechange事件，发生在Document对象和XMLHttpRequest对象，当它们的readyState属性发生变化时触发
         // scroll事件，resize事件
@@ -145,6 +154,8 @@
         // popstate事件，在浏览器的history对象的当前记录发生显式切换时触发
 
         // 文本事件： cut事件，copy事件，paste事件
+
+        // contextmenu事件右键显示上下文菜单时触发，冒泡
         
         // CSS事件
         // transitionEnd事件，属性：
@@ -153,6 +164,11 @@
             // pseudoElement：如果transition效果发生在伪元素，会返回该伪元素的名称，以“::”开头。如果不发生在伪元素上，则返回一个空字符串。
         // animationstart事件，animationend事件，animationiteration事件
         
+        // DOM2级变动事件
+        // DOMSutreeModified
+        // DOMNodeInserted
+        // DOMNodeRemoved
+
 
     </script>
 </body>
