@@ -6,6 +6,14 @@
     </head>
     <body>
         <script type="text/javascript">
+            // 浏览器网络状态
+            if (navigator.onLine) {
+                // 正常工作
+            } else {
+                // 执行离线状态时的任务
+            }
+            // online, offline事件，在网络状态改变时触发，这两个事件在window对象上触发
+
             // Cookie，HTTP cookie
 
             // cookie选项包括：expires、domain、path、secure、HttpOnly。在设置任一个cookie时都可以设置相关的这些属性，
@@ -59,25 +67,36 @@
                 }
             }
 
-            // Storage，提供最大的存储空间来存储名值对，拥有以下方法
-            // clear()，删除所有值
+            // Storage，提供最大的存储空间来存储名值对，拥有以下方法，IE8+
+            // clear()，删除所有值，Firefox未实现
             // getItem(name)，根据name获取值
             // key(index)，获取index处的值的名字
             // removeItem(name)，删除name指定的名值对
             // setItem(name, value)，为指定的name设置一个对应的值
+            // length，名值对长度
 
             // sessionStorage，用于存储特定于某个会话的数据，也就是数据只保存到浏览器关闭，在浏览器关闭后消失。
             // 储存在sessionStorage中的数据可以跨越页面刷新而存在
             // sessionStorage是Storage的一个实例，所以可以用Storage的方法
             // sessionStorage.setItem('name', 'Tom') // 使用方法存储数据
 
+            // IE不支持
             // globalStorage,目的是跨越会话存储数据，但有特定的访问限制，使用globalStorage的时候一定要指定一个域名，
-            // 也可以使用Storage对象的方法
+            // 也可以使用Storage对象的方法，遵循同源策略
             // globalStorage['example.com'].name = 'Tom' // 只有example.com域可以访问
             // globalStorage[''].name = 'Tom' // 所有域都可以访问
             // globalStorage[local.host].name = 'Tom' // 不确定类名就使用local.host作为属性比较安全
+
+            // IE8+
             // localStorage，持久保存客户端数据，要访问同一个localStorage对象，页面必须来自同一个域名（子域名无效），
             // 使用同一种协议，在同一个端口上
+            // localStorage取代了globalStorage，localStorage是storage实例，可以使用storage的方法
+
+            // storage事件，在对Storage对象进行修改后触发，有以下属性：
+            // domain，发生变化的存储空间的域名
+            // key，设置或删除的键名
+            // newValue，如果是设置值，则是新值，如果删除值，则是null
+            // oldValue，键被更改之前的值
             
         </script>
     </body>
