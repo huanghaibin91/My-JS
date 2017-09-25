@@ -120,12 +120,12 @@
         // FormData对象，序列化表单，使用formdata不必明确设置头部，XHR对象能够数据类型是formdata的实例
         // 表单字段的名称name和值value进行URL编码，使用和号（&）分割
         // 使用append方法后，对应的键值对就已经添加到表单里面了，你在控制台看到的是FormData原型，存储的数据没有以
-        // 对象属性的方式体现，可以理解为类的私有字段，外界访问不到，所以显示的是空对象，但是你可以通过formData.get("qweqwe")
+        // 对象属性的方式体现，可以理解为类的私有字段，外界访问不到，所以显示的是空对象，但是你可以通过formData.get(key)
         // 的方式获取到对应的表单数据
         var data = new FormData();
         data.append(key, value); // 两个参数，键和值，向data中添加数据
         data.append(document.form[0]); // 直接传入表单
-        // 利用formData模拟file控件。进行文件上传
+        // 利用formData模拟file控件。进行文件上传，IE9+
         function uploadFiles(url, files) {
             var formData = new FormData();
             for (var i = 0, file; file = files[i]; ++i) {

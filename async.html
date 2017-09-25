@@ -7,7 +7,7 @@
     <!-- defer与async的区别是：前者要等到整个页面正常渲染结束，才会执行；后者一旦下载完，渲染引擎就会中断渲染，
     执行这个脚本以后，再继续渲染。一句话，defer是“渲染完再执行”，async是“下载完就执行”。另外，如果有多个defer脚本，
     会按照它们在页面出现的顺序加载，而多个async脚本是不能保证加载顺序的。如果不支持，defer和async，则把script放到
-    body底部 -->
+    body底部，defer和async同时存在时，async会覆盖defer -->
     <!-- <script src="path/to/myModule.js" defer></script> -->
     <!-- <script src="path/to/myModule.js" async></script> -->
     <script src="./image/jquery-1.12.3.js"></script>
@@ -16,8 +16,7 @@
 <body>
     <p>异步运行图</p>
     <img src="./image/asyn.jpg" alt="">
-    <p>下图中，主线程运行的时候，产生堆（heap）和栈（stack），栈中的代码调用各种外部API，它们在"任务队列"中加入各种事件 
-        （click，load，done）。只要栈中的代码执行完毕，主线程就会去读取"任务队列"，依次执行那些事件所对应的回调函数
+    <p>下图中，主线程运行的时候，产生堆（heap）和栈（stack），栈中的代码调用各种外部API，它们在"任务队列"中加入各种事件 （click，load，done）。只要栈中的代码执行完毕，主线程就会去读取"任务队列"，依次执行那些事件所对应的回调函数
     </p>
     <img src="./image/eventloop.png" alt="">
     <script type="text/javascript">
@@ -25,6 +24,8 @@
         // 同步任务指的是，在主线程上排队执行的任务，只有前一个任务执行完毕，才能执行后一个任务；
         // 异步任务指的是，不进入主线程、而进入"任务队列"（task queue）的任务，只有"任务队列"通知主线程，
         // 某个异步任务可以执行了，该任务才会进入主线程执行
+
+        // JavaScript提供的异步函数有两大类：I/O函数和计时函数
 
         // 异步执行的运行机制
         // 所有同步任务都在主线程上执行， 形成一个执行栈（ execution context stack）
@@ -44,7 +45,8 @@
 
         // "任务队列"是一个先进先出的数据结构，排在前面的事件，优先被主线程读取。主线程的读取过程基本上是自动的，
         // 只要执行栈一清空，"任务队列"上第一位的事件就自动进入主线程。但是，由于存在后文提到的"定时器"功能，
-        // 主线程首先要检查一下执行时间，某些事件只有到了规定的时间，才能返回主线程。
+        // 主线程首先要检查一下执行时间，某些事件只有到了规定的时间，才能返回主线程。“任务队列”还有一个事件循环功能，会不断
+        // 循环提取任务队列中的事件
 
         // 除了放置异步任务的事件，"任务队列"还可以放置定时事件
         setTimeout(function () {
@@ -76,6 +78,13 @@
         // I/O（input/output），即输入/输出端口
 
         // 不管 API 形态像什么，始终要记住的是，只能在回调内部处理源于回调的异步错误
+        try {
+            setTimeout(function () { // 异步事件
+                throw new Error('Catch me if you can!'); // function会异步执行，所以catch不能捕获错误进行处理，错误仍会弹出
+            }, 0);
+        } catch (e) {
+            console.error(e);
+        }
 
         // “事件”完全可以理解成”信号”，如果存在一个”信号中心”，某个任务执行完成，就向信号中心”发布”（publish）一个信号，
         // 其他任务可以向信号中心”订阅”（subscribe）这个信号，从而知道什么时候自己可以开始执行。这就叫做”发布/订阅模式“
@@ -114,7 +123,7 @@
         // 异步编程的方法
         // 1.回调函数
         // 假定有两个函数，f1和f2，f2需要f1的结果，但f1需要计算很久，就可以考虑把f1写成f2的回调函数
-        function f2  (callback) {
+        function f2(callback) {
             setTimeout(function () {
                 callback();
             }, 1000)
@@ -125,7 +134,7 @@
 
         // 2. 事件监听,采用事件驱动模式。任务的执行不取决于代码的顺序，而取决于某个事件是否发生
         f1.on('done', f2) // f1绑定一个事件，当f1发生done事件，就执行f2
-        function f1 () {
+        function f1() {
             setTimeout(function () {
                 f1.trigger('done'); // f1.trigger('done')表示，执行完成后，立即触发done事件，从而开始执行f2
             }, 1000)
@@ -137,11 +146,26 @@
         // 假定，存在一个"信号中心"，某个任务执行完成，就向信号中心"发布"（publish）一个信号，其他任务可以向信号中心
         // "订阅"（subscribe）这个信号，从而知道什么时候自己可以开始执行。这就叫做"发布/订阅模式"（publish-subscribe pattern），
         // 又称"观察者模式"（observer pattern）
+        PubSub = {
+            handlers: {}
+        };
+        PubSub.on = function (eventType, handler) {
+            if (!(eventType in this.handlers)) {
+                this.handlers[eventType] = [];
+            }
 
+            this.handlers[eventType].push(handler);
+            return this;
+        }
+        PubSub.emit = function (eventType) {
+            var handlerArgs = Array.prototype.slice.call(arguments, 1);
+            for (var i = 0; i < this.handlers[eventType].length; i++) {
+                this.handlers[eventType][i].apply(this, handlerArgs);
+            }
+            return this;
+        }
 
         // 4.promise对象
-
-
     </script>
 </body>
 
