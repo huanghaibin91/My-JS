@@ -73,6 +73,10 @@
         // 需要在CORS机制下发出跨域请求，需要指明状态
         fetch('http://some-site.com/cors-enabled/some.json', {mode: 'cors'})
         // fetch方法的第二个参数还可以用来配置其他值，比如指定cookie连同HTTP请求一起发出
+
+        // Fetch 请求默认是不带 cookie 的，需要设置 fetch(url, {credentials: 'include'})
+
+        
     </script>
 </body>
 

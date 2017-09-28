@@ -30,9 +30,9 @@
         // push(), 返回新的长度
         // pop(), 返回删除的元素
         // unshift(), 返回新的长度
-        // shift(),返回数组的第一个元素
+        // shift(), 返回数组的第一个元素
 
-        // reverse(),翻转数组，改变原数组
+        // reverse(), 翻转数组，改变原数组
         var arr5 = [1, 5, 6, 3, 9];
         console.log(arr5.reverse());
         console.log(arr5);
@@ -50,7 +50,7 @@
         var arr7 = arr6.slice(0, 4);
         console.log(arr7);
 
-        // splice(),删除添加元素都可以，改变原数组，返回值是删除的元素
+        // splice(), 删除添加元素都可以，改变原数组，返回值是删除的元素
         var arr8 = arr6.splice(0, 2, 'one', 'two');
         console.log(arr6);
         console.log(arr8);
@@ -60,11 +60,11 @@
         // 迭代方法
         var arr9 = [1, 8, 7, 6, 3];
         // every()，返回布尔值，数组所有元素满足返回true
-        console.log(arr9.every(function (ele) {
+        console.log(arr9.every(function (ele, index, arr) {
             return ele > 1;
         }));
         // filter()，筛选数组满足条件的元素，返回一个新数组
-        var arr10 = arr9.filter(function (ele) {
+        var arr10 = arr9.filter(function (ele, index, arr) {
             return ele > 3;
         });
         console.log(arr10);
@@ -77,12 +77,12 @@
         });
         console.log(arr9);
         // map()，对数组每一项进行操作，返回操作后新数组
-        var arr11 = arr9.map(function (ele) {
+        var arr11 = arr9.map(function (ele, inde, arr) {
             return ele * 2;
         });
         console.log(arr11);
         // some(),返回布尔值，全部都不满足返回false
-        console.log(arr9.some(function (ele) {
+        console.log(arr9.some(function (ele, index, arr) {
             return ele > 3;
         }));
         // reduce(),归并方法，返回一个最终值

@@ -8,6 +8,8 @@
     执行这个脚本以后，再继续渲染。一句话，defer是“渲染完再执行”，async是“下载完就执行”。另外，如果有多个defer脚本，
     会按照它们在页面出现的顺序加载，而多个async脚本是不能保证加载顺序的。如果不支持，defer和async，则把script放到
     body底部，defer和async同时存在时，async会覆盖defer -->
+    <!-- 带有defer属性的script元素会在window.onload事件之前调用 -->
+    <!-- 脚本插入的script标签默认是async的 -->
     <!-- <script src="path/to/myModule.js" defer></script> -->
     <!-- <script src="path/to/myModule.js" async></script> -->
     <script src="./image/jquery-1.12.3.js"></script>
@@ -26,6 +28,12 @@
         // 某个异步任务可以执行了，该任务才会进入主线程执行
 
         // JavaScript提供的异步函数有两大类：I/O函数和计时函数
+
+        // JS中的任务队列中有两个部分：
+        // macro-task包括：script(整体代码), setTimeout, setInterval, setImmediate, I/O, UI rendering。
+        // micro-task包括：process.nextTick, Promises, Object.observe, MutationObserver（DOM变动API）
+        // 执行顺序：函数调用栈清空只剩全局执行上下文，然后开始执行所有的micro-task。当所有可执行的micro-task执行完毕之后。
+        // 循环再次执行macro-task中的一个任务队列，执行完之后再执行所有的micro-task，就这样一直循环
 
         // 异步执行的运行机制
         // 所有同步任务都在主线程上执行， 形成一个执行栈（ execution context stack）
@@ -96,7 +104,7 @@
         // Promise对象只有三种状态：异步操作“未完成”（pending），异步操作“已完成”（resolved，又称fulfilled），异步操作“失败”（rejected）
         // 这三种的状态的变化途径只有两种：异步操作从“未完成”到“已完成”，异步操作从“未完成”到“失败”。
         // 异步操作成功，Promise对象传回一个值，状态变为resolved。异步操作失败，Promise对象抛出一个错误，状态变为rejected。
-        // omise对象使用then方法添加回调函数。then方法可以接受两个回调函数，第一个是异步操作成功时（变为resolved状态）时的回调函数，
+        // promise对象使用then方法添加回调函数。then方法可以接受两个回调函数，第一个是异步操作成功时（变为resolved状态）时的回调函数，
         // 第二个是异步操作失败（变为rejected）时的回调函数（可以省略）。一旦状态改变，就调用相应的回调函数
         // promise操作Ajax
         function search(term) {
