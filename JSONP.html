@@ -95,7 +95,9 @@
                 url: 'http://osod5bm6c.bkt.clouddn.com/jsonp.json',
                 type: 'get',
                 dataType: 'jsonp',
-                jsonpCallback: 'updateText2',
+                jsonp: 'callback', //传递给请求处理程序或页面的，用以获得jsonp回调函数名的参数名(一般默认为:callback)
+                jsonpCallback: 'updateText2', //自定义的jsonp回调函数名称，默认为jQuery自动生成的随机函数名，也可以写"?"，
+                // jQuery会自动为你处理数据
                 success: function (data) {
                     console.log(data);
                 }
@@ -115,7 +117,9 @@
             var id = 0,
                 container = document.getElementsByTagName("head")[0];
             function jsonp(options) {
-                if (!options || !options.url) return;
+                if (!options || !options.url) {
+                    return;
+                }
                 var scriptNode = document.createElement("script"),
                     data = options.data || {},
                     url = options.url,
