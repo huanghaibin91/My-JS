@@ -32,17 +32,24 @@
         // document.defaultView属性，在浏览器中返回document对象所在的window对象，否则返回null
         // document.documentURI（所有文档），document.URL（HTML文档）表示当前文档的网址。document.domain返回当前文档的域名
         // document.location，属性返回location对象，提供了当前文档的URL信息
+        // document.title，获取文档标题，也可以修改文档标题
+        // document.URL，获取页面完整URL，只读
+        // document.referrer，保存着链接到当前页面的那个页面的URL，只读
+        // document.domain，页面域名，可写，当页面存在在其它域的子域，设置domain可以使父子间通信
 
         // Element元素节点
-        // Element.id，Element.tagName，Element.className
-        // classList类名集合,以下是它的方法
+        // Element.id，Element.tagName，Element.className，Element.title
+        // classList类名集合,以下是它的方法，IE10+
         // add()，添加类名
         // contains()，是否有类名
         // remove()，移除类名
-        // toggle()，检查是否有类名，有就删除，没有就添加
-        // innerHTML，读模式属性返回与调用元素的所有子节点对应的HTML标记，写模式会被解析为DOM子树，替换调用元素所有的子节点，但是通过innerHTML插入script无效
-        // outerHTML，读模式属性返回与调用元素及其所有子节点对应的HTML标记，写模式会被解析为DOM子树，替换调用元素及其所有的子节点
-        // innerText,读模式可以操作元素中包含的所有文本，包括子文档树中的文本，写模式下会替换掉元素的所有子节点，使元素只有一个子文本节点，
+        // toggle()，检查是否有类名，若类名列表中有此类名，移除之，并返回false; 如果没有，则添加该类名，并返回true
+        // innerHTML，读模式属性返回与调用元素的所有子节点对应的HTML标记，写模式会被解析为DOM子树，替换调用元素所有的子节点，
+        // 但是通过innerHTML插入script无效
+        // outerHTML，读模式属性返回与调用元素及其所有子节点对应的HTML标记，写模式会被解析为DOM子树，替换调用元素及其所有的子
+        // 节点
+        // innerText,读模式可以操作元素中包含的所有文本，包括子文档树中的文本，写模式下会替换掉元素的所有子节点，使元素只有一
+        // 个子文本节点
         // outerText，读模式下与innerText一致，写模式下会用文本节点替换掉元素及其子节点
         // 元素尺寸,以下属性都是只读属性，不可赋值
         // offsetHeight，元素垂直空间高度，包括边框与滚动条
@@ -58,13 +65,15 @@
         // scrollTop，内容区域上方滚动的像素，可以设置改变滚动位置
         // scrollLeft，内容区域左侧滚动的像素，可以设置改变滚动位置
 
+        // 获取元素相对于视口的位置，getBoundingClientRect()，返回一个矩形对象，有top、right、bottom和left是个属性
+
         // ele.scrollIntoView()，参数默认true，页面（或容器）发生滚动，使element的顶部与视图（容器）顶部对齐；参数为false，
         // 使element的底部与视图（容器）底部对齐。应用场景，聊天新信息到了直接滚动到底部显示
 
         // 文本节点
         // createTextNode
-        // remove()移出文本节点，splitText(target)从target位置分割文本节点，normalize()合并文本节点
-
+        // remove()移除文本节点，splitText(target)从target位置分割文本节点，normalize()合并文本节点
+        // 以下是XML操作文本节点方法，JS也可以用：
         // appendData(str)把str放置在文本节点末尾，deleteData(target, length)，insertData(target, str)，
         // replaceData(target, length, str)，subStringData(target, length)文本节点操作方法
         // HTML代码为 
@@ -101,7 +110,7 @@
         // childElementCount，返回子元素的个数
         // parentNode.appendChild(newNode),在父节点末尾添加一个节点，如果目标节点已经是文档的一部分了，
         // 那结果就是将该节点从原来的的位置移动到新位置
-        // parentNode.insertBefore(newNode,targetNode)，在父节点的某个子节点之前添加一个节点，目标位置参数
+        // parentNode.insertBefore(newNode, targetNode)，在父节点的某个子节点之前添加一个节点，目标位置参数
         // null则跟appendChild()一样,
         // 如果所要插入的节点是当前DOM现有的节点，则该节点将从原有的位置移除，插入新的位置
         // parentNode.replaceChild(newNode, oldNode)，替换一个子节点
@@ -117,9 +126,10 @@
 
         // document.documentElement取得html,document.body取得body
 
-        // HTMLCollection实例对象与NodeList实例对象类似，也是节点的集合，返回一个类似数组的对象。
+        // NodeList是类数组对象，可以动态反映DOM结构的变化 
+        // HTMLCollection实例对象与NodeList实例对象类似，也是节点的集合，返回一个类似数组的对象，但HTMLCollection只能是
+        // 元素集合，也可以动态反映DOM结构的变化
         // document.links、docuement.forms、document.images等属性，返回的都是HTMLCollection实例对象，
-        // HTMLCollection只能是元素集合
         // docuemnt.title取得文档标题
         // document.forms取得所有表单元素
         // document.images取得所有图像元素
@@ -134,7 +144,7 @@
         // setAttribute()
         // hasAttribute()
         // removeAttribute()
-        // element.attributes，返回一个类似数组的动态对象，成员是该元素标签的所有属性节点对象，性节点对象有name和value属性
+        // element.attributes，返回一个类似数组的动态对象，成员是该元素标签的所有属性节点对象，属性节点对象有name和value属性
 
         // document.createElement()
         // document.createTextNode()
@@ -156,6 +166,7 @@
 
         // document.activeElement(),DOM中当前获得焦点的元素
         // document.hasFocus(),确定文档是否获取了焦点
+        // ele1.contains(ele2)，ele1是否是ele2的祖先节点
 
         // document.readyState，有两个值loading和complete，用来实现一个指示文档已经加载完成的指示器
         // 浏览器开始解析HTML文档，document.readyState属性等于loading。

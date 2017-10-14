@@ -9,13 +9,18 @@
 <body>
     <script type="text/javascript">
         // 事件冒泡事件模型三个阶段：事件捕获阶段，处于目标阶段，事件冒泡阶段
+        // event.eventPhase属性：1，捕获阶段；2，处于目标阶段；3，冒泡阶段
+
         // 由于事件会在冒泡阶段向上传播到父节点，因此可以把子节点的监听函数定义在父节点上，由父节点的监听函数统一处理多个子元素的事件。
         // 这种方法叫做事件的代理（delegation）
-        // stopPropagation方法只会阻止当前监听函数的传播，不会阻止<p>节点上的其他click事件的监听函数。如果想要不再触发那些监听函数，
+        // stopPropagation方法只会阻止当前监听函数的传播，不会阻止节点上的其他click事件的监听函数。如果想要不再触发那些监听函数，
         // 可以使用stopImmediatePropagation方法
+        // 例如一个节点绑定了两个点击事件，其中一个调用了preventPropagation()方法，只有这个事件不会冒泡，另一个仍然会冒泡，如果使用
+        // stopImmediatePropagation()会阻止所有当前节点的事件冒泡
 
         //使用DOM0级事件时，事件处理程序的this指向当前元素，被当做元素的方法
 
+        // DOM2级事件可以添加多个同类型事件
         // DOM2级事件处理addEventListener(),removeEventListener(),接收三个参数，事件名，事件处理函数，布尔值，
         // 最后一个布尔值默认false，代表事件冒泡，设置为true表示事件捕获，DOM2可以为同一元素设置多个事件处理函数，
         // W3C this指向当前元素，被当做元素的方法，IE指向window
@@ -25,6 +30,10 @@
         // addEventListener：绑定事件的监听函数
         // removeEventListener：移除事件的监听函数
         // dispatchEvent：触发事件，参数是一个Event对象的实例
+
+        // 事件对象：
+        // DOM事件：type、target
+        // IE事件：type、srcElement
 
         // 宽浏览器事件处理，IE9+支持W3C标准事件处理
         var EventUtil = {
@@ -150,7 +159,7 @@
         // DOMContentLoaded事件，当HTML文档下载并解析完成以后触发，外部资源还未加载，比load早
         // readystatechange事件，发生在Document对象和XMLHttpRequest对象，当它们的readyState属性发生变化时触发
         // scroll事件，resize事件
-        // hashchange事件，在URL的hash部分（即#号后面的部分，包括#号）发生变化时触发
+        // hashchange事件，在URL的hash部分（即#号后面的部分，包括#号）发生变化时触发，这个事件得搬动window对象
         // popstate事件，在浏览器的history对象的当前记录发生显式切换时触发
 
         // 文本事件： cut事件，copy事件，paste事件

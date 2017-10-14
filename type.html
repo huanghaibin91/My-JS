@@ -184,7 +184,9 @@
         // if (Boolean(a)) {
         //     // ..
         // }
-
+        
+        // ToPrimitive(obj)等价于：先计算obj.valueOf()，如果结果为原始值，则返回此结果；否则，计算obj.toString()，
+        // 如果结果是原始值，则返回此结果；否则，抛出异常
         // (1) 如果 Type(x) 是字符串或数字， Type(y) 是对象，则返回 x == ToPrimitive(y) 的结果；
         // (2) 如果 Type(x) 是对象， Type(y) 是字符串或数字，则返回 ToPromitive(x) == y 的结果。
         var a9 = 42;
@@ -195,6 +197,12 @@
         // • 如果两边的值中有 true 或者 false，千万不要使用 ==。
         // • 如果两边的值中有 []、 "" 或者 0，尽量不要使用 ==。
         // 为了安全起见就要使用 ===
+        
+        // == 规则
+        // undefined == null，结果是true。且它俩与所有其他值比较的结果都是false。
+        // String == Boolean，需要两个操作数同时转为Number。
+        // String/Boolean == Number，需要String/Boolean转为Number。
+        // Object == Primitive，需要Object转为Primitive(具体通过valueOf和toString方法)
 
         a10 = 1; // 全局变量，会作为window的属性，可以用delete删除
         var a11 = 1; // 声明变量
