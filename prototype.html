@@ -14,7 +14,11 @@
     <script type="text/javascript">
         // 创建的每个对象都有一个prototype（原型）属性，这个属性是一个指针，指向一个对象，
         // 而这个对象的用途是包含可以由特定类型的所有实例共享的属性和方法
-        // 每个对象都有 __proto__ 属性，但只有函数对象才有 prototype 属性
+
+        // 每个对象都有 __proto__ 属性，但只有函数对象才有 prototype 属性，prototype都是一个对象
+        // 原型对象其实就是普通对象（但 Function.prototype 除外，它是函数对象，但它很特殊，他没有prototype属性
+        // （前面说道函数对象都有prototype属性））
+        // Object.prototype 对象也有proto属性，但它比较特殊，为 null 。因为 null 处于原型链的顶端，这个只能记住
         // Object.getPrototypeof()（读取）和Object.setPrototypeOf()（设置），进行原型对象的读写操作
 
         // JS中分为普通对象和函数对象
@@ -56,10 +60,12 @@
 
         console.log(new Person().sayName); // undefined,在重写原型之前调用，仍指向原来的原型，原来的原型没有sayName方法
 
-        // 在默认情况下，所有的原型对象都会自动获得一个constructo（构造函数属性，这个属性是一个指针指向 prototype 属性所在的函数（Person）
+        // 在默认情况下，所有的原型对象都会自动获得一个constructo（构造函数属性，这个属性是一个指针指向 prototype 属性所在
+        // 的函数（Person）
         // 原型对象（Person.prototype）是 构造函数（Person）的一个实例
         Person.prototype = {
             // constructor: Person, // 使用对象字面量重写了原型对象，此时新的对象也有一个constructor属性，指向Object
+            // 因为写原型，相当于用一个新对象替代，新对象是Object构造函数创建的，所以会指向Obejct
             // ，如果constructor值重要，可以这样重写constructor指向适当的值，这种方法会导致它的enumerable为true，
             // 默认情况下，constructor是不可枚举的
             // 如果不设置constructor，那么这里的prototype对象是由Object创建的，指向Object
@@ -84,7 +90,7 @@
         console.log(typeof Person);
         console.log(typeof person1);
         console.log(Person.prototype.constructor === Person); // true
-        console.log(person1.constructor == Person); //true
+        console.log(person1.constructor == Person); //true，person1.constructor是从Person构造函数的原型得到的
         console.log(person2.constructor == Person); //true
         console.log(person1.sayname == person2.sayname); //true
         person1.sayName(); // 'Zaxlct'
@@ -102,7 +108,9 @@
         // person1.__proto__ === Person.prototype
         // Person.__proto__ === Function.prototype
         // Person.prototype.__proto__ === Object.prototype
-        // Object.prototype.__proto__ === null，所有函数对象的__proto__都指向Function.prototype，它是一个空函数
+        // Object.prototype.__proto__ === null
+        // Function.prototype.__proto__ === Object.prototype
+        // 所有函数对象的__proto__都指向Function.prototype，它是一个空函数
         // 所有的构造器都来自于 Function.prototype，甚至包括根构造器Object及Function自身。所有构造器都继承了·
         // Function.prototype·的属性及方法。如length、call、apply、bind
 
@@ -178,6 +186,12 @@
         // Object.create(proto, [ propertiesObject ]) 其中参数proto为一个对象，作为新创建对象的原型，propertiesObject
         // 一个对象值，可以包含若干个属性，属性名为新建对象的属性名，属性值为那个属性的属性描述符对象，默认全为false
         // 第二个参数。该参数是一个属性描述对象，它所描述的对象属性，会添加到实例对象，作为该对象自身的属性
+        function createObj(o) {  // createObj相当于Object.create方法
+            function F() {} 
+            F.prototype = o; 
+            return new F(); 
+        }
+
         var a = {
             a: 1
         };
@@ -243,8 +257,8 @@
         // Foo.prototype; // { }对象通常被称为 Foo 的原型
         // 这个对象是在调用 new Foo()时创建的， 最后会被关联到这个“ Foo 点 prototype” 对象上
 
-        // JavaScript 中， 我们并不会将一个对象（ “ 类”） 复制到另一个对象（ “ 实例”）， 只是将它们关联起来
-        // 继承意味着复制操作， JavaScript（ 默认） 并不会复制对象属性。 相反， JavaScript 会在两个对象之间创建一个关联， 
+        // JavaScript 中， 我们并不会将一个对象（“类”） 复制到另一个对象（“实例”）， 只是将它们关联起来
+        // 继承意味着复制操作， JavaScript（默认） 并不会复制对象属性。 相反， JavaScript 会在两个对象之间创建一个关联， 
         // 这样一个对象就可以通过委托访问另一个对象的属性和函数。委托这个术语可以更加准确地描述 JavaScript 中对象的关联机制。
 
         // 通过“ 构造函数” 调用 new创建的对象有一个 .constructor 属性， 指向“ 创建这个对象的函数”
@@ -252,7 +266,7 @@
         // a1 并没有 .constructor 属性， 所以它会委托 [[Prototype]] 链上的 Foo.prototype。 但是这个对象也没有 
         // .constructor 属性（ 不过默认的 Foo.prototype 对象有这个属性！ ）， 所以它会继续委托， 这次会委托给委托链顶端的 
         // Object.prototype。 这个对象有 .constructor 属性， 指向内置的 Object(..) 函数
-        function Foo1() { /* .. */ } // 有constructor属性，指向Foo
+        function Foo1() { /* .. */ } // 有constructor属性，指向Foo1
         Foo1.prototype = { /* .. */ }; // 创建一个新原型对象,constructor属性变成了新对象的constructor属性，
         // 指向Object构造函数
         var a1 = new Foo1();
@@ -272,7 +286,8 @@
             this.label = label;
         }
         // 我们创建了一个新的 Bar2.prototype 对象并关联到 Foo2.prototype
-        Bar2.prototype = Object.create(Foo2.prototype); // Object.create(..) 会创建一个新对象（ bar2） 并把它关联到我们指定的对象（ foo2）
+        Bar2.prototype = Object.create(Foo2.prototype); // Object.create(..) 会创建一个新对象（bar2） 并把它关联到我们
+        // 指定的对象（foo2）
         // 注意！ 现在没有 Bar2.prototype.constructor 了
         // 如果你需要这个属性的话可能需要手动修复一下它
         Bar2.prototype.myLabel = function () {
@@ -284,7 +299,6 @@
 
         // Object.create(null) 会创建一个拥有（或者说null）[[Prototype]]链接的对象， 这个对象无法进行委托。 
         // 由于这个对象没有原型链， 所以instanceof 操作符（ 之前解释过） 无法进行判断， 因此总是会返回 false。
-
 
         // 原型链继承，通过原型链实现继承时，不能通过对象字面量创建原型方法，因为这样会重写原型链
         function superColor1() {
@@ -345,8 +359,14 @@
 
         // 寄生组合式继承
         // 声明一个方法
+        function object(o) {
+            function F() {};
+            F.prototype = o;
+            return new F();
+        }
         function inheritPrototype(subType, superType) {
-            var prototype = Object(superType.prototype); // 创建对象
+            var prototype = object(superType.prototype); // 创建对象
+            // var prototype = Object.create(superType.prototype); 
             prototype.constructor = subType; // 增强对象
             subType.prototype = prototype; // 指定对象
         }

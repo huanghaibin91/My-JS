@@ -23,6 +23,24 @@
         // JavaScript有三种方法，可以确定一个值到底是什么类型: typeof运算符、instanceof运算符、
         // Object.prototype.toString方法
 
+        // Object.prototype.toString的执行步骤：
+        // 如果 this 值是 undefined，就返回 [object Undefined]
+        // 如果 this 的值是 null，就返回 [object Null]
+        // 让 O 成为 ToObject(this) 的结果
+        // 让 class 成为 O 的内部属性 [[Class]] 的值
+        // 最后返回由 "[object " 和 class 和 "]" 三个部分组成的字符串
+        var number = 1; // [object Number] 
+        var string = '123'; // [object String] 
+        var boolean = true; // [object Boolean] 
+        var und = undefined; // [object Undefined] 
+        var nul = null; // [object Null] 
+        var obj = {a: 1} // [object Object] 
+        var array = [1, 2, 3]; // [object Array] 
+        var date = new Date(); // [object Date] 
+        var error = new Error(); // [object Error] 
+        var reg = /a/g; // [object RegExp] 
+        var func = function a(){}; // [object Function]
+
         // 全局变量会成为window的属性
 
         typeof undefined === "undefined"; // true

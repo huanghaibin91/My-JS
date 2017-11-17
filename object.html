@@ -15,17 +15,17 @@
         // 对象的属性和方法:
         // obj.constructor: 保存着用于创建当前对象的函数
         // obj.hasOwnProperty(propertyName): 用于检验属性是否在实例中
-        // obj.isPrototypeOf(object): 用于检查传入的对象是否是当前对象的原型
+        // obj.isPrototypeOf(object): 用于检查当前对象是否是传入的对象的原型
         // obj.propertyIsEnumerable(): 检查属性是否能用for-in枚举
         // obj.toLocalString():
-        // obj.toString():要求的是字符串那么就会调用toString
+        // obj.toString():要求的是字符串那么就会调用toString，如果调用toString方法的是数字可以传入参数，以指定进制表示的字符串
         // obj.valueOf():要求的是原始值那么就会调用valueOf
         // delete，删除对象属性，只能删除自身的属性，不能删除继承的属性
 
         // Object.keys方法和Object.getOwnPropertyNames方法很相似，一般用来遍历对象的属性。
         // 它们的参数都是一个对象，都返回一个数组，该数组的成员都是对象自身的（而不是继承的）所有属性名。
         // 它们的区别在于，Object.keys方法只返回可枚举的属性，Object.getOwnPropertyNames方法还返回不可枚举的属性名，
-        // 类似数组的长度属性，两者都不返回原型属性
+        // 类似数组的长度属性或者对象constructor属性，两者都不返回原型属性
         var o = {
             p1: 123,
             p2: 456
@@ -67,6 +67,7 @@
         // 如果想访问key， 使用. 操作符或者 [] 操作符。 .a 语法通常被称为“ 属性访问”， ["a"] 语法通常被称为“ 键访问”。
         // . 操作符要求属性名满足标识符的命名规范， 而 [".."] 语法可以接受任意 UTF-8/Unicode 字符串作为属性名。
         // . 操作符要求属性名满足标识符的命名规范， 而 [".."] 语法可以接受任意 UTF-8/Unicode 字符串作为属性名。
+        // 通过变量访问属性时需要用方括号法，不能使用点表示法
 
         // 简单基本类型（ string、 boolean、 number、 null 和 undefined） 本身并不是对象。
 

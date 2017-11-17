@@ -1,31 +1,35 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <title>数组</title>
-    </head>
-    <body>
-        <script type="text/javascript">
+
+<head>
+    <meta charset="utf-8">
+    <title>数组</title>
+</head>
+
+<body>
+    <script type="text/javascript">
         // JavaScript 中，数组可以容纳任何类型的值，可以是字符串、数字、对象（ object），甚至是其他数组
         // （多维数组就是通过这种方式来实现的）
 
         // slice可以将类数组参数argumen转化成真正的数组
-
         // var arr = Array.prototype.slice.call( arguments );当slice()没有输入参数的时候，会创建一个新数组，
         // 然后把当前数组的所有元素扔进去，最后返回这个新数组
         // 用 ES6 中的内置工具函数 Array.from(..) 也能实现同样的功能：
+        // Array.from()拥有3个形参，第一个为类似数组的对象，必选。第二个为加工函数，新生成的数组会经过该函数的加工再返回，
+        // 默认参数当前元素value和index。第三个为this作用域，表示加工函数执行时this的值。后两个参数都是可选的
         // var arr2 = Array.from( arguments );
-
+        // var arr = Array.from({length: 10}, (value, index) => i); // 生成从0到9的数组
         // 检测是否是数组
         var arr3 = [1, 2, 3];
         console.log(arr3 instanceof Array);
         console.log(Array.isArray(arr3));
+        console.log(Object.prototype.toString.apply(arr3) === '[object Array]');
 
         // join,将数组组合成字符串
         var arr4 = ['hello', 'world', 'hi'];
         console.log(arr4.join(''));
         console.log(arr4.join('-'));
-        
+
         // 向数组中添加删除元素,改变原数组
         // push(), 返回新的长度
         // pop(), 返回删除的元素
@@ -36,17 +40,21 @@
         var arr5 = [1, 5, 6, 3, 9];
         console.log(arr5.reverse());
         console.log(arr5);
-        // sort()，数组排序，改变原数组，比较函数接收两个参数，如果第一个数应该位于跌个数之前则返回一个负数，
+        // sort()，数组排序，改变原数组，比较函数接收两个参数，如果第一个数应该位于第二个数之前则返回一个负数，
         // 相等返回0，第一个参数应该位于第二个参数之后返回一个正数
-        console.log(arr5.sort(function(a, b) {
+        console.log(arr5.sort(function (a, b) {
             return a - b;
         }));
+
+        // concat和slice不传参数都会返回一个新数组，如果数组元素是基本类型，就会拷贝一份，互不影响，而如果是对象或者数组，
+        // 就会只拷贝对象和数组的引用，这样我们无论在新旧数组进行了修改，两者都会发生变化
 
         // concat(),连接数组，返回一个新数组
         var arr6 = arr5.concat(arr4, arr3);
         console.log(arr6);
 
-        // slice(start, end),截去数组，不包括end项，返回新数组
+        // slice(start, end),截去数组，不包括end项，返回新数组，但是当新数组中有嵌套了数组或对象时，改变里面的数组或者
+        // 对象，原数组和现有数组中的值都会改变
         var arr7 = arr6.slice(0, 4);
         console.log(arr7);
 
@@ -87,12 +95,79 @@
         }));
         // reduce(),归并方法，返回一个最终值
         // pre在归并开始时是数组第一个值，后边会把函数操作的返回值作为pre传递到下一步
-        var total = arr9.reduce(function(pre, next, index, arr) {
+        var total = arr9.reduce(function (pre, next, index, arr) {
             return pre + nex;
         });
         console.log(total);
 
+        // arr.copyWithin(target, start[, end = this.length])，taget 指定被替换元素的索引，
+        // start 指定替换元素起始的索引，end 可选，指的是替换元素结束位置的索引
+        // arr.fill(value, start[, end = this.length])，value 指定被替换的值，start 指定替换元素起始的索引，end 可选，
+        // 指的是替换元素结束位置的索引
+
+
         // 数组方法中能返回一个数组的方法，都能够链式调用
-        </script>
-    </body>
+
+        // Array构造函数，new Array(len)，单个参数时是表示数组长度
+        // Array.of()，单个参数时生成一个参数的数组，多个参数时与new Array表现一样
+
+        // 数组去重
+        Array.prototype.method1 = function () {
+            var arr = []; //定义一个临时数组  
+            for (var i = 0; i < this.length; i++) { //循环遍历当前数组  
+                //判断当前数组下标为i的元素是否已经保存到临时数组  
+                //如果已保存，则跳过，否则将此元素保存到临时数组中  
+                if (arr.indexOf(this[i]) == -1) {
+                    arr.push(this[i]);
+                }
+            }
+            return arr;
+        }
+
+        Array.prototype.method2 = function () {
+            var h =  {}; //定义一个hash表  
+            var arr = []; //定义一个临时数组  
+
+            for (var i = 0; i < this.length; i++) { //循环遍历当前数组  
+                //对元素进行判断，看是否已经存在表中，如果存在则跳过，否则存入临时数组  
+                if (!h[this[i]]) {
+                    //存入hash表  
+                    h[this[i]] = true;
+                    //把当前数组元素存入到临时数组中  
+                    arr.push(this[i]);
+                }
+            }
+            return arr;
+        }
+
+        Array.prototype.method3 = function () {
+            //直接定义结果数组  
+            var arr = [this[0]];
+            for (var i = 1; i < this.length; i++) { //从数组第二项开始循环遍历此数组  
+                //对元素进行判断：  
+                //如果数组当前元素在此数组中第一次出现的位置不是i  
+                //那么我们可以判断第i项元素是重复的，否则直接存入结果数组  
+                if (this.indexOf(this[i]) == i) {
+                    arr.push(this[i]);
+                }
+            }
+            return arr;
+        }
+
+        Array.prototype.method4 = function () {
+                //将数组进行排序  
+                this.sort();
+                //定义结果数组  
+                var arr = [this[0]];
+                for (var i = 1; i < this.length; i++) { //从数组第二项开始循环遍历数组  
+                    //判断相邻两个元素是否相等，如果相等说明数据重复，否则将元素写入结果数组  
+                    if (this[i] !== arr[arr.length - 1]) {
+                        arr.push(this[i]);
+                    }
+                }
+                return arr;
+        }
+    </script>
+</body>
+
 </html>

@@ -203,7 +203,8 @@
         // var computedStyle = node.currentStyle;
         // 有可能不会显示综合属性，就是几个CSS属性简写在一起的，所以查询的时候写详细的属性
 
-        // Mutation Observer API 用来监视 DOM 变动。DOM 的任何变动，比如节点的增减、属性的变动、文本内容的变动，这个 API 都可以得到通知
+        // Mutation Observer API 用来监视 DOM 变动。DOM 的任何变动，比如节点的增减、属性的变动、文本内容的变动，这个API
+        // 都可以得到通知
         // 它等待所有脚本任务完成后，才会运行，即采用异步方式。
         // 它把 DOM 变动记录封装成一个数组进行处理，而不是一条条地个别处理 DOM 变动。
         // 它既可以观察发生在 DOM 的所有类型变动，也可以观察某一类变动
@@ -241,7 +242,6 @@
         // attributeName：发生变动的属性。如果设置了attributeFilter，则只返回预先指定的属性。
         // oldValue：变动前的值。这个属性只对attribute和characterData变动有效，如果发生childList变动，则返回null。
         
-
         // 浏览器窗口大小
         function getViewport() {
             if (document.compatMode == 'BackCompat') {
