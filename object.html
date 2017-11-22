@@ -96,11 +96,11 @@
         // 数据属性，属性描述对象
         // {
         // value: 2，默认undefined
-        // writable: true,可写，决定可以修改属性的值，writable只有在从false改为true会报错，从true改为false则是允许的
-        // enumerable: true,可枚举，，属性是否会出现在对象的属性枚举中，会被for...in循环遍历
-        // 一个属性的enumerable为false，for..in循环，Object.keys方法，JSON.stringify方法不可取得属性
+        // writable: true,可写，决定可以修改属性的值
+        // enumerable: true,可枚举，属性是否会出现在对象的属性枚举中，会被for...in循环遍历
+        // 一个属性的enumerable为false，for..in循环，Object.keys方法，JSON.stringify方法都不可取得属性
         // configurable: true,可配置，只要属性是可配置的， 就可以使用defineProperty(..) 方法来修改属性描述符，
-        // 不可配置的属性也不可以删除
+        // 不可配置的属性也不可以删除，只有在从false改为true会报错，从true改为false则是允许的
         // get: undefined, get存放一个函数，表示该属性的取值函数（getter），默认为undefined
         // set: undefined set存放一个函数，表示该属性的存值函数（setter），默认为undefined
         // }
@@ -159,6 +159,8 @@
             },
             set: function (newValue) {
                 if (newValue > 2017) {
+                    // this.year = newValue; // 报错，因为this.year本身又会触发set方法，导致栈溢出
+                    // 所以需要在内部维护一个私有变量作为中介，例如_year
                     this._year = newValue;
                     this.edition += newValue - 2017;
                 }

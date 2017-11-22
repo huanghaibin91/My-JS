@@ -12,7 +12,7 @@
             return this.name.toUpperCase();
         }
         function speak() {
-            var greeting = "Hello, I'm " + identify.call(this);
+            var greeting = "Hello, I'm " + identify.call(this); // call会改变this指向
             console.log(greeting);
         }
         var me = {
@@ -51,6 +51,7 @@
         baz(); // <-- baz 的调用位置,全局作用域调用
 
         // 最常用的函数调用类型： 独立函数调用。 可以把这条规则看作是无法应用其他规则时的默认规则。
+        // 严格模式，this指向undefined，非严格指向全局对象
         function foo2() {
             console.log(this.a);
         }
@@ -93,6 +94,7 @@
         };
         var bar4 = obj4.foo4; // 函数别名！， bar 是 obj.foo 的一个引用， 但是实际上， 它引用的是 foo 函数本身， 
         // 因此此时的bar() 其实是一个不带任何修饰的函数调用， 因此应用了默认绑定。
+        // 将函数作为值传递都会导致this应用默认绑定
         var a4 = "oops, global"; // a 是全局对象的属性
         bar4(); // "oops, global"
 
@@ -122,6 +124,9 @@
         }
 
         // apply()和call()，传入null/undefined的时候将执行js全局对象浏览器中是window，其他环境是global 
+        // 传入了一个原始值（ 字符串类型、 布尔类型或者数字类型） 来当作 this 的绑定对象， 这个原始值会被转换成它的对象形式
+        // （ 也就是 new String(..)、 new Boolean(..) 或者new Number(..)）
+        // bind与call、apply的区别是，bind会生成一个新函数，而call、apply会立即执行函数
 
         // 使用 new 来调用函数， 或者说发生构造函数调用时， 会自动执行下面的操作。
         // 1. 创建（ 或者说构造） 一个全新的对象。

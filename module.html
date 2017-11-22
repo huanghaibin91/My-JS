@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title></title>
+    <title>模块</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
@@ -10,6 +10,30 @@
 <body>
     <!-- script -->
     <script>
+        // 模块模式需要具备两个必要条件：
+        // 1. 必须有外部的封闭函数， 该函数必须至少被调用一次（ 每次调用都会创建一个新的模块实例）
+        // 2. 封闭函数必须返回至少一个内部函数， 这样内部函数才能在私有作用域中形成闭包， 并且可以访问或者修改私有的状态
+        var foo = (function CoolModule(id) {
+            function change() {
+                // 修改公共 API
+                publicAPI.identify = identify2;
+            }
+            function identify1() {
+                console.log(id);
+            }
+            function identify2() {
+                console.log(id.toUpperCase());
+            }
+            var publicAPI = {
+                change: change,
+                identify: identify1
+            };
+            return publicAPI;
+        })("foo module"); // 传入参数，立即执行
+        foo.identify(); // foo module
+        foo.change();
+        foo.identify(); // FOO MODULE
+
         //  这种方法将私有变量封装在构造函数中，违反了构造函数与实例对象相分离的原则。并且，非常耗费内存
         function StringBuilder() {
             var buffer = [];
@@ -34,18 +58,18 @@
                 return this._buffer.join('');
             }
         };
-        
+
         // 使用立即执行函数加闭包生成模块
         // 使用“立即执行函数”（Immediately-Invoked Function Expression，IIFE），将相关的属性和方法封装在一个函数作用域里面，
         // 可以达到不暴露私有成员的目的
         var module1 = (function () {　
             var _count = 0;　
-            var m1 = function () {　 
-                    //...
-                };　
-            var m2 = function () {　　 
-                    //...
-                };　
+            var m1 = function () {　
+                //...
+            };　
+            var m2 = function () {　　
+                //...
+            };　
             return {　　
                 m1: m1,
                 m2: m2　
@@ -54,7 +78,7 @@
 
         // 如果一个模块很大，必须分成几个部分，或者一个模块需要继承另一个模块，这时就有必要采用“放大模式”（augmentation）
         var module1 = (function (mod) { // 将module1作为参数传入　
-            mod.m3 = function () {　　// 为module1添加新方法
+            mod.m3 = function () {　　 // 为module1添加新方法
                 //...
             };　
             return mod; // 返回新的module1
@@ -62,7 +86,7 @@
 
         // 在浏览器环境中，模块的各个部分通常都是从网上获取的，
         // 有时无法知道哪个部分会先加载。如果采用上一节的写法，第一个执行的部分有可能加载一个不存在空对象，这时就要采用"宽放大模式"
-        var module1 = (function (mod) {　 
+        var module1 = (function (mod) {　
             //...
             return mod;
         })(window.module1 || {}); // 与"放大模式"相比，＂宽放大模式＂就是"立即执行函数"的参数可以是空对象
@@ -77,8 +101,6 @@
         // AMD更适合浏览器环境
 
         // require.js：（1）实现js文件的异步加载，避免网页失去响应；（2）管理模块之间的依赖性，便于代码的编写和维护。
-
-
     </script>
 </body>
 

@@ -7,18 +7,18 @@
 </head>
 
 <body>
+    <img src="./image/prototype4.png" alt=""><br>
     <img src="./image/prototype.png" alt=""><br>
     <img src="./image/prototype2.png" alt=""><br>
     <img src="./image/prototype3.png" alt="" width="100%" height="100%"><br>
 
     <script type="text/javascript">
-        // 创建的每个对象都有一个prototype（原型）属性，这个属性是一个指针，指向一个对象，
-        // 而这个对象的用途是包含可以由特定类型的所有实例共享的属性和方法
+        // 创建的每个函数都有一个prototype（原型）属性，这个属性是一个指针，指向一个对象，对象正是调用该构造函数而创建的
+        // 实例的原型，而这个对象的用途是包含可以由特定类型的所有实例共享的属性和方法
 
-        // 每个对象都有 __proto__ 属性，但只有函数对象才有 prototype 属性，prototype都是一个对象
-        // 原型对象其实就是普通对象（但 Function.prototype 除外，它是函数对象，但它很特殊，他没有prototype属性
-        // （前面说道函数对象都有prototype属性））
-        // Object.prototype 对象也有proto属性，但它比较特殊，为 null 。因为 null 处于原型链的顶端，这个只能记住
+        // 每个对象（除null）都有 __proto__ 属性，指向其构造函数的原型对象。但只有函数对象才有 prototype 属性，
+        // prototype都是一个对象，保存着实例共享的属性和方法
+        // Object.prototype 对象也有 _proto_ 属性，但它比较特殊，为 null 。因为 null 处于原型链的顶端，这个只能记住
         // Object.getPrototypeof()（读取）和Object.setPrototypeOf()（设置），进行原型对象的读写操作
 
         // JS中分为普通对象和函数对象
@@ -177,7 +177,8 @@
         // in无论属性在实例还是原型中
         // property in obj，判断obj中是否有property
         // for (property in obj)循环obj中所有属性，不论原型还是实例
-        // 使用 for..in 遍历对象时原理和查找 [[Prototype]] 链类似， 任何可以通过原型链访问到（ 并且是 enumerable） 的属性都会被枚举。 使用 in 操作符来检查属性在对象中是否存在时， 同样会查找对象的整条原型链（ 无论属性是否可枚举）
+        // 使用 for..in 遍历对象时原理和查找 [[Prototype]] 链类似， 任何可以通过原型链访问到（ 并且是 enumerable） 的属性都
+        // 会被枚举。 使用 in 操作符来检查属性在对象中是否存在时， 同样会查找对象的整条原型链（ 无论属性是否可枚举）
 
         // 原型链
         // 每个构造函数都有一个原型对象，原型对象都包含一个指向构造函数的指针，而实例都包含一个指向原型对象的内部指针。
@@ -185,7 +186,10 @@
         // Object.create(..) 的原理，现在只需要知道它会创建一个对象并把这个对象的 [[Prototype]] 关联到指定的对象，IE9+
         // Object.create(proto, [ propertiesObject ]) 其中参数proto为一个对象，作为新创建对象的原型，propertiesObject
         // 一个对象值，可以包含若干个属性，属性名为新建对象的属性名，属性值为那个属性的属性描述符对象，默认全为false
-        // 第二个参数。该参数是一个属性描述对象，它所描述的对象属性，会添加到实例对象，作为该对象自身的属性
+        // 第二个参数。该参数是一个属性描述对象，它所描述的对象属性，会添加到实例对象，作为该对象自身的属性，而不是原型上
+        // Object.create(null) 会 创 建 一 个 拥 有 空（或 者 说 null） [[Prototype]]链接的对象， 这个对象无法进行委托。 
+        // 由于这个对象没有原型链， 所以instanceof 操作符（ 之前解释过） 无法进行判断， 因此总是会返回 false。这些特殊的空
+        //  [[Prototype]] 对象通常被称作“ 字典”， 它们完全不会受到原型链的干扰， 因此非常适合用来存储数据
         function createObj(o) {  // createObj相当于Object.create方法
             function F() {} 
             F.prototype = o; 
@@ -224,12 +228,14 @@
         obj1.p = 2;
         obj2.p // 2
 
-        // 如果 foo 不直接存在于 myObject 中而是存在于原型链上层时 myObject.foo = "bar" 会出现的三种情况
+        // myObject.foo = "bar"; 
+        // 如果 foo 不直接存在于 myObject 中而是存在于原型链上层时 myObject.foo = "bar"，即myObject没有foo，进行复制操作
+        // 会出现的三种情况：
         // 1. 如果在 [[Prototype]] 链上层存在名为 foo 的普通数据访问属性并且没有被标记为只读（ writable:false）， 
         // 那就会直接在 myObject 中添加一个名为 foo 的新属性， 它是屏蔽属性。
         // 2. 如果在 [[Prototype]] 链上层存在 foo， 但是它被标记为只读（ writable:false）， 那么无法修改已有属性或者在 
         // myObject 上创建屏蔽属性。 如果运行在严格模式下， 代码会抛出一个错误。 否则， 这条赋值语句会被忽略。 总之， 
-        // 不会发生屏蔽。
+        // 不会发生屏蔽。只读属性会阻止 [[Prototype]] 链下层隐式创建（ 屏蔽） 同名属性
         // 3. 如果在 [[Prototype]] 链上层存在 foo 并且它是一个 setter， 那就一定会调用这个 setter。 foo 不会被添加到
         // （ 或者说屏蔽于） myObject， 也不会重新定义 foo 这个 setter。
         // 希望在第二种和第三种情况下也屏蔽 foo， 那就不能使用 = 操作符来赋值， 而是使用 Object.defineProperty(..)来向 
