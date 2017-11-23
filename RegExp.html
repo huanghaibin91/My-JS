@@ -9,7 +9,6 @@
             // 正则表达式标志：g，全局模式；i，不区分大小写；m，多行模式
             // 正则表达式元字符：( { [ \ ^ $ | ? * = . ] } )这些元字符都拥有特殊用途，要想匹配元字符就必须用\反斜杠转义
             // []，匹配方括号中的其中一个字符
-            
 
             // reg1与reg2等价
             var reg1 = /\[bc\]at/g;
@@ -21,11 +20,11 @@
             var text1 = 'mom and dady and baby';
             var pattern1 = /mom( and dady( and baby)?)?/gi;
             var matches = pattern1.exec(text1);
-            console.log(matches.index);
-            console.log(matches.input);
-            console.log(matches[0]);
-            console.log(matches[1]);
-            console.log(matches[2]);
+            console.log(matches.index); // 0
+            console.log(matches.input); // mom and dady and baby
+            console.log(matches[0]); // mom and dady and baby
+            console.log(matches[1]); // and dady and baby
+            console.log(matches[2]); // and baby
 
             // 对于exec(),模式中设置了g标志，每次也只会返回一个匹配项。在不设置g时，在同一个字符串上多次调用exec()
             // input：整个原字符串。

@@ -234,7 +234,7 @@
         // Eval的代码 – 在Eval函数内运行的代码
         function foo1() {
             console.log(a);
-            a = 1; // 这时是全局声明，不会提升
+            a = 1; // 这时是赋值操作，不是声明，不会提升，当没找到a才会在全局创建一个
         }
         foo1(); // 报错，
         function bar1() {
