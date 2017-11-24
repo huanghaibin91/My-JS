@@ -32,6 +32,26 @@
         // JSON对象的两个方法
         // stringify()将JavaScript对象序列化为JSON字符串,在序列化JavaScript对象时，所有函数及其原型成员都会被忽略，
         // 值为undefined的任何属性也都会被跳过，成员的值是undefined、函数或 XML 对象，这个成员会被过滤
+
+        // 对大多数简单值来说， JSON 字符串化和 toString() 的效果基本相同
+        JSON.stringify( 42 ); // "42"
+        JSON.stringify( "42" ); // ""42""（含有双引号的字符串）
+        JSON.stringify( null ); // "null"
+        JSON.stringify( true ); // "true"
+
+        // JSON.stringify(..) 在对象中遇到 undefined、 function 和 symbol 时会自动将其忽略，在数组中则会返回 null（
+        // 以保证单元位置不变）
+        JSON.stringify(undefined); // undefined
+        JSON.stringify(function () {}); // undefined
+        JSON.stringify(
+            [1, undefined, function () {}, 4]
+        ); // "[1,null,null,4]"
+        JSON.stringify({
+            a: 2,
+            b: function () {}
+        }); // "{"a":2}"
+
+
         var book = {
             title: "Professional JavaScript",
             authors: [
@@ -59,11 +79,12 @@
                     return value;
             }
         }), 4); // 数值4作为最后一个参数表示缩进的空格数
-        
+
         // parse()把JSON字符串解析为原生JavaScript值
         console.log(JSON.parse(jsonText));
 
         // toJSON(),返回其自身的JSON数据格式，可以作为函数过滤器的补充
+        // 对含有非法 JSON 值的对象做字符串化，或者对象中的某些值无法被序列化时，就需要定义 toJSON() 方法来返回一个安全的 JSON 值
         // 普通对象转化JSON
         var user = {
             firstName: '三',
@@ -110,8 +131,6 @@
         // 跨站脚本攻击，注入攻击的一种，使用JSON常见的漏洞通常发生在JavaScript才能够服务器获取一段JSON字符串并将其转化为
         // JavaScript对象时
         // 使用eval解析JSON会执行恶意注入JSON的代码，所以避免使用eval解析JSON，而使用安全的JSON.parse()方法
-
-
     </script>
 </body>
 

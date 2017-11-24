@@ -25,6 +25,11 @@
         console.log(Array.isArray(arr3));
         console.log(Object.prototype.toString.apply(arr3) === '[object Array]');
 
+        // 数组字符串键值能够被强制类型转换为十进制数字的话，它就会被当作数字索引来处理
+        var a = [];
+        a['5'] = 5;
+        console.log(a.length); // 6，数组长度被改变了
+
         // join,将数组组合成字符串
         var arr4 = ['hello', 'world', 'hi'];
         console.log(arr4.join(''));
