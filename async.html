@@ -18,7 +18,8 @@
 <body>
     <p>异步运行图</p>
     <img src="./image/asyn.jpg" alt="">
-    <p>下图中，主线程运行的时候，产生堆（heap）和栈（stack），栈中的代码调用各种外部API，它们在"任务队列"中加入各种事件 （click，load，done）。只要栈中的代码执行完毕，主线程就会去读取"任务队列"，依次执行那些事件所对应的回调函数
+    <p>下图中，主线程运行的时候，产生堆（heap）和栈（stack），栈中的代码调用各种外部API，它们在"任务队列"中加入各种事件 
+        （click，load，done）。只要栈中的代码执行完毕，主线程就会去读取"任务队列"，依次执行那些事件所对应的回调函数
     </p>
     <img src="./image/eventloop.png" alt="">
     <script type="text/javascript">
@@ -30,10 +31,10 @@
         // JavaScript提供的异步函数有两大类：I/O函数和计时函数
 
         // JS中的任务队列中有两个部分：
-        // macro-task包括：script(整体代码), setTimeout, setInterval, setImmediate, I/O, UI rendering。
-        // micro-task包括：process.nextTick, Promises, Object.observe, MutationObserver（DOM变动API）
+        // macro-task，宏任务包括：script(整体代码), setTimeout, setInterval, setImmediate, I/O, UI 渲染。
+        // micro-task，微任务包括：process.nextTick, Promises, Object.observe（被废除）, MutationObserver（DOM变动API）
         // 执行顺序：函数调用栈清空只剩全局执行上下文，然后开始执行所有的micro-task。当所有可执行的micro-task执行完毕之后。
-        // 循环再次执行macro-task中的一个任务队列，执行完之后再执行所有的micro-task，就这样一直循环
+        // 循环再次执行macro-task中的一个任务队列，执行完之后再执行所有的micro-task，再执行一个macro-task任务就这样一直循环
 
         // 异步执行的运行机制
         // 所有同步任务都在主线程上执行， 形成一个执行栈（ execution context stack）
@@ -55,6 +56,11 @@
         // 只要执行栈一清空，"任务队列"上第一位的事件就自动进入主线程。但是，由于存在后文提到的"定时器"功能，
         // 主线程首先要检查一下执行时间，某些事件只有到了规定的时间，才能返回主线程。“任务队列”还有一个事件循环功能，会不断
         // 循环提取任务队列中的事件
+
+        // setTimeout(..) 并没有把你的回调函数挂在事件循环队列中。它所做的是设定一个定时器。当定时器到时后，环境会把你的
+        // 回调函数放在事件循环中，这样，在未来某个时刻的 tick 会摘下并执行这个回调
+        // 但放进去时可能事件循环队列中已经有多个任务排队，那么就会导致setTimeOut的函数延后运行，这就是为什么setTimeOut和
+        // setInterval不准确的原因
 
         // 除了放置异步任务的事件，"任务队列"还可以放置定时事件
         setTimeout(function () {

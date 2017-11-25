@@ -140,6 +140,7 @@
         document.querySelector('input[type="file"]').addEventListener('change', function (e) {
             uploadFiles('/server', this.files);
         }, false);
+
         // 直接使用file API上传文件
         var file = document.getElementById('test-input').files[0];
         var xhr = new XMLHttpRequest();
@@ -210,7 +211,8 @@
 
         // 跨域安全策略，XHR对象只能访问包含它页面位于同一个域中的资源
 
-        // withCredentials，是一个布尔值，表示跨域请求时，用户信息（比如Cookie和认证的HTTP头信息）是否会包含在请求之中，默认为false
+        // withCredentials，是一个布尔值，表示跨域请求时，用户信息（比如Cookie和认证的HTTP头信息）是否会包含在请求之中，
+        // 默认为false
         xhr.withCredentials = true;
 
         // CORS定义了必须访问跨域资源时，浏览器与服务器应该如何沟通。就是使用自定义的HTTP头部让浏览器与服务器精细沟通，
