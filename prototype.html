@@ -279,7 +279,7 @@
         a1.constructor === Foo1; // false!
         a1.constructor === Object; // true!
 
-        // 原型继承
+        // 寄生组合式继承
         function Foo2(name) {
             this.name = name;
         }
@@ -307,6 +307,7 @@
         // 由于这个对象没有原型链， 所以instanceof 操作符（ 之前解释过） 无法进行判断， 因此总是会返回 false。
 
         // 原型链继承，通过原型链实现继承时，不能通过对象字面量创建原型方法，因为这样会重写原型链
+        // 子类的原型是父类的一个实例，这样子类在原型上继承了父类属性和方法
         function superColor1() {
             this.colors = ['red', 'blue', 'green'];
         }
@@ -317,6 +318,7 @@
         function subColor1() {
 
         }
+        // 子类的原型重写为父类构造函数生成的一个实例
         subColor1.prototype = new superColor1(); // 这样共享原型会产生问题，改变数据后都会被修改，而且添加
         // 新方法不能采用subColor.prototype = {}因为这样会重写原型，会导致之前的原型无效
         var color1 = new subColor1();
@@ -333,6 +335,7 @@
             this.colors = ['red', 'blue', 'green'];
         }
         function subColor2() {
+            // 利用call、apply将父类的属性和方法传给子类，这样缺点是不会继承父类的原型属性和方法
             superColor2.call(this); // 这样就不会共享数据了，之间都是独立的，还有个好处是可以传递参数
         }
         var color3 = new subColor2();
@@ -352,10 +355,11 @@
 
         function subColor3(name, age) {
             this.age = age;
-            superColor3.call(this, name); // 这里有superColor3的属性，第二次调用
+            superColor3.call(this, name); // 这里有superColor3的属性，第二次调用，继承父类的实例属性和方法
         }
-        subColor3.prototype = new superColor3(); // 这里有superColor3的属性，第一次调用
+        subColor3.prototype = new superColor3(); // 这里有superColor3的属性，第一次调用，继承父类的属性和方法
         // 两次调用superColor3，subColor3的原型和实例中都有属性name和colors，只是实例中的屏蔽了原型中的同名属性
+        // 这样就在子类原型中继承父类原型中的属性和方法
         subColor3.prototype.sayAge = function () {
             console.log(this.age);
         }
@@ -371,6 +375,7 @@
             return new F();
         }
         function inheritPrototype(subType, superType) {
+            // 直接将父类的原型对象传给子类，子类就继承了了父类的原型属性和方法
             var prototype = object(superType.prototype); // 创建对象
             // var prototype = Object.create(superType.prototype); 
             prototype.constructor = subType; // 增强对象
@@ -387,7 +392,7 @@
 
         function subColor4(name, age) {
             this.age = age;
-            superColor3.call(this, name);
+            superColor3.call(this, name); // 继承父类的实例属性和方法
         }
         inheritPrototype(subColor4, superColor4);
         subColor4.prototype.sayAge = function () {
