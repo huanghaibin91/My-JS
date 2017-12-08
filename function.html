@@ -22,7 +22,7 @@
         console.log(typeof add2); // function
         console.log(add2(3, 4));
 
-        // // 函数声明提升，函数表达式不会提升
+        // 函数声明提升，函数表达式不会提升
         // 不能在条件语句中声明函数, 不得在非函数的代码块中声明函数，最常见的情况就是if和try语句 
         if (false) {
             function f() {} // 这样声明因为if不是块级作用域，那么函数会提升，不论if如何判断f()都会生效
@@ -38,6 +38,8 @@
         // 函数属性
         // name，返回function关键字后的名字
         // length，返回定义的参数长度
+
+        // 函数方法
         // toString，返回函数字符串
 
         // 函数本身也是一个值，也有自己的作用域。它的作用域与变量一样，就是其声明时所在的作用域，与其运行时所在的作用域无关
@@ -56,20 +58,20 @@
         }
         foo1(value);
         console.log(value) // 1
+
         var obj = {
             value: 1
         };
-
         function foo2(o) {
             o.value = 2;
             console.log(o.value); //2，传递对象的时候，传递对象的引用的副本，改变参数会改变原参数
         }
         foo2(obj);
         console.log(obj.value) // 2
+        
         var obj2 = {
             value: 1
         };
-
         function foo3(o) {
             o = 2;
             console.log(o); //2，传递引用副本，但是又重新给参数赋值，切断原来的引用，所以原有引用为改变
