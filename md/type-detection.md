@@ -1,7 +1,6 @@
 # 类型检测 #
 
 
-
 ----------
 
 在JS中数据有七种内置类型：空值（ null）、未定义（ undefined）、布尔值（ boolean）、数字（ number）、字符串（ string）、对象（ object）、符号（ symbol， ES6 中新增）
@@ -45,6 +44,11 @@ instanceof只能用来判断对象和函数，不能用来判断字符串和数�
 		var c = /a/g;
 		c instanceof RegExp; // true
 
+前面说`typeof null === 'object'`，但是`null instanceof Object`返回`false`，正确检测null可以使用。
+
+	var a = null;
+	(!a && typeof a === "object"); // true
+
 **Object.prototype.toString方法**
 
 Object.prototype.toString方法可以准确区分数据的类型，Object.prototype.toString方法被调用时会执行以下步骤：
@@ -66,5 +70,9 @@ Object.prototype.toString方法可以准确区分数据的类型，Object.protot
         Object.prototype.toString.call(new Error()) // [object Error] 
         Object.prototype.toString.call(/a/) // [object RegExp] 
         Object.prototype.toString.call(function () {}) // [object Function]
+
+**其他检测方法**
+
+- 
 
 
