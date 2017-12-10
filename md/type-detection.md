@@ -44,7 +44,7 @@ instanceof只能用来判断对象和函数，不能用来判断字符串和数�
 		var c = /a/g;
 		c instanceof RegExp; // true
 
-前面说`typeof null === 'object'`，但是`null instanceof Object`返回`false`，正确检测null可以使用。
+前面说`typeof null === 'object'`，但是`null instanceof Object`会返回`false`，正确检测null可以使用。
 
 	var a = null;
 	(!a && typeof a === "object"); // true
@@ -73,6 +73,18 @@ Object.prototype.toString方法可以准确区分数据的类型，Object.protot
 
 **其他检测方法**
 
-- 
+- isNaN()函数，使用isNaN()参数可以转化为数字(相当于使用Number()函数的结果)则返回false，反之返回true；
+
+		isNaN(NaN); // true
+		isNaN(10); // false
+		isNaN('10'); // false
+		isNaN('10a'); // true
+		isNaN(true); // false
+		isNaN({valueOf: function () {return 10;}}); // false
+
+- Array.isArray()，参数为数组返回true，反之返回false；
+
+		Array.isArray([]); // true
+		Array.isArray(10); // false
 
 

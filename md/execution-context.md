@@ -3,10 +3,6 @@
 
 ----------
 
-当一个函数被调用时， 会创建一个活动记录（ 有时候也称为执行上下文）。 这个记录会包
-含函数在哪里被调用（ 调用栈）、 函数的调用方法、 传入的参数等信息。 this 就是记录的
-其中一个属性， 会在函数执行的过程中用到。
-
 执行上下文，就是Js执行的时候的一个运行环境/作用域（scope）。执行上下文决定了Js执行过程中可以获取哪些变量、函数、数据，一段程序可能被分割成许多不同的上下文，每一个上下文都会绑定一个变量对象（variable object），它就像一个容器，用来存储当前上下文中所有已定义或可获取的变量、函数等。
 
 **可执行代码**
@@ -29,38 +25,129 @@
 
 **执行上下文的创建和执行**
 
-- 上下文的创建阶段：函数被调用，但尚未开始执行（代码分析预处理阶段），此时会为执行上下文创建作用域链，创建变量、函数和参数以及求this的值。也就是发生声明提升的阶段；
-- 执行阶段：指派变量的值和函数的引用并解释执行代码，在执行阶段，JS引擎会创建执行上下文栈来管理执行上下文；   
+- 上下文的创建阶段：函数被调用，但尚未开始执行（代码分析预处理阶段），此时会为执行上下文创建作用域链，创建变量、函数和参数以及求this的值。也就是发生声明提升的阶段，同时也是产生声明提升的原因；
+- 执行阶段：指派变量的值和函数的引用并解释执行代码，也就是变量赋值，函数引用，执行其它代码，在执行阶段，JS引擎会创建执行上下文栈来管理执行上下文；   
 
-		var a = 1;
-		function f() {
-			var a = 2;
-			function sayA() {
-				console.log(a);
+简单例子：
+
+		var a = 1; // ①
+		function f() { // ②
+			var a = 2; // ③
+			function sayA() { // ④
+				console.log(a); // ⑤
 			}
-			sayA();
-		}
-		f();
-	
-		// 我们用执行上下文解析上面代码
-		// 代码执行之前，首先创建全局执行上下文，全局执行上下文入栈
-		function f() {} // 函数声明先提升
-		var a;
-		a = 1;
-		// 执行函数f之前，创建函数执行上下文，在函数中声明提升
-		function f() {
-			function sayA() {
-				console.log(a);
-			};
-			var a;
-			a = 2;
-		}
-		// 执行sayA，sayA函数入栈，弹出结果2，sayA函数出栈
-		// f函数出栈
-		// 如果是浏览器环境，关闭浏览器，全局执行上下文出栈
+			sayA(); // ⑥
+		} 
+		f(); // ⑦
 		
-	
-	
+首先先将执行上下文和执行上下文栈具象化：
+
+- 将每个执行上下文看作一个对象，它包含三个属性：
+
+		ECObj = {
+			variableObject: {}, // 变量对象，函数中的arguments对象, 参数, 内部的变量以及函数声明 
+   			scopeChain: [], // 作用域链，包含执行上下文自身变量对象以及所有父执行上下文中的变量对象，也就是所有可访问的变量和函数
+   			this: {} // this指向的对象
+		};
+
+- 将执行上下文栈看作一个数组；
+
+		ECStack = []; // 初始执行上下文栈为空数组
+
+上面代码具体执行情况：
+
+1. 代码开始执行之前，首先创建全局执行上下文；
+
+	    globalECObj = {
+			variableObject: {
+				f: pointer to function f(), // 函数声明会指向该函数在内存中的地址的一个引用，所以函数可以在声明之前调用
+				a: undefined // 变量声明初始化会是undefined
+			},
+   			scopeChain: [
+				globalECObj.variableObject
+			], 
+   			this: window
+		};
+
+		// 执行全局执行上下文，全局执行上下文入栈
+		ECStack.push(globalECObj);
+
+2. 全局执行上下文创建完毕，开始执行代码，从上至下，① 为赋值操作；
+
+		// ① var a = 1; 给全局变量a赋值
+		globalECObj = {
+			variableObject: {
+				f: pointer to function f(), 
+				a: 1
+			},
+   			scopeChain: [
+				globalECObj.variableObject
+			], 
+   			this: window
+		};
+
+3. 跳过函数声明直到遇到可执行到代码 ⑦ ；
+
+		// ⑦ f(); 遇到函数调用，创建函数f的执行上下文
+		fECObj = {
+			variableObject: {
+				sayA: pointer to function sayA(),
+				a: undefined
+			},
+   			scopeChain: [globalECObj.variableObject, fECObj.variableObject], 
+   			this: window
+		};
+
+		// 函数f执行上下文入栈
+		ECStack.push(fECObj);
+
+		// 执行f执行上下文
+		// ③ var a = 2; 给局部变量a赋值
+		fECObj = {
+			variableObject: {
+				sayA: pointer to function sayA(),
+				a: 2
+			},
+   			scopeChain: [globalECObj.variableObject, fECObj.variableObject], 
+   			this: window
+		}
+
+4. 执行函数f执行上下文中又遇到可执行代码 ⑥ ；
+		
+		// ⑥ sayA(); 遇到函数调用，创建函数sayA执行上下文
+		sayAECObj = {
+			variableObject: {},
+   			scopeChain: [globalECObj.variableObject, fECObj.variableObject, sayAECObj.variableObject], 
+   			this: window
+		};
+
+		// 函数sayA执行上下文入栈
+		ECStack.push(sayAECObj);
+
+		// 执行sayA执行上下文
+		2 // 弹出结果2
+			
+5. sayA函数执行结束，从执行上下文栈弹出
+
+		ECStack.pop();
+
+6. f函数执行结束，从执行上下文栈弹出
+
+		ECStack.pop();
+
+7. 现在只剩全局执行上下文了，它会在浏览器关闭从执行上下文栈中弹出
+
+		
+**执行上下文过程**
+
+1. JS代码加载完成；
+2. 创建全局执行上下文，为全局执行上下文创建作用域链，创建变量、函数和参数以及求this的值；
+3. 全局执行上下文入执行上下文栈，开始执行代码；
+4. JS为单线程，从上至下当遇到可执行代码，就新建一个执行上下文，为新建执行上下文创建作用域链，创建变量、函数和参数以及求this的值；
+5. 新建执行上下文入执行上下文栈，开始执行代码；
+7. 如果可执行代码中还有可执行代码就重复4和5；
+8. 执行完成的执行上下文从执行上下文栈顶弹出；
+9. 关闭浏览器后全局执行上下文从执行上下文栈中弹出，执行上下文栈清空；
 
 
 
