@@ -22,7 +22,7 @@
 
 **prototype**
 
-只要创建一个新函数，就会创建一个prototype属性，这个属性指向原型对象。原型对象初始只包含constructor属性，指向构造函数。
+只要创建一个新函数，就会创建一个prototype属性，这个属性指向原型对象。原型对象初始只包含`constructor`属性，指向构造函数。
 
 	function F(val) {
 		this.a = val;
@@ -85,10 +85,44 @@
 
 原型链，是JS实现继承的主要方法，基本思想是利用原型让一个引用类型继承另一个引用类型的属性和方法。
 
-`__proto__`，理解原型链，就得先理解`__proto__`;每个**对象（除null）**都有__proto__属性，指向其构造函数的原型对象。这是一个浏览器的内置属性，在其他实现是对脚本不可见的。
+我们知道构造函数、原型和实例之间有如下关系：**每个构造函数都有一个原型对象（prototype），原型对象都有一个指向构造函数的指针（constructor），而实例对象都包含一个指向原型对象的内部指针（ [[Prototype]] ）**
 
-**__proto__是实现原型链的基础**
+`[[Prototype]]`是一个JS内置属性就是 ，理解原型链，就得先理解`[[Prototype]]`;每个**对象（除null）**都有`[[Prototype]]`属性，指向其构造函数的原型对象，是不可见的。
 
-`__proto__`有个特殊值，就是Object.prototype对象也有__proto__属性，值为null，处于原型链的最顶层。
+在浏览器中 `[[Prototype]]`属性就是 `__proto__`。
 
-`__proto__`
+正因为`[[Prototype]]`指向构造函数的原型对象，对象才能获取构造函数原型上的属性和方法。然后原型对象也是一个对象，它也有`[[Prototype]]`属性指向它的构造函数的原型对象，这样就构成了原型链。
+
+**所以`[[Prototype]]`是实现原型链的基础**
+
+`[[Prototype]]`有个特殊值，就是Object.prototype对象也有`[[Prototype]]`属性，值为null，处于原型链的最顶层。
+	
+	// 浏览器环境下例子，[[Prototype]]就是__proto__：
+	
+	var f = { // 字面量创建一个对象，相当于调用Object构造函数创建对象
+		a: 1
+	}; 
+	// 原型链： f --__proto__--> Object.prototype --__proto__--> null
+
+	function A() {
+		this.a = 1;
+	}
+	A.prototype.sayA = function () {
+		console.log(this.a);
+	};
+
+	var a = new A();
+	// 原型链： a --__proto__--> a.prototype --__proto__ --> Object.prototype --__proto__ --> null
+
+	function B() {
+		this.b = 2;
+	} 
+	B.prototype = new A();
+
+	var b = new B();
+	// 原型链：b --__proto__--> B.prototype --__proto__ --> A.prototype --__proto__ --> Object.prototype --__proto__ --> null
+
+实例对象会按照原型链的顺序搜索属性或方法。
+
+
+

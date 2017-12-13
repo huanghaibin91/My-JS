@@ -63,9 +63,7 @@
 				f: pointer to function f(), // 函数声明会指向该函数在内存中的地址的一个引用，所以函数可以在声明之前调用
 				a: undefined // 变量声明初始化会是undefined
 			},
-   			scopeChain: [
-				globalECObj.variableObject
-			], 
+   			scopeChain: Object.assign({}, globalECObj.variableObject), // 作用域链是全局作用域
    			this: window
 		};
 
@@ -80,9 +78,7 @@
 				f: pointer to function f(), 
 				a: 1
 			},
-   			scopeChain: [
-				globalECObj.variableObject
-			], 
+   			scopeChain: Object.assign({}, globalECObj.variableObject),
    			this: window
 		};
 
@@ -94,7 +90,7 @@
 				sayA: pointer to function sayA(),
 				a: undefined
 			},
-   			scopeChain: [globalECObj.variableObject, fECObj.variableObject], 
+   			scopeChain: Object.assign({}, globalECObj.variableObject, fECObj.variableObject), // 作用域链是全局作用域和f函数作用域
    			this: window
 		};
 
@@ -108,7 +104,7 @@
 				sayA: pointer to function sayA(),
 				a: 2
 			},
-   			scopeChain: [globalECObj.variableObject, fECObj.variableObject], 
+   			scopeChain: Object.assign({}, globalECObj.variableObject, fECObj.variableObject),
    			this: window
 		}
 
@@ -117,7 +113,7 @@
 		// ⑥ sayA(); 遇到函数调用，创建函数sayA执行上下文
 		sayAECObj = {
 			variableObject: {},
-   			scopeChain: [globalECObj.variableObject, fECObj.variableObject, sayAECObj.variableObject], 
+   			scopeChain: Object.assign({}, globalECObj.variableObject, fECObj.variableObject, sayAECObj.variableObject), // 作用域链是全局作用域和f函数作用域和sayA函数作用域
    			this: window
 		};
 
