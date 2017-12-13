@@ -22,7 +22,7 @@
 		//
 	})()
 
-函数声明会提升，但函数表达式不会。声明提升在[执行上下文]()。
+函数声明会提升，但函数表达式不会。声明提升在[执行上下文](https://github.com/huanghaibin91/My-JS/blob/master/md/execution-context.md)。
 
 	function f() {
 		console.log(1);
@@ -112,7 +112,7 @@ arguments，arguments是一个类数组对象，包含传入函数的所有参�
 	}
 	add(1, 2); // 3
 
-this，this引用的是函数据以执行的环境对象，关于this请点这里[My-JS this]()
+this，this引用的是函数据以执行的环境对象，关于this请点这里[this](https://github.com/huanghaibin91/My-JS/blob/master/md/this.md)
 
 	var a = {
 		name: 'a',
@@ -126,7 +126,7 @@ this，this引用的是函数据以执行的环境对象，关于this请点这�
 
 每个函数都包含两个非继承而来的方法：apply()和call()。这两个方法的用途都是在特定的域中调用函数，其真正强大之处在于能够扩充函数赖以运行的作用域，ES5又新增bind()方法。
 
-关于apply、call和bind请点这里[My-JS this]()
+关于apply、call和bind请点这里[this](https://github.com/huanghaibin91/My-JS/blob/master/md/this.md)
 
 因为函数也是对象，所以函数也有toString()方法，返回函数的字符串形式。
 
