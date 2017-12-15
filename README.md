@@ -16,6 +16,7 @@
 - [原型](https://github.com/huanghaibin91/My-JS/blob/master/md/prototype.md)；
 - [类](https://github.com/huanghaibin91/My-JS/blob/master/md/class.md)；
 - [this](https://github.com/huanghaibin91/My-JS/blob/master/md/this.md)；
+- [异步任务](https://github.com/huanghaibin91/My-JS/blob/master/md/asynchronous.md)；
 
 HTML 文件夹中放到的是未整理的笔记。
 
