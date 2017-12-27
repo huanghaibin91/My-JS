@@ -36,6 +36,8 @@
         // document.URL，获取页面完整URL，只读
         // document.referrer，保存着链接到当前页面的那个页面的URL，只读
         // document.domain，页面域名，可写，当页面存在在其它域的子域，设置domain可以使父子间通信
+        // document.write()、document.writeIn()将内容写入网页，writeIn会换行，输入内容可以是文字或HTML
+        // document.open()、document.close()打开或关闭网页
 
         // Element元素节点
         // Element.id，Element.tagName，Element.className，Element.title
@@ -51,7 +53,7 @@
         // innerText,读模式可以操作元素中包含的所有文本，包括子文档树中的文本，写模式下会替换掉元素的所有子节点，使元素只有一
         // 个子文本节点
         // outerText，读模式下与innerText一致，写模式下会用文本节点替换掉元素及其子节点
-        // 元素尺寸,以下属性都是只读属性，不可赋值
+        // 元素尺寸,以下属性都是只读属性，不可赋值，offset的定位依据最近的一个具有大小的祖先元素：
         // offsetHeight，元素垂直空间高度，包括边框与滚动条
         // offsetWidth，元素水平空间高度，包括边框与滚动条
         // offsetTop，元素上外边框与与包含元素上内边框的距离
@@ -108,6 +110,8 @@
 
         // hasChildNodes()，方法检测 元素是否有子节点
         // childElementCount，返回子元素的个数
+
+        // 下面四个方法都是在父节点调用操作子节点，所以在不支持子节点的节点会报错 
         // parentNode.appendChild(newNode),在父节点末尾添加一个节点，如果目标节点已经是文档的一部分了，
         // 那结果就是将该节点从原来的的位置移动到新位置
         // parentNode.insertBefore(newNode, targetNode)，在父节点的某个子节点之前添加一个节点，目标位置参数
@@ -115,6 +119,7 @@
         // 如果所要插入的节点是当前DOM现有的节点，则该节点将从原有的位置移除，插入新的位置
         // parentNode.replaceChild(newNode, oldNode)，替换一个子节点
         // parentNode.removeChild(node)，移出一个子节点
+
         // cloneNode(),复制节点，接收一个参数，表示是否执行深复制，深复制会复制其整个子节点树。这个方法不会
         // 复制添加到DOM节点中的JavaScript属性，例如事件处理等
 
