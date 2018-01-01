@@ -67,7 +67,7 @@
     }
     foo3();
 
-下面是一个关于闭包的金典例子：
+下面是一个关于闭包的经典例子：
 
 	for (var i = 1; i <= 5; i++) { // 只有一个全局作用域，运行timer是寻找变量i只有全局的i = 6
         setTimeout(function timer() {

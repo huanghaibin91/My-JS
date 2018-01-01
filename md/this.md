@@ -22,14 +22,14 @@ this的指向是一个对象。
 
 - new 绑定，构造函数生成实例中调用；
 
-	function F() {
-		this.a = 1;
-		this.sayA = function () {
-			console.log(this.a);
+		function F() {
+			this.a = 1;
+			this.sayA = function () {
+				console.log(this.a);
+			}
 		}
-	}
-	var f = new F();
-	f.sayA(); // 1
+		var f = new F();
+		f.sayA(); // 1
 
 - call、apply调用（显式绑定）；
 

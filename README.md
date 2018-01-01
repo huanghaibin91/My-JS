@@ -17,7 +17,7 @@
 - [类](https://github.com/huanghaibin91/My-JS/blob/master/md/class.md)；
 - [this](https://github.com/huanghaibin91/My-JS/blob/master/md/this.md)；
 - [异步任务](https://github.com/huanghaibin91/My-JS/blob/master/md/asynchronous.md)；
-
+- [跨域]()；
 HTML 文件夹中放到的是未整理的笔记。
 
 md 文件夹中放的整理好的。

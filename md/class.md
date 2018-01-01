@@ -121,7 +121,7 @@ JS一般使用构造函数和原型配合实现类的功能：
 		function parasiticObject(o) {
 			var obj = object(o);
 			// 下面写要给对象添加的实例方法和属性
-
+			
 			return obj;
 		}
 		
