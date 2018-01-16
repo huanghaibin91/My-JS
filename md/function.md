@@ -89,7 +89,6 @@ JS中所有函数的参数都是按值传递的。
     f3(obj2);
     console.log(obj2.a) // 1
 
-
 **函数属性**
 
 函数属性包括：length和prototype
@@ -105,7 +104,7 @@ prototype，每个函数都包含一个prototype属性，这个属性是指向�
 
 函数内部属性：arguments和this
 
-arguments，arguments是一个类数组对象，包含传入函数的所有参数，arguments的主要用途是保存函数参数。
+arguments，arguments是一个类数组对象，包含传入函数的所有参数，arguments的主要用途是保存函数参数。注意：不要修改arguments对象，如果需要修改，使用`[].slice.call(arguments)`将参数对象复制到一个真实数组中再在数组中进行修改。
 	
 	function add(a, b) {
 		return arguments[0] + arguments[1];

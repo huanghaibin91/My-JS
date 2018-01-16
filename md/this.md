@@ -59,7 +59,7 @@ this的指向是一个对象。
 			var f2 = f.bind(obj); // 返回的是一个新函数，所以可以将函数保存至变量，方便以后调用
 			f2(); // 2
 	
-	- 如果你把null或者undefined作为 this 的绑定对象传入call、apply或者bind，这些值在调用时会被忽略，实际应用的是默认绑定规则；
+	- 如果你把null或者undefined作为 this 的绑定对象传入call、apply或者bind，这些值在调用时会被忽略，实际应用的是默认绑定规则，一般在函数不需要this的时候；
 
 - 作为对象方法调用（隐式绑定）；
 		

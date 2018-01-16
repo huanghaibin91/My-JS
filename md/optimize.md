@@ -1,16 +1,11 @@
-# JS 优化 #
+# 前端优化 #
 
 
 ----------
 
-- 尽可能减少首屏元素数量：用异步加载和本地缓存加载数据
+- 尽量减少HTTP请求数
 
-- CDN加载慢时候，减少页面空白概率：页面CSS样式文件内联在页面上
+	- 合并文件，将脚本文件合并一起
+	- CSS Sprites，通过雪碧图合并图片减少图片请求数量
 
-- 减少页面请求数量：CSS/JS combo，CSS sprite
-
-- 减少静态文件体积：CSS/JS/Images压缩
-
-- DNS预解析：头部增加比如<link rel="dns-prefetch" href="//d.jd.com"/>
-
-- 减小Cookie体积等等
+- 减少DNS查找

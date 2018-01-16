@@ -147,5 +147,14 @@ JS中提供了Number()、String()、Boolean()等函数将值转换成特定的�
 	- while (..) 和 do..while(..) 循环中的条件判断表达式；  
 	- ? : 中的条件判断表达式；   
 	- 逻辑运算符 ||（逻辑或）和 &&（逻辑与）左边的操作数（作为条件判断表达式）； 
+
+**toString()和valueOf()**
+
+JS中所有数据类型都拥有valueOf和toString这两个方法，null除外
+
+- toString()，是返回最适合该对象类型的原始值
+- valueOf()，是将在该对象类型的原始值以字符串形式返回
+
+valueOf偏向于运算，toString偏向于显示。在进行强转字符串类型时将优先调用toString方法，强转为数字时优先调用valueOf。在有运算操作符的情况下，valueOf的优先级高于toString。
 	 
 				

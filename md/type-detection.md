@@ -82,6 +82,11 @@ Object.prototype.toString方法可以准确区分数据的类型，Object.protot
 		isNaN(true); // false
 		isNaN({valueOf: function () {return 10;}}); // false
 
+		// 因为isNaN()会进行类型转换，所以也不是百分比正确，可以自己定义一个isNaN方法
+		function isNaN(val) {
+			return val !== val;
+		}
+
 - Array.isArray()，参数为数组返回true，反之返回false；
 
 		Array.isArray([]); // true
