@@ -17,8 +17,8 @@
 	var f1 = new F(1);
 	var f2 = new F(2);
 	// 由F函数生成的实例都会包含sayA方法
-	f1.sayA();
-	f2.sayA();
+	f1.sayA(); // 1
+	f2.sayA(); // 2
 
 **prototype**
 
@@ -87,7 +87,7 @@
 
 我们知道构造函数、原型和实例之间有如下关系：**每个构造函数都有一个原型对象（prototype），原型对象都有一个指向构造函数的指针（constructor），而实例对象都包含一个指向原型对象的内部指针（ [[Prototype]] ）**
 
-`[[Prototype]]`是一个JS内置属性就是 ，理解原型链，就得先理解`[[Prototype]]`;每个**对象（除null）**都有`[[Prototype]]`属性，指向其构造函数的原型对象，是不可见的。
+`[[Prototype]]`是一个JS内置属性，理解原型链，就得先理解`[[Prototype]]`;每个**对象（除null）**都有`[[Prototype]]`属性，指向其构造函数的原型对象，是不可见的。
 
 在浏览器中 `[[Prototype]]`属性就是 `__proto__`。
 

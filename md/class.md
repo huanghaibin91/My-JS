@@ -153,7 +153,7 @@ JS一般使用构造函数和原型配合实现类的功能：
 		var color3 = new SubColor();
         color2.colors.push('black');
 
-		color1.sayColor(); // ['red', 'blue', 'green', 'black']
+		color1.sayColor(); // ['red', 'blue', 'green']
 		color2.sayColor(); // TypeError: color2.sayColor is not a function，父类原型上的方法没有继承
 		
 		// 子类继承父类的实例属性且不会共享

@@ -7,7 +7,7 @@
 
 同源政策会在跨域时限制一些操作，其限制之一是不能通过ajax的方法去请求不同源中的文档，第二个限制是浏览器中不同域的框架之间是不能进行js的交互操作的，具体表现在三个方面：
 
-- Cookie、LocalStorage和 IndexedDB无法读取；
+- Cookie、LocalStorage和IndexedDB无法读取；
 
 - DOM无法获得；
 
@@ -23,7 +23,7 @@
 	http://a.example.com/a.html
 	http://b.example.com/b.html
 
-- 通过document.domain跨域访问cookie；   
+- 通过document.domain + iframe跨域访问cookie；   
 	
 		// http://a.example.com/a.html 网页中嵌套iframe页面，地址为http://b.example.com/b.html
 		// 设置网址的document.domain，注意：document.domain的设置是有限制的，我们只能把document.domain设置成自身或更高一级的父域，且主域必须相同
@@ -59,8 +59,6 @@ window对象有个name属性，该属性有个特征：即在一个窗口(window
 	// 3. 在a.com/index.html页面中，就可以通过document.getElementById('my-iframe').contentWindow.name来获取iframe内页面a.com/empty.html的window.name值了，而这个值正是b.com/index.html设置的
 
 	// 注意： 实际操作中，我们一般使用一个隐藏的iframe，然后监听它第二次onload事件，就知道该iframe已经跳到同域页面了
-
-	
 
 **location.hash跨域**
 
