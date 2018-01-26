@@ -18,6 +18,7 @@
 - [this](https://github.com/huanghaibin91/My-JS/blob/master/md/this.md)；
 - [异步任务](https://github.com/huanghaibin91/My-JS/blob/master/md/asynchronous.md)；
 - [跨域](https://github.com/huanghaibin91/My-JS/blob/master/md/cross-domain.md)；
+- [正则表达式](https://github.com/huanghaibin91/My-JS/blob/master/md/regular-expression.md);
 
 
 
