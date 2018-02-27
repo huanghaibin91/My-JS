@@ -9,7 +9,7 @@
 
 **typeof运算符**
 
-typeof运算符返回类型的字符串值
+typeof运算符返回类型的字符串值。
 		
 		typeof undefined // 'undefined'
 		typeof null // 'object'，特殊情况

@@ -13,11 +13,11 @@
 
 - AJAX请求无效（可以发送，但浏览器会拒绝接受响应）。
 
-但有的时候，我们仍是需要进行跨域操作。
+这时候便需要进行跨域操作了。
 
 **document.domain跨域**
 
-通过document.domain跨域只适用于不同子域的跨域情景
+通过document.domain跨域只适用于不同子域的跨域情景。document.domain的设置是有限制的，我们只能把document.domain设置成自身或更高一级的父域，且主域必须相同。
 	
 	// 下面两个子域不同
 	http://a.example.com/a.html
@@ -140,15 +140,35 @@ window.postMessage()方法的第一个参数是具体的信息内容，第二个
 
 JSONP，便是利用script的这个特性，该协议的一个要点就是允许用户传递一个callback参数给服务端，然后服务端返回数据时会将这个callback参数作为函数名来包裹住JSON数据，这样客户端就可以随意定制自己的函数来自动处理返回数据。
 
-注意，JSONP的回调函数必须在window下添加。
+注意，JSONP的回调函数必须在window对象下添加。
 
-这里是我封装的一个元素JS JSONP函数，[JS jsonp函数](https://github.com/huanghaibin91/JS-CSS-Fragment/blob/master/JS/jsonp.js)。
+这里是我封装的一个原生JS JSONP函数，[JS jsonp函数](https://github.com/huanghaibin91/JS-CSS-Fragment/blob/master/JS/jsonp.js)。
+
+服务端代码例子：
+	
+	// 假设客户端URL为：http://127.0.0.1:3000	
+
+	// node.js
+	// 跨域请求的URL为：http://127.0.0.1:4000/jsonpHandler，端口不同，跨域请求
+	app.get('/jsonpHandler', (req,res) => { // 跨域请求的触发路由回调函数
+		let callback = req.query.callback; // 获取jsonp请求URL中的callback
+		let data = {  // 服务器要返回的数据
+			name : 'jsonp', 
+			value : 'my jsonp data' 
+		}; 
+		res.writeHead(200, {"Content-Type": "text/javascript"}); // 返回内容mine类型为JS 
+		res.end(callback + '(' + JSON.stringify(data) + ')'); // 将数据转化为字符串格式作为callback的参数返回客户端
+	});
 
 JSONP主要是用于解决Ajax跨域请求无效的情景。JSONP只能支持GET操作。
 
 **CORS**
 
 CORS，跨域资源共享，允许浏览器向跨源服务器，发出XMLHttpRequest请求，从而克服了AJAX只能同源使用的限制。CORS需要浏览器和服务器同时支持。目前，所有浏览器都支持该功能，IE浏览器不能低于IE10。CORS通信与同源的AJAX通信没有差别，代码完全一样。**因此，实现CORS通信的关键是服务器。只要服务器实现了CORS接口，就可以跨源通信。**服务器端对于CORS的支持，主要就是通过设置Access-`Control-Allow-Origin`来进行的。如果浏览器检测到相应的设置，就可以允许Ajax进行跨域的访问。
+
+CORS背后的基本思想就是使用自定义的HTTP头部，让服务器能声明哪些来源可以通过浏览器访问该服务器上的资源，从而决定请求或响应是应该成功还是失败。
+
+[CORS通信](http://javascript.ruanyifeng.com/bom/cors.html)
 
 CORS，主要是用于解决Ajax跨域请求无效的情景。
 

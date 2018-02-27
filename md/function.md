@@ -100,35 +100,35 @@ JS中所有函数的参数都是按值传递的。
 
 **函数属性**
 
-函数属性包括：length和prototype
+- 函数属性包括：length和prototype
 
-length，函数的length属性是只读属性，函数定义时的形参个数即通常也是函数调用时期望传入函数的参数个数。
-
-	function add(a, b) {
-		return a + b;
-	}
-	add.length // 2，函数声明时形参长度
-
-prototype，每个函数都包含一个prototype属性，这个属性是指向一个对象的引用，这个对象称为“原型对象”。每个函数都包含不同的原型对象。当函数用做构造函数时，新创建的对象会从原型对象上继承属性。
-
-函数内部属性：arguments和this
-
-arguments，arguments是一个类数组对象，包含传入函数的所有参数，arguments的主要用途是保存函数参数。注意：不要修改arguments对象，如果需要修改，使用`[].slice.call(arguments)`将参数对象复制到一个真实数组中再在数组中进行修改。
+	length，函数的length属性是只读属性，函数定义时的形参个数即通常也是函数调用时期望传入函数的参数个数。
 	
-	function add(a, b) {
-		return arguments[0] + arguments[1];
-	}
-	add(1, 2); // 3
-
-this，this引用的是函数据以执行的环境对象，关于this请点这里[this](https://github.com/huanghaibin91/My-JS/blob/master/md/this.md)
-
-	var a = {
-		name: 'a',
-		sayName: function () {
-			console.log(this.name);
+		function add(a, b) {
+			return a + b;
 		}
-	};
-	a.sayName(); // 'a'
+		add.length // 2，函数声明时形参长度
+	
+	prototype，每个函数都包含一个prototype属性，这个属性是指向一个对象的引用，这个对象称为“原型对象”。每个函数都包含不同的原型对象。当函数用做构造函数时，新创建的对象会从原型对象上继承属性。
+
+- 函数内部属性：arguments和this
+
+	arguments，arguments是一个类数组对象，包含传入函数的所有参数，arguments的主要用途是保存函数参数。注意：不要修改arguments对象，如果需要修改，使用`[].slice.call(arguments)`将参数对象复制到一个真实数组中再在数组中进行修改。
+		
+		function add(a, b) {
+			return arguments[0] + arguments[1];
+		}
+		add(1, 2); // 3
+	
+	this，this引用的是函数据以执行的环境对象，关于this请点这里[this](https://github.com/huanghaibin91/My-JS/blob/master/md/this.md)
+	
+		var a = {
+			name: 'a',
+			sayName: function () {
+				console.log(this.name);
+			}
+		};
+		a.sayName(); // 'a'
 
 **函数方法**
 
@@ -137,6 +137,25 @@ this，this引用的是函数据以执行的环境对象，关于this请点这�
 关于apply、call和bind请点这里[this](https://github.com/huanghaibin91/My-JS/blob/master/md/this.md)
 
 因为函数也是对象，所以函数也有toString()方法，返回函数的字符串形式。
+
+**函数返回值**
+
+JS中，函数只会返回一个值，默认返回undefined。如果想返回复合值，就将返回值放进数组或对象中返回。
+
+	function f1() {}
+	function f2() {
+		return 'b'; // 一个函数只有一个return返回值，多余的return不会执行
+	}
+	function f3() {
+		return // 记住返回值要接在return之后，不可换行 
+		'c';
+	}
+
+	var a = f1(); // undefined
+	var b = f2(); // 'b'
+	var c = f3(); // undefined
+
+`return`因为可以结束函数执行，所以可以通过提前返回来做节流控制。
 
 **匿名函数**
 

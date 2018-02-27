@@ -99,18 +99,49 @@ Ajax过程：创建AJAX对象，发出HTTP请求，接收服务器传回的数�
 - Ajax方法：
 
 	- `.open(method, url, false/true)`，准备启动一个AJAX请求；
-	- `.setRequestHeader()`，设置请求头部信息；
+	- `.setRequestHeader()`，设置请求头部信息，必须在open()方法之后send()之前；
 	- `.send()`，发送AJAX请求，send方法参数不能为空，即时不需要发送任何数据的GET请求，也需要在调用.send()方法时，向其传入null值；
 	- `.getResponseHeader()`，获得响应头部信息；
 	- `.getAllResponseHeader()`，获得一个包含所有头部信息的长字符串；
 	- `.abort()`，取消异步请求；
+	- `.overrideMineType()`，重写xhr响应返回数据的MIME类型，必须在send()方法之前调用；
 
 - Ajax属性：
 
 	- `.responseText`，包含响应主体返回文本；
 	- `.responseXML`，如果响应的内容类型时text/xml或application/xml，该属性将保存包含着相应数据的XML DOM文档；
 	- `.status`，响应的HTTP状态；
+		- 200, OK，访问正常，基本上，只有2xx和304的状态码，表示服务器返回是正常状态；
+        - 301, Moved Permanently，永久移动；
+        - 302, Move temporarily，暂时移动；
+        - 304, Not Modified，未修改；
+        - 307, Temporary Redirect，暂时重定向；
+        - 401, Unauthorized，未授权；
+        - 403, Forbidden，禁止访问；
+        - 404, Not Found，未发现指定网址；
+        - 500, Internal Server Error，服务器发生错误；
 	- `.statusText`，HTTP状态的说明；
 	- `.readyState`，表示“请求”/“响应”过程的当前活动阶段；
+		- 0，未初始化，未调用open()方法；
+		- 1，启动，调用open()方法，未调用send()方法；
+		- 2，发送，调用send()方法，未收到响应；
+		- 3，接收，已经收到部分响应数据；
+		- 4，完成，已收到全部响应数据；
+	- `.timeout`，请求等待响应多少毫秒之后终止请求；
 
+- Ajax事件，事件绑定`xhr.onreadystatechange = fn`、`xhr.addEventListener('readystatechange', fn)`两种方式：
+
+	- `readystatechange`，异步请求readyState属性改变触发；
+	- `timeout`，在timeout属性规定的时间没有接收到响应触发；
+	- 进度事件，进度事件是在Ajax响应各个阶段触发：
+		- `loadStart`，接收响应数据第一个字节时触发；
+		- `progress`，接收数据时不断触发，progress事件必须在open()方法之前绑定progress的事件event对象，event拥有几个属性：
+			- `event.target`，指向XHR对象；
+			- `event.lengthComputable`，布尔值，表示进度信息是否可用；
+			- `position`，表示已经接收的字节数；
+			- `totalSize`，表示根据Content-Length响应头部确定的预期字节数；
+		- `error`，请求发生错误时触发；
+		- `abort`，在因为调用abort()方法终止请求时调用；
+		- `load`，接收完整响应数据时触发，类似readyState属性为4阶段；
+		- `loadend`，通信完成或者触发error、abort和load事件后触发；
 
