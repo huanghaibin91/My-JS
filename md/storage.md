@@ -72,6 +72,20 @@ Web Storage提供客户端的信息存储，storage类型的属性：
 
 浏览器保存结构化数据的数据库。indexedDB的操作都是异步的。
 
+**HTML标签data属性**
+
+`data-*` 属性用于存储私有页面后应用的自定义数据。data-* 属性可以在所有的 HTML 元素中嵌入数据。自定义的数据可以让页面拥有更好的交互体验（不需要使用 Ajax 或去服务端查询数据）。data-* 属性由以下两部分组成：属性名不要包含大写字母，在 data- 后必须至少有一个字符。该属性可以是任何字符串。
+
+	<!-- data-*有两种设置方式，可以直接在HTML元素标签上书写 -->
+    <p id="p1" data-mydata="mydata">Hello World</p>
+	<!-- 使用JS设置data属性 -->
+    <p id="p2">Hello World</p>
+
+	// HTML5中元素都会有一个dataset的属性，这是一个DOMStringMap类型的键值对集合，可以设置读取data属性
+    var p2 = document.getElementById('p2');
+    p2.dataset.yourdata = 'yourdata';
+    // 删掉一个 data-属性 ，可以这么做： delete el.dataset.id ;  或者 el.dataset.id = null
+
 
 
 

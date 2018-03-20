@@ -70,6 +70,7 @@ Object.prototype.toString方法可以准确区分数据的类型，Object.protot
         Object.prototype.toString.call(new Error()) // [object Error] 
         Object.prototype.toString.call(/a/) // [object RegExp] 
         Object.prototype.toString.call(function () {}) // [object Function]
+		Object.prototype.toString.call(JSON) // [object JSON]
 
 **其他检测方法**
 

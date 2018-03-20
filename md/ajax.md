@@ -3,7 +3,7 @@
 
 ----------
 
-Ajax（异步的JavaScript和XML），核心是`XMLHttpRequest`对象，在用户和服务器之间加了一个中间层(Ajax引擎)，使用户操作与服务器响应异步化，通过XMlHttpRequest对象来向服务器发异步请求，从服务器获得数据，然后用javascript来操作DOM而更新页面。
+Ajax（异步的JavaScript和XML），核心是`XMLHttpRequest`对象，在用户和服务器之间加了一个中间层(Ajax引擎)，使用户操作与服务器响应异步化，通过`XMLHttpRequest`对象来向服务器发异步请求，从服务器获得数据，然后用javascript来操作DOM而更新页面。
 
 **Ajax特点**
 
@@ -16,9 +16,9 @@ Ajax（异步的JavaScript和XML），核心是`XMLHttpRequest`对象，在用�
 
 - 缺点：
 
-	- ajax干掉了back按钮，即对浏览器后退机制的破坏；
+	- ajax干掉了back按钮，即对浏览器后退机制的破坏，因为Ajax是页面无刷新更新的内容，所以使用后退按钮并不是数据更新之前的页面；
     - ajax也难以避免一些已知的安全弱点，诸如跨站点脚步攻击、SQL注入攻击和基于credentials的安全漏洞等；
-    -对搜索引擎的支持比较弱；
+    - 对搜索引擎的支持比较弱；
     - 破坏了程序的异常机制，异步不好获取错误；
     - 违背了url和资源定位的初衷；
 
@@ -29,6 +29,7 @@ Ajax过程：创建AJAX对象，发出HTTP请求，接收服务器传回的数�
 1. 创建Ajax：
 
 		// 跨浏览器创建Ajax，IE7+就支持XMLHttpRequest对象
+		// 使用惰性载入的方式，利用IFEE和return让变量声明时进行一次分支检测，以后使用便不再执行if分支检测，固定createXHR的值
 		var createXHR = (function createXHR() {
             if (typeof XMLHttpRequest !== 'undefined') {
                 return function () {
@@ -91,7 +92,15 @@ Ajax过程：创建AJAX对象，发出HTTP请求，接收服务器传回的数�
 
 **Ajax请求类型**
 
-- `GET`，常用于向服务器查询某些信息get请求HTML的responseText返回的是HTML的字符串查询字符串中每个参数的名称和值都必须使用encodeURIComponent()进行编码向URL的末尾添加查询字符串参数；
+- `GET`，常用于向服务器查询某些信息，get请求HTML的responseText返回的是HTML的字符串，查询字符串中每个参数的名称和值都必须使用`encodeURIComponent()`进行编码向URL的末尾添加查询字符串参数；
+
+		// 向URL的末尾添加查询字符串参数
+        function addURLParam(url, name, value) {
+            url += (url.index('?') == -1 ? '?' : '&');
+            url += encodeURIComponent(name) + '=' + encodeURIComponent(value);
+            return url;
+        }
+
 - `POST`，post请求，通常用于向服务器发送应该被保存的数据，通常用于表单提交；
 
 **Ajax方法和属性**
@@ -109,6 +118,7 @@ Ajax过程：创建AJAX对象，发出HTTP请求，接收服务器传回的数�
 - Ajax属性：
 
 	- `.responseText`，包含响应主体返回文本；
+	- `.responseType`，用来指定服务器返回数据（xhr.response）的类型：“”：字符串（默认值）；“aybuffer”：ArrayBuffer对象；“blob”：Blob对象；“document”：Document对象；“json”：JSON对象；“text”：字符串；
 	- `.responseXML`，如果响应的内容类型时text/xml或application/xml，该属性将保存包含着相应数据的XML DOM文档；
 	- `.status`，响应的HTTP状态；
 		- 200, OK，访问正常，基本上，只有2xx和304的状态码，表示服务器返回是正常状态；
@@ -144,4 +154,41 @@ Ajax过程：创建AJAX对象，发出HTTP请求，接收服务器传回的数�
 		- `abort`，在因为调用abort()方法终止请求时调用；
 		- `load`，接收完整响应数据时触发，类似readyState属性为4阶段；
 		- `loadend`，通信完成或者触发error、abort和load事件后触发；
+
+**Ajax上传文件**
+
+Ajax除了能从服务器获取数据，还可以像服务器传递数据。
+
+	// 利用formData模拟file控件。进行文件上传，IE9+
+    function uploadFiles(url, files) {
+        var formData = new FormData(); // 创建FormData实例，FormData对象，序列化表单，使用FormData不必明确设置头部，XHR对象能够识别数据类型是FormData的实例并配置适当的头部信息。FormData可以将表单字段的名称name和值value进行URL编码，使用和号（&）分割。可以直接将form元素传入FormData构造函数，或者使用append方法传入键值对，对应的键值对就已经添加到表单里面了，你在控制台看到的是FormData原型，存储的数据没有以对象属性的方式体现，可以理解为类的私有字段，外界访问不到，所以显示的是空对象，但是你可以通过formData.get(key)的方式获取到对应的表单数据
+        for (var i = 0, file; file = files[i]; ++i) {
+			// new FormData(formElement)
+			// formData.append(key, value)
+			// formData.get(key)
+            formData.append(file.name, file); // 可加入第三个参数，表示文件名 
+        }
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', url, true);
+        xhr.onload = function (e) {
+            // 文件创建成功后操作
+        };
+        xhr.send(formData); // multipart/form-data，直接将formData对象利用send方法传给服务器
+    }
+
+	
+	// 直接使用file API上传文件
+	function uploadFiles(url, files) {
+		for (var i = 0, file; file = files[i]; ++i) {
+			var xhr = new XMLHttpRequest();
+    		xhr.open('POST', 'myserver/uploads');
+    		xhr.setRequestHeader('Content-Type', file.type);
+   			xhr.send(file);
+		}
+	}
+	
+	// 元素绑定事件触发上传
+    document.querySelector('input[type="file"]').addEventListener('change', function (e) {
+        uploadFiles('/server', this.files);
+    }, false);
 

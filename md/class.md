@@ -19,10 +19,16 @@ new关键字创建对象过程：
 JS一般使用构造函数和原型配合实现类的功能：
 
 		function F(val) { // 构造函数也是函数，所以可以传递参数
-			// 检测函数的调用方式，确保构造函数以new操作符形式调用	
+			'use strict'; // 1.使用严格模式，普通调用会报错
+			// 2.检测函数的调用方式，确保构造函数以new操作符形式调用	
 			if (!(this instanceof F)) {
                 return new F(val);
             }
+			// 3.ES6中函数内部可以使用new.target属性。如果当前函数是new命令调用，new.target指向当前函数，否则为undefined
+			if (!new.target) {
+                throw new Error('请使用 new 命令调用！');
+            }
+			// 以上是三种保证构造函数是new调用的方式
 	
 			// 构造函数中定义实例特有的属性和方法
 			this.a = val; 

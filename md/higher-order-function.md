@@ -7,7 +7,7 @@
 
 **函数返回函数**
 
-函数返回函数的高阶函数最常见的用法就是闭包，[闭包笔记]()。
+函数返回函数的高阶函数最常见的用法就是闭包，[闭包笔记](https://github.com/huanghaibin91/My-JS/blob/master/md/closure.md)。
 
 **偏函数**
 
