@@ -9,15 +9,15 @@ Ajax（异步的JavaScript和XML），核心是`XMLHttpRequest`对象，在用�
 
 - 优点：
 
-	 - 最大的一点是页面无刷新，在页面内与服务器通信，给用户的体验非常好；
-     - 使用异步方式与服务器通信，不需要打断用户的操作，具有更加迅速的响应能力；
-     - 可以把以前一些服务器负担的工作转嫁到客户端，利用客户端闲置的能力来处理，减轻服务器和带宽的负担，节约空间和宽带租用成本。并且减轻服务器的负担，ajax的原则是“按需取数据”，可以最大程度的减少冗余请求，和响应对服务器造成的负担；
-     - 基于标准化的并被广泛支持的技术，不需要下载插件或者小程序；
+	- 最大的一点是页面无刷新，在页面内与服务器通信，给用户的体验非常好；
+    - 使用异步方式与服务器通信，不需要打断用户的操作，具有更加迅速的响应能力；
+    - 可以把以前一些服务器负担的工作转嫁到客户端，利用客户端闲置的能力来处理，减轻服务器和带宽的负担，节约空间和宽带租用成本。并且减轻服务器的负担，ajax的原则是“按需取数据”，可以最大程度的减少冗余请求，和响应对服务器造成的负担；
+    - 基于标准化的并被广泛支持的技术，不需要下载插件或者小程序；
 
 - 缺点：
 
 	- ajax干掉了back按钮，即对浏览器后退机制的破坏，因为Ajax是页面无刷新更新的内容，所以使用后退按钮并不是数据更新之前的页面；
-    - ajax也难以避免一些已知的安全弱点，诸如跨站点脚步攻击、SQL注入攻击和基于credentials的安全漏洞等；
+    - ajax也难以避免一些已知的安全弱点，诸如跨站点脚本攻击、SQL注入攻击和基于credentials的安全漏洞等；
     - 对搜索引擎的支持比较弱；
     - 破坏了程序的异常机制，异步不好获取错误；
     - 违背了url和资源定位的初衷；
@@ -92,7 +92,7 @@ Ajax过程：创建AJAX对象，发出HTTP请求，接收服务器传回的数�
 
 **Ajax请求类型**
 
-- `GET`，常用于向服务器查询某些信息，get请求HTML的responseText返回的是HTML的字符串，查询字符串中每个参数的名称和值都必须使用`encodeURIComponent()`进行编码向URL的末尾添加查询字符串参数；
+- `GET`，常用于向服务器查询某些信息，get请求HTML的responseText返回的是HTML的字符串，查询字符串中每个参数的名称和值都必须使用`encodeURIComponent()`进行编码向URL的末尾添加查询字符串参数，GET/HEAD请求，`send()`方法一般不传参或传null。不过即使传入了参数，参数也最终被忽略，`xhr.send(data)`中的data会被置为null；
 
 		// 向URL的末尾添加查询字符串参数
         function addURLParam(url, name, value) {
@@ -101,15 +101,37 @@ Ajax过程：创建AJAX对象，发出HTTP请求，接收服务器传回的数�
             return url;
         }
 
-- `POST`，post请求，通常用于向服务器发送应该被保存的数据，通常用于表单提交；
+	`GET`请求特点：
+		
+	    - GET 请求可被缓存；
+	    - GET 请求保留在浏览器历史记录中；
+	    - GET 请求可被收藏为书签；
+	    - GET 请求不应在处理敏感数据时使用；
+	    - GET 请求有长度限制；
+	    - GET 请求只应当用于取回数据；
+
+- `POST`，post请求，通常用于向服务器发送应该被保存的数据，通常用于表单提交，`POST`请求特点：
+	
+	    - POST 请求不会被缓存；
+	    - POST 请求不会保留在浏览器历史记录中；
+	    - POST 不能被收藏为书签；
+	    - POST 请求对数据长度没有要求；
+
+`GET`与`POST`，区别：
+
+![](https://raw.githubusercontent.com/huanghaibin91/My-JS/master/image/get-post.png)
 
 **Ajax方法和属性**
 
 - Ajax方法：
 
 	- `.open(method, url, false/true)`，准备启动一个AJAX请求；
-	- `.setRequestHeader()`，设置请求头部信息，必须在open()方法之后send()之前；
-	- `.send()`，发送AJAX请求，send方法参数不能为空，即时不需要发送任何数据的GET请求，也需要在调用.send()方法时，向其传入null值；
+	- `.setRequestHeader()`，设置请求头部信息，必须在open()方法之后send()之前，此方法可以调用多次，内容会追加不会覆盖；
+	- `.send(data)`，发送AJAX请求，send方法参数不能为空，即时不需要发送任何数据的GET请求，也需要在调用.send()方法时，向其传入null值，可以传入的数据类型`Array`，`Buffer`，`Blob`，`Document`，`DOMString`，`FormData`，`null`。xhr.send(data)中data参数的数据类型会影响请求头部content-type的默认值：
+	    - 如果data是`Document`类型，同时也是`HTML Document`类型，则content-type默认值为`text/html;charset=UTF-8;`否则为`application/xml;charset=UTF-8`；
+	    - 如果data是`DOMString`类型，`content-type`默认值为`text/plain;charset=UTF-8`；
+	    - 如果data是`FormData`类型，`content-type`默认值为`multipart/form-data; boundary=[xxx]`；
+	    - 如果data是其他类型，则不会设置`content-type`的默认值；
 	- `.getResponseHeader()`，获得响应头部信息；
 	- `.getAllResponseHeader()`，获得一个包含所有头部信息的长字符串；
 	- `.abort()`，取消异步请求；
@@ -138,6 +160,7 @@ Ajax过程：创建AJAX对象，发出HTTP请求，接收服务器传回的数�
 		- 3，接收，已经收到部分响应数据；
 		- 4，完成，已收到全部响应数据；
 	- `.timeout`，请求等待响应多少毫秒之后终止请求；
+	- `.withCredentials`，CORS跨域默认不能传递cookie，在跨域请求中，client端必须手动设置`xhr.withCredentials=true`，且server端也必须允许request能携带认证信息（即response header中包含`Access-Control-Allow-Credentials:true）`，这样浏览器才会自动将cookie加在request header中；
 
 - Ajax事件，事件绑定`xhr.onreadystatechange = fn`、`xhr.addEventListener('readystatechange', fn)`两种方式：
 
@@ -148,8 +171,8 @@ Ajax过程：创建AJAX对象，发出HTTP请求，接收服务器传回的数�
 		- `progress`，接收数据时不断触发，progress事件必须在open()方法之前绑定progress的事件event对象，event拥有几个属性：
 			- `event.target`，指向XHR对象；
 			- `event.lengthComputable`，布尔值，表示进度信息是否可用；
-			- `position`，表示已经接收的字节数；
-			- `totalSize`，表示根据Content-Length响应头部确定的预期字节数；
+			- `event.position`，表示已经接收的字节数；
+			- `event.totalSize`，表示根据Content-Length响应头部确定的预期字节数；
 		- `error`，请求发生错误时触发；
 		- `abort`，在因为调用abort()方法终止请求时调用；
 		- `load`，接收完整响应数据时触发，类似readyState属性为4阶段；

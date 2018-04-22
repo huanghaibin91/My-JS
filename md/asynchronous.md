@@ -32,11 +32,13 @@ JS是单线程的（所谓单线程，是指在JS引擎中负责解释和执行J
 
 主线程只会做一件事情，就是从任务队列里面取事件、执行事件，再取事件、再执行。当任务队列为空时，就会等待直到任务队列变成非空。而且主线程只有在将当前的事件执行完成后，才会去取下一个事件。这种机制就叫做事件循环机制，取一个消息并执行的过程叫做一次循环。
 
+![事件循环图解](https://raw.githubusercontent.com/huanghaibin91/My-JS/master/image/eventloop.png)
+
 事件循环过程：
 
-- 首先判断JS是同步还是异步，同步就进入主进程，异步就进入event table（事件列表）；
-- 异步任务在event table中注册函数，当满足触发条件后,被推入event queue（事件队列）；
-- 同步任务进入主线程后一直执行，直到主线程空闲时，才会去event queue（事件队列）中查看是否有可执行的异步任务,如果有就推入主进程中；
+- 首先判断JS是同步还是异步，同步就进入主进程，异步就进入`event table`（事件列表）；
+- 异步任务在`event table`中注册函数，当满足触发条件后,被推入`event queue`（事件队列）；
+- 同步任务进入主线程后一直执行，直到主线程空闲时，才会去`event queue`（事件队列）中查看是否有可执行的异步任务,如果有就推入主进程中；
 
 		setTimeout(function () {
 			console.log(1);
@@ -64,8 +66,8 @@ JS是单线程的（所谓单线程，是指在JS引擎中负责解释和执行J
 
 除了将JS运行任务分为同步和异步，还有一种更准确的分类方式：
 
-- macro-task(宏任务)：包括整体代码script，setTimeout，setInterval，setImmediate，I/O，UI渲染；
-- micro-task(微任务)：Promise，process.nextTick，MutationObserver（DOM变动API）；
+- `macro-task`(宏任务)：包括整体代码`script`，`setTimeout`，`setInterval`，`setImmediate`，`I/O`，`UI渲染`；
+- `micro-task`(微任务)：`Promise`，`process.nextTick`，`MutationObserver`（DOM变动API）；
 
 		setTimeout(function(){
      		console.log(1);

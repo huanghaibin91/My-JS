@@ -3,7 +3,7 @@
 
 ----------
 
-每个**函数对象**都有一个prototype属性，这个属性这个属性是一个指针，指向一个对象。当函数作为构造函数使用时这个对象会成为调用该构造函数而创建的实例的原型，而这个对象的用途是包含可以由特定类型的所有实例共享的属性和方法。
+每个**函数对象**都有一个`prototype`属性，这个属性这个属性是一个指针，指向一个对象。当函数作为构造函数使用时这个对象会成为调用该构造函数而创建的实例的原型，而这个对象的用途是包含可以由特定类型的所有实例共享的属性和方法。
 
 就是说，构造函数生成的实例会有一组共享的属性和方法，这些属性和方法在构造函数的原型对象里。
 
@@ -22,7 +22,7 @@
 
 **prototype**
 
-只要创建一个新函数，就会创建一个prototype属性，这个属性指向原型对象。原型对象初始只包含`constructor`属性，指向构造函数。
+只要创建一个新函数，就会创建一个`prototype`属性，这个属性指向原型对象。原型对象初始只包含`constructor`属性，指向构造函数。
 
 	function F(val) {
 		this.a = val;
@@ -68,11 +68,11 @@
 	
 - 原型方法：
 
-	- proObj.isPrototypeOf(obj)，判断proObj是否是obj的原型对象，是返回true，反之false
+	- `proObj.isPrototypeOf(obj)`，判断proObj是否是obj的原型对象，是返回true，反之false
 			
 			Object.prototype.isPrototypeOf({}); // true
 
-	- Object.getPrototypeOf(obj)，获取obj的原型对象
+	- `Object.getPrototypeOf(obj)`，获取obj的原型对象
 
 			Object.getPrototypeOf({}); // Object.prototype
 
@@ -85,9 +85,9 @@
 
 原型链，是JS实现继承的主要方法，基本思想是利用原型让一个引用类型继承另一个引用类型的属性和方法。
 
-我们知道构造函数、原型和实例之间有如下关系：**每个构造函数都有一个原型对象（prototype），原型对象都有一个指向构造函数的指针（constructor），而实例对象都包含一个指向原型对象的内部指针（ [[Prototype]] ）**
+我们知道构造函数、原型和实例之间有如下关系：**每个构造函数都有一个原型对象（`prototype`），原型对象都有一个指向构造函数的指针（`constructor`），而实例对象都包含一个指向原型对象的内部指针（` [[Prototype]] `）**
 
-`[[Prototype]]`是一个JS内置属性，理解原型链，就得先理解`[[Prototype]]`;每个**对象（除null）**都有`[[Prototype]]`属性，指向其构造函数的原型对象，是不可见的。
+`[[Prototype]]`是一个JS内置属性，理解原型链，就得先理解`[[Prototype]]`;每个**对象（除`null`）**都有`[[Prototype]]`属性，指向其构造函数的原型对象，是不可见的。
 
 在浏览器中 `[[Prototype]]`属性就是 `__proto__`。
 
@@ -95,7 +95,7 @@
 
 **所以`[[Prototype]]`是实现原型链的基础**
 
-`[[Prototype]]`有个特殊值，就是Object.prototype对象也有`[[Prototype]]`属性，值为null，处于原型链的最顶层。
+`[[Prototype]]`有个特殊值，就是`Object.prototype`对象也有`[[Prototype]]`属性，值为`null`，处于原型链的最顶层。
 	
 	// 浏览器环境下例子，[[Prototype]]就是__proto__：
 	

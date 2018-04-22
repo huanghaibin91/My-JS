@@ -52,6 +52,7 @@
 		}
     }
     f2(); // TypeError: f2 is not a function
+	f2 // undefined，声明提升
 
 但我在测试时发现新版火狐、Chrome、IE11都不会在if中提升函数声明，但IE11以下版本会，所以为避免出错，尽量在if等非函数代码块中使用函数表达式。
 
@@ -123,6 +124,21 @@ JS中所有函数的参数都是按值传递的。
 			return arguments[0] + arguments[1];
 		}
 		add(1, 2); // 3
+
+	将arguments转化成真正的数组进行操作：	
+
+		// 按照ES6的行为方式实现
+		function f(...args) {
+			// args已经是一个真正的数组，可以使用数组的方法操作
+			args.shift();
+		}
+
+		// 按照ES6之前方式实现
+		function f() {
+			// 把arguments转换为一个真正的数组赋值给args
+			var args = Array.prototype.slice.call( arguments );
+			args.shift();
+		}
 	
 	this，this引用的是函数据以执行的环境对象，关于this请点这里[this](https://github.com/huanghaibin91/My-JS/blob/master/md/this.md)
 	
@@ -133,6 +149,7 @@ JS中所有函数的参数都是按值传递的。
 			}
 		};
 		a.sayName(); // 'a'
+	
 
 **函数方法**
 

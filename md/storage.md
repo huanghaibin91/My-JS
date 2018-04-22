@@ -7,7 +7,7 @@
 
 HTTP是一个不保存状态的协议，也就说同个客户端即使多次向同个服务器发出请求，服务器也做出响应了，但服务器却不知道是否是同一个客户端发出的请求。而cookie可以保存一段信息，在请求时发给服务器让无状态的HTTP协议也可以记录状态信息。
 
-![cookie原理]()
+![cookie原理](https://raw.githubusercontent.com/huanghaibin91/My-JS/master/image/cookie.png)
 
 第一次访问网站的时候，浏览器发出请求，服务器响应请求后，会将cookie放入到响应请求中，这样会在客户端设置一个cookie。当浏览器第二次发请求的时候，会把这个cookie带给服务器，服务端会解析cookie辨别用户身份，当然服务器也可以修改cookie内容。
 
@@ -38,12 +38,12 @@ HTTP是一个不保存状态的协议，也就说同个客户端即使多次向�
 
 - JS操作cookie，`document.cookie`（这个方法只能获取非HttpOnly类型的cookie）：[封装的cookie操作]()
 
-在服务器端，还有一个与cookie相似的在服务器端使用的一种记录客户端状态的机制session，cookie与session有以下区别：
+在服务器端，还有一个与`cookie`相似的在服务器端使用的一种记录客户端状态的机制`session`，`cookie`与`session`有以下区别：
 
-- cookie数据存放在客户的浏览器上，session数据放在服务器上；
-- cookie不是很安全，别人可以分析存放在本地的cookie并进行cookie欺骗考虑到安全应当使用 session；
-- session会在一定时间内保存在服务器上。当访问增多，会比较占用你服务器的性能考虑到减轻服务器性能方面，应当使用cookie；
-- 单个cookie保存的数据不能超过4K，很多浏览器都限制一个站点最多保存20个cookie；
+- `cookie`数据存放在客户的浏览器上，`session`数据放在服务器上；
+- `cookie`不是很安全，别人可以分析存放在本地的`cookie`并进行`cookie`欺骗考虑到安全应当使用 session；
+- `session`会在一定时间内保存在服务器上。当访问增多，会比较占用你服务器的性能考虑到减轻服务器性能方面，应当使用`cookie`；
+- 单个`cookie`保存的数据不能超过4K，很多浏览器都限制一个站点最多保存20个`cookie`；
 
 鉴于上述区别我们建议：将登陆信息等重要信息存放为session，其他信息如果需要保留，可以放在cookie中。
 
@@ -62,8 +62,8 @@ Web Storage提供客户端的信息存储，storage类型的属性：
 
 - storage类型特点：
 
-	- localStorage每个来源有5M的大小限制，sessionStorage也有大小限制；
-	- storage类型只能存储字符串，如果想存储对象，可以将数据先调用`JSON.stringify()`将对象转换为字符串，使用时再使用`JSON.parse()`将数据解析为对象；
+	- `localStorage`每个来源有5M的大小限制，`sessionStorage`也有大小限制；
+	- `storage`类型只能存储字符串，如果想存储对象，可以将数据先调用`JSON.stringify()`将对象转换为字符串，使用时再使用`JSON.parse()`将数据解析为对象；
 
 - `sessionStorage`，会话存储，该数据只保持到浏览器关闭，sessionStorage比localStorage更严苛一点，除了协议、主机名、端口外，还要求在同一窗口（也就是浏览器的标签页）下才可访问；
 - `localStorage`，IE8+，浏览器持久保存数据的存储对象，localStorage的访问域默认设定为设置localStorage的当前域，需满足同源策略才能访问同一个localStorage；

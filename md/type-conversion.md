@@ -9,9 +9,9 @@
 
 **显式强制类型转换**
 
-JS中提供了Number()、String()、Boolean()等函数将值转换成特定的类型。这种使用函数方法显式的将值的类型进行转换就称为显式强制类型转换。
+JS中提供了`Number()`、`String()`、`Boolean()`等函数将值转换成特定的类型。这种使用函数方法显式的将值的类型进行转换就称为显式强制类型转换。
 
-- Number()，将值的类型转换成数字。Number()函数转换规则：
+- `Number()`，将值的类型转换成数字。`Number()`函数转换规则：
 
 	- 参数是布尔值，true和false分别转换成1和1；
 	- 参数是数字，返回参数本身；
@@ -25,7 +25,7 @@ JS中提供了Number()、String()、Boolean()等函数将值转换成特定的�
 		- 参数字符串为空，转换为0；
 		- 参数字符串包含上述格式之外的字符，转换为NaN；   
 		
-	- 参数是对象，调用对象自身的valueOf()方法。如果返回原始类型的值，则直接对该值使用Number()函数，不再进行后续步骤。如果valueOf()方法返回的还是对象，则改为调用对象自身的toString()方法。如果toString()方法返回原始类型的值，则对该值使用Number()函数，不再进行后续步骤。如果toString()方法返回的是对象，就报错。
+	- 参数是对象，调用对象自身的`valueOf()`方法。如果返回原始类型的值，则直接对该值使用`Number()`函数，不再进行后续步骤。如果`valueOf()`方法返回的还是对象，则改为调用对象自身的`toString()`方法。如果`toString()`方法返回原始类型的值，则对该值使用`Number()`函数，不再进行后续步骤。如果`toString()`方法返回的是对象，就报错。
 
 			var a = {
 				name: 'a',
@@ -41,7 +41,7 @@ JS中提供了Number()、String()、Boolean()等函数将值转换成特定的�
 			b.toString(); // '2'
 			Number(b); // 2
 
-- JS中parseInt和parseFloat函数可以将字符串转化为整数和浮点数，parseInt()可以传递第二个参数，代表解析的进制，parseFloat只能解析十进制值。这两个方法允许字符串中含有非数字字符，解析按从左到右的顺序，如果遇到非数字字符就停止，而Number()不允许参数含有非数字字符，如包含返回NaN。
+- JS中`parseIn`t和`parseFloat`函数可以将字符串转化为整数和浮点数，`parseInt()`可以传递第二个参数，代表解析的进制，`parseFloat`只能解析十进制值。这两个方法允许字符串中含有非数字字符，解析按从左到右的顺序，如果遇到非数字字符就停止，而`Number()`不允许参数含有非数字字符，如包含返回NaN。
 
 		parseInt('10a') // 10
 		parseInt('AF', 16) // 175
@@ -49,9 +49,9 @@ JS中提供了Number()、String()、Boolean()等函数将值转换成特定的�
 		
 		parseFloat('10.01a') // 10.01
 
-- toString()方法和String()函数，将值的类型转换成字符串。
+- `toString()`方法和`String()`函数，将值的类型转换成字符串。
 
-	- toString()方法，除null和undefined之外的所有值都有toString()方法，此方法可以接受一个参数，表示输出数值的进制基数。
+	- `toString()`方法，除null和undefined之外的所有值都有`toString()`方法，此方法可以接受一个参数，表示输出数值的进制基数。
 	 	
 			var a = 10;		
 			a.toString(); // '10'
@@ -69,13 +69,13 @@ JS中提供了Number()、String()、Boolean()等函数将值转换成特定的�
 			};
 			c.toString(); // 'c'，改写toString()方法，返回设定的值
 
-	- String()函数，可以将任何类型的值转换为字符串，转换规则：
+	- `String()`函数，可以将任何类型的值转换为字符串，转换规则：
 
-		- 参数有toString()方法，调用该方法返回结果；
+		- 参数有`toString()`方法，调用该方法返回结果；
 		- 参数是null，返回'null'；
 		- 参数是undefined，返回'undefined'；
 
-- Boolean()函数，将值转换为布尔值，在JS中`false、''、0、NaN、null、undefined`为假，其余都为真值，所以使用Number()函数`false、''、0、NaN、null、undefined`会被转换为false，其余转换为true。
+- `Boolean()`函数，将值转换为布尔值，在JS中`false、''、0、NaN、null、undefined`为假，其余都为真值，所以使用`Number()`函数`false、''、0、NaN、null、undefined`会被转换为false，其余转换为true。
 
 **隐式强制类型转换**
 

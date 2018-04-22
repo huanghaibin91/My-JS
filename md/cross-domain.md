@@ -9,7 +9,7 @@
 
 - Cookie、LocalStorage和IndexedDB无法读取；
 
-- DOM无法获得；
+- DOM和JS对象无法获得；
 
 - AJAX请求无效（可以发送，但浏览器会拒绝接受响应）。
 
@@ -17,26 +17,27 @@
 
 **document.domain跨域**
 
-通过document.domain跨域只适用于不同子域的跨域情景。document.domain的设置是有限制的，我们只能把document.domain设置成自身或更高一级的父域，且主域必须相同。
+通过`document.domain`跨域只适用于不同子域的跨域情景，一般与`iframe`结合使用。`document.domain`的设置是有限制的，我们只能把`document.domain`设置成自身或更高一级的父域，且主域必须相同。
 	
 	// 下面两个子域不同
 	http://a.example.com/a.html
 	http://b.example.com/b.html
 
-- 通过document.domain + iframe跨域访问cookie；   
+- 通过`document.domain + iframe`跨域访问cookie；   
 	
 		// http://a.example.com/a.html 网页中嵌套iframe页面，地址为http://b.example.com/b.html
 		// 设置网址的document.domain，注意：document.domain的设置是有限制的，我们只能把document.domain设置成自身或更高一级的父域，且主域必须相同
-		// 设置父窗口和子窗口的domain相同
-		document.domain = 'example.com';
+		// 需要在父窗口和子窗口设置domain相同
 
 		// 父窗口http://a.example.com/a.html设置cookie
+		document.domain = 'example.com';
 		document.cookie = "a=a";
 
 		// 子窗口http://b.example.com/b.html将可以读取这个cookie
+		document.domain = 'example.com';
 		console.log(document.cookie);
 
-- 通过document.domain + iframe可以跨域操作DOM；
+- 通过`document.domain + iframe`可以跨域操作DOM；
 
 		// http://a.example.com/a.html 网页中嵌套iframe页面，地址为http://b.example.com/b.html
 		// 设置父窗口和子窗口的domain相同
@@ -45,9 +46,20 @@
 		// 父窗口
 		document.getElementById('my-iframe').contentWindow.document; // 可以跨域获取iframe里的document对象
 
+- 通过`document.domain + iframe`可以跨域获取JS对象；
+		
+		// http://a.example.com/a.html 网页中嵌套iframe页面，地址为http://b.example.com/b.html
+		// 父窗口http://a.example.com/a.html设置cookie
+		document.domain = 'example.com';
+		var a = 'a';
+
+		// 子窗口http://b.example.com/b.html将可以读取这个cookie
+		document.domain = 'example.com';
+		widow.parent.a; // a
+
 **window.name跨域**
 
-window对象有个name属性，该属性有个特征：即在一个窗口(window)的生命周期内,窗口载入的所有的页面都是共享一个window.name的，每个页面对window.name都有读写的权限，window.name是持久存在一个窗口载入过的所有页面中的，并不会因新页面的载入而进行重置。window.name是string类型。**window.name属性的神奇之处在于name 值在不同的页面（甚至不同域名）加载后依旧存在（如果没修改则值不会变化），并且可以支持非常长的 name 值（2MB**）
+window对象有个name属性，该属性有个特征：即在一个窗口(window)的生命周期内,窗口载入的所有的页面都是共享一个`window.name`的，每个页面对`window.name`都有读写的权限，`window.name`是持久存在一个窗口载入过的所有页面中的，并不会因新页面的载入而进行重置。`window.name`是`string`类型。**window.name属性的神奇之处在于name 值在不同的页面（甚至不同域名）加载后依旧存在（如果没修改则值不会变化），并且可以支持非常长的 name 值（2MB）**
 
 	// 假设我们有3个页面
 	// a.com/index.html
@@ -62,9 +74,9 @@ window对象有个name属性，该属性有个特征：即在一个窗口(window
 
 **location.hash跨域**
 
-location.hash可以解决页面与页面中iframe间通信。
+`location.hash`可以解决页面与页面中iframe间通信。
 
-location.hash就是URL的#号后面的部分，比如`http://a.example.com/a.html#fragment`的`#fragment`。如果只是改变location.hash，这部分的修改不会产生HTTP请求所以页面不会重新刷新，但是会产生浏览器历史记录。
+`location.hash`就是URL的#号后面的部分，比如`http://a.example.com/a.html#fragment`的`#fragment`。如果只是改变`location.hash`，这部分的修改不会产生HTTP请求所以页面不会重新刷新，但是会产生浏览器历史记录。
 
 	// http://a.example.com/a.html 网页中嵌套iframe页面，地址为http://b.example.com/b.html
 
@@ -83,9 +95,9 @@ location.hash就是URL的#号后面的部分，比如`http://a.example.com/a.htm
 	// 子窗口向父窗口传递消息
 	// 在子窗口中再创建一个隐藏的子iframe，此iframe的链接与父窗口同域
 	try {  
-    	parent.location.hash = 'data';  
+    	parent.location.hash = 'data'; // 直接修改父窗口的hash跨域出错，触发下面操作
 	} catch (e) {  
-		var url = 'ttp://a.example.com/proxy.html';
+		var url = 'http://a.example.com/proxy.html'; // 与父窗口同域
 		var data = 'hello world'; 
 	    // ie、chrome的安全机制无法修改parent.location.hash，创建一个代理iframe
 	    var ifrproxy = document.createElement('iframe');  
@@ -101,9 +113,9 @@ location.hash就是URL的#号后面的部分，比如`http://a.example.com/a.htm
 
 **H5跨文档通信 postMessage**
 
-window.postMessage()方法实现页面与页面中iframe或通过window.open()方法打开的页面之间的通信。（IE8+）
+`window.postMessage()`方法实现页面与页面中iframe或通过`window.open()`方法打开的页面之间的通信。（IE8+）
 
-window.postMessage()方法的第一个参数是具体的信息内容，第二个参数是接收消息的窗口的源（origin）即“协议 + 域名 + 端口”。也可以设为*，表示不限制域名，向所有窗口发送。
+`window.postMessage()`方法的第一个参数是具体的信息内容，第二个参数是接收消息的窗口的源（origin）即“协议 + 域名 + 端口”。也可以设为*，表示不限制域名，向所有窗口发送。
 
 	// http://a.example.com/a.html 网页中嵌套iframe页面，地址为http://b.example.com/b.html
 	// 那么父窗口想向子窗口传递信息，父窗口代码：
@@ -140,7 +152,7 @@ window.postMessage()方法的第一个参数是具体的信息内容，第二个
 
 JSONP，便是利用script的这个特性，该协议的一个要点就是允许用户传递一个callback参数给服务端，然后服务端返回数据时会将这个callback参数作为函数名来包裹住JSON数据，这样客户端就可以随意定制自己的函数来自动处理返回数据。
 
-注意，JSONP的回调函数必须在window对象下添加。
+**注意，JSONP的回调函数必须在window对象下添加。**
 
 这里是我封装的一个原生JS JSONP函数，[JS jsonp函数](https://github.com/huanghaibin91/JS-CSS-Fragment/blob/master/JS/jsonp.js)。
 
@@ -164,7 +176,7 @@ JSONP主要是用于解决Ajax跨域请求无效的情景。JSONP只能支持GET
 
 **CORS**
 
-CORS，跨域资源共享，允许浏览器向跨源服务器，发出XMLHttpRequest请求，从而克服了AJAX只能同源使用的限制。CORS需要浏览器和服务器同时支持。目前，所有浏览器都支持该功能，IE浏览器不能低于IE10。CORS通信与同源的AJAX通信没有差别，代码完全一样。**因此，实现CORS通信的关键是服务器。只要服务器实现了CORS接口，就可以跨源通信。**服务器端对于CORS的支持，主要就是通过设置Access-`Control-Allow-Origin`来进行的。如果浏览器检测到相应的设置，就可以允许Ajax进行跨域的访问。
+CORS，跨域资源共享，允许浏览器向跨源服务器，发出`XMLHttpRequest`请求，从而克服了AJAX只能同源使用的限制。CORS需要浏览器和服务器同时支持。目前，所有浏览器都支持该功能，IE浏览器不能低于IE10。CORS通信与同源的AJAX通信没有差别，代码完全一样。**因此，实现CORS通信的关键是服务器。只要服务器实现了CORS接口，就可以跨源通信。**服务器端对于CORS的支持，主要就是通过设置`Access-Control-Allow-Origin`来进行的。如果浏览器检测到相应的设置，就可以允许Ajax进行跨域的访问。
 
 CORS背后的基本思想就是使用自定义的HTTP头部，让服务器能声明哪些来源可以通过浏览器访问该服务器上的资源，从而决定请求或响应是应该成功还是失败。
 
@@ -174,7 +186,7 @@ CORS，主要是用于解决Ajax跨域请求无效的情景。
 
 **WebSocket**
 
-WebSocket是一种通信协议，使用ws://（非加密）和wss://（加密）作为协议前缀。该协议不实行同源政策，只要服务器支持，就可以通过它进行跨源通信。
+WebSocket是一种通信协议，使用`ws://`（非加密）和`wss://`（加密）作为协议前缀。该协议不实行同源政策，只要服务器支持，就可以通过它进行跨源通信。
 
 **服务器跨域**
 
