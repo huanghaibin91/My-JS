@@ -169,8 +169,8 @@ Element元素节点。
 
 - 计算样式，元素所有样式，`getComputedStyle`，`currentStyle`(IE中)，计算样式都是只读的。返回的CSS值都是绝对单位，比如，长度都是像素单位（返回值包括px后缀），颜色是rgb(#, #, #)或rgba(#, #, #, #)格式。CSS规则的简写形式无效，比如，想读取margin属性的值，不能直接读，只能读marginLeft、marginTop等属性。如果一个元素不是绝对定位，top和left属性总是返回auto。该方法返回的样式对象的cssText属性无效，返回undefined。该方法返回的样式对象是只读的，如果想设置样式，应该使用元素节点的style属性：
 	
-	// 两个参数是计算样式的元素和一个伪元素字符串，如":after"，不需要伪元素则写null，会返回一个包含所有计算属性的对象
-	// 有可能不会显示综合属性，就是几个CSS属性简写在一起的，所以查询的时候写详细的属性
-	var computedStyle = document.defaultView.getComputedStyle(node, null); 
-    var computedStyle = node.currentStyle;
+		// 两个参数是计算样式的元素和一个伪元素字符串，如":after"，不需要伪元素则写null，会返回一个包含所有计算属性的对象
+		// 有可能不会显示综合属性，就是几个CSS属性简写在一起的，所以查询的时候写详细的属性
+		var computedStyle = document.defaultView.getComputedStyle(node, null); 
+		var computedStyle = node.currentStyle;
         
